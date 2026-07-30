@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>留白记账 · 记一笔</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: 'Noto Serif SC', serif; background: #fdf8f8; }
+
+    .page {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ── Blurred background dashboard ── */
+    .bg-dashboard {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      padding: 24px;
+      display: flex; flex-direction: column; gap: 32px;
+      filter: blur(1px);
+      opacity: .4;
+    }
+    .bg-header { display: flex; align-items: center; }
+    .bg-app-title {
+      font-size: 24px; font-weight: 500;
+      color: #1c1b1b; letter-spacing: -0.6px; line-height: 32px;
+    }
+
+    .bg-cards { display: flex; flex-direction: column; gap: 16px; }
+
+    /* Asset summary card */
+    .asset-card {
+      background: #fff;
+      border: 1px solid rgba(196,199,199,.3);
+      border-radius: 8px;
+      padding: 25px;
+      box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    }
+    .asset-label { font-size: 11px; font-weight: 500; color: #6b6b6b; letter-spacing: 1.1px; line-height: 16px; margin-bottom: 4px; }
+    .asset-amount {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 32px; font-weight: 600;
+      color: #1c1b1b; letter-spacing: 1.6px; line-height: 40px;
+    }
+
+    /* Income / expense row */
+    .summary-row { display: flex; gap: 16px; }
+    .summary-card {
+      flex: 1;
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    }
+    .summary-income-label { font-size: 11px; font-weight: 500; color: #2e7d5e; letter-spacing: 1.1px; line-height: 16px; margin-bottom: 4px; }
+    .summary-expense-label { font-size: 11px; font-weight: 500; color: #c0392b; letter-spacing: 1.1px; line-height: 16px; margin-bottom: 4px; }
+    .summary-amount {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 18px; font-weight: 500;
+      color: #1c1b1b; line-height: 24px;
+    }
+
+    /* Transaction list */
+    .tx-list { display: flex; flex-direction: column; gap: 16px; }
+    .tx-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; }
+    .tx-left { display: flex; align-items: center; gap: 12px; }
+    .tx-icon-wrap { width: 40px; height: 40px; background: rgba(212,204,188,.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+    .tx-icon-wrap img { object-fit: contain; }
+    .tx-name { font-size: 16px; font-weight: 500; color: #1c1b1b; line-height: 24px; }
+    .tx-time { font-size: 13px; font-weight: 400; color: #6b6b6b; line-height: 20px; }
+    .tx-amount { font-family: 'Hanken Grotesk', sans-serif; font-size: 18px; font-weight: 500; color: #c0392b; line-height: 24px; }
+    .tx-divider { height: 2px; background: linear-gradient(90deg, rgba(212,204,188,0) 0%, rgba(212,204,188,.5) 50%, rgba(212,204,188,0) 100%); border-radius: 86px; opacity: .5; }
+
+    /* ── Backdrop overlay ── */
+    .backdrop {
+      position: absolute; inset: 0; z-index: 1;
+      background: rgba(0,0,0,.2);
+      backdrop-filter: blur(.5px);
+    }
+
+    /* ── Bottom drawer ── */
+    .drawer {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 2;
+      background: #fdf8f8;
+      border-radius: 32px 32px 0 0;
+      box-shadow: 0 10px 40px 0 rgba(26,26,26,.08);
+      max-height: 813px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+
+    /* Drawer texture overlay */
+    .drawer::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url('assets/drawer-texture.png');
+      background-size: 410px 410px;
+      background-position: top left;
+      opacity: .12;
+      pointer-events: none;
+      border-radius: 32px 32px 0 0;
+    }
+
+    /* Handlebar */
+    .handlebar { display: flex; justify-content: center; padding: 16px 0 0; position: relative; z-index: 1; }
+    .handlebar-dot { width: 48px; height: 4px; background: #d4ccbc; border-radius: 12px; opacity: .6; }
+
+    /* Drawer body */
+    .drawer-body { padding: 16px 24px 64px; display: flex; flex-direction: column; gap: 32px; position: relative; z-index: 1; overflow: auto; }
+
+    /* Amount display */
+    .amount-display { height: 74px; position: relative; }
+    .amount-currency {
+      position: absolute;
+      left: 82px; top: 0;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 48px; font-weight: 400;
+      color: #c0392b; opacity: .5;
+      line-height: 48px;
+    }
+    .amount-value {
+      position: absolute;
+      left: calc(50% + 19.53px); top: 27.5px;
+      transform: translateX(-50%);
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 56px; font-weight: 400;
+      color: #000; line-height: 56px;
+    }
+    .amount-underline {
+      position: absolute;
+      bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 96px; height: 2px;
+      background: linear-gradient(90deg, rgba(212,204,188,0), rgba(212,204,188,1) 50%, rgba(212,204,188,0));
+      border-radius: 24.5px;
+    }
+
+    /* Income / expense toggle */
+    .toggle-wrap { display: flex; justify-content: center; }
+    .toggle {
+      position: relative;
+      background: #f7f3f2;
+      border: 1px solid rgba(196,199,199,.3);
+      border-radius: 12px; padding: 5px;
+      width: 192px;
+      display: flex; align-items: center;
+    }
+    .toggle-indicator {
+      position: absolute; top: 4px; bottom: 4px; left: 4px;
+      width: 91px; background: #000; border-radius: 12px;
+      transition: transform .2s;
+    }
+    .toggle-indicator.income { transform: translateX(91px); }
+    .toggle-btn { flex: 1; position: relative; z-index: 1; padding: 6.5px 0; text-align: center; font-size: 16px; font-weight: 500; cursor: pointer; border-radius: 8px; transition: color .2s; }
+    .toggle-btn.active { color: #fff; }
+    .toggle-btn.inactive { color: #6b6b6b; }
+
+    /* Category grid */
+    .cat-section { display: flex; flex-direction: column; gap: 16px; }
+    .cat-section-label { font-size: 11px; font-weight: 500; color: #6b6b6b; text-align: center; letter-spacing: 1.1px; line-height: 16px; }
+    .cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px 8px; }
+    .cat-cell { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .cat-icon-wrap {
+      width: 56px; height: 56px;
+      background: #fff;
+      border: 1px solid rgba(212,204,188,.4);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      box-shadow: inset 0 0 10px rgba(0,0,0,.05);
+    }
+    .cat-icon-wrap.selected { background: #000; border-color: #000; }
+    .cat-icon-wrap img { object-fit: contain; }
+    .cat-name { font-size: 11px; font-weight: 500; color: #6b6b6b; line-height: 16.5px; text-align: center; }
+    .cat-cell.selected .cat-name { color: #000; }
+
+    /* Date & note rows */
+    .input-rows { display: flex; flex-direction: column; gap: 16px; }
+    .input-row { display: flex; align-items: center; gap: 16px; border-bottom: 1px solid rgba(212,204,188,.2); padding: 12px 0 13px; }
+    .input-row img { object-fit: contain; flex-shrink: 0; }
+    .input-row-text { font-size: 16px; font-weight: 400; color: #1c1b1b; line-height: 24px; }
+    .input-row-placeholder { font-size: 16px; font-weight: 400; color: #d4ccbc; line-height: normal; }
+
+    /* ── Footer seal button ── */
+    .footer-seal {
+      padding: 8px 0 0;
+      backdrop-filter: blur(6px);
+      background: rgba(255,255,255,.8);
+    }
+    .seal-btn-wrap { display: flex; justify-content: center; padding: 16px 0 32px; }
+    .seal-btn {
+      width: 64px; height: 64px;
+      background: #c0392b;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .seal-btn img { width: 22px; height: 16px; object-fit: contain; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Blurred Background Dashboard ── -->
+  <div class="bg-dashboard">
+    <div class="bg-header">
+      <span class="bg-app-title">留白记账</span>
+    </div>
+
+    <div class="bg-cards">
+      <div class="asset-card">
+        <div class="asset-label">资产总计</div>
+        <div class="asset-amount">$12,450.00</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-card">
+          <div class="summary-income-label">本月收入</div>
+          <div class="summary-amount">$3,200</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-expense-label">本月支出</div>
+          <div class="summary-amount">$1,840</div>
+        </div>
+      </div>
+      <div class="tx-list">
+        <div class="tx-item">
+          <div class="tx-left">
+            <div class="tx-icon-wrap"><img src="assets/icon-food.png" alt="" style="width:15px;height:20px" /></div>
+            <div>
+              <div class="tx-name">京都拉面</div>
+              <div class="tx-time">今天 12:30</div>
+            </div>
+          </div>
+          <div class="tx-amount">-$18.50</div>
+        </div>
+        <div class="tx-divider"></div>
+        <div class="tx-item">
+          <div class="tx-left">
+            <div class="tx-icon-wrap"><img src="assets/icon-metro.png" alt="" style="width:16px;height:19px" /></div>
+            <div>
+              <div class="tx-name">城市地铁</div>
+              <div class="tx-time">今天 08:45</div>
+            </div>
+          </div>
+          <div class="tx-amount">-$2.40</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Backdrop overlay -->
+  <div class="backdrop"></div>
+
+  <!-- Bottom Drawer -->
+  <div class="drawer">
+
+    <!-- Handlebar -->
+    <div class="handlebar"><div class="handlebar-dot"></div></div>
+
+    <!-- Drawer body -->
+    <div class="drawer-body">
+
+      <!-- Amount display -->
+      <div class="amount-display">
+        <span class="amount-currency">$</span>
+        <span class="amount-value">24.50</span>
+        <div class="amount-underline"></div>
+      </div>
+
+      <!-- Income / Expense toggle -->
+      <div class="toggle-wrap">
+        <div class="toggle">
+          <div class="toggle-indicator" id="toggleIndicator"></div>
+          <div class="toggle-btn active" id="btnExpense" onclick="switchToggle('expense')">支出</div>
+          <div class="toggle-btn inactive" id="btnIncome" onclick="switchToggle('income')">收入</div>
+        </div>
+      </div>
+
+      <!-- Category grid -->
+      <div class="cat-section">
+        <div class="cat-section-label">选择分类</div>
+        <div class="cat-grid">
+          <!-- Row 1 -->
+          <div class="cat-cell selected" onclick="selectCat(this)">
+            <div class="cat-icon-wrap">
+              <img src="assets/icon-food.png" alt="餐饮" style="width:17.5px;height:23px" />
+            </div>
+            <span class="cat-name">餐饮</span>
+          </div>
+          <div class="cat-cell" onclick="selectCat(this)">
+            <div class="cat-icon-wrap">
+              <img src="assets/icon-cat-food.png" alt="购物" style="width:19px;height:23px" />
+            </div>
+            <span class="cat-name">购物</span>
+          </div>
+          <div class="cat-cell" onclick="selectCat(this)">
+            <div class="cat-icon-wrap">
+              <img src="assets/icon-metro.png" alt="交通" style="width:21px;height:19px" />
+            </div>
+            <span class="cat-name">交通</span>
+          </div>
+          <div class="cat-cell" onclick="selectCat(this)">
+            <div class="cat-icon-wrap">
+              <img src="assets/icon-house.png" alt="居住" style="width:19px;height:21px" />
+            </div>
+            <span class="cat-name">居住</span>
+          </div>
+          <!-- Row 2 -->
+          <div class="cat-cell" onclick="selectCat(this)">
+            <div class="cat-icon-wrap">
+              <img src="assets/icon-leisure.png" alt="休闲" style="width:23px;height:19px" />
+            </div>
+            <span class="cat-name">休闲</span>
+          </div>
+          <div class="cat-cell" onclick="selectCat(this)">
+            <div class="cat-icon-wrap">
+              <img src="assets/icon-medical.png" alt="医疗" style="width:19px;height:23px" />
+            </div>
+            <span class="cat-name">医疗</span>
+          </div>
+          <div class="cat-cell" onclick="selectCat(this)">
+            <div class="cat-icon-wrap">
+              <img src="assets/icon-study.png" alt="学习" style="width:26px;height:21px" />
+            </div>
+            <span class="cat-name">学习</span>
+          </div>
+          <div class="cat-cell" onclick="selectCat(this)">
+            <div class="cat-icon-wrap">
+              <img src="assets/icon-other.png" alt="其他" style="width:19px;height:5px" />
+            </div>
+            <span class="cat-name">其他</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Date & note inputs -->
+      <div class="input-rows">
+        <div class="input-row">
+          <img src="assets/icon-calendar.png" alt="" style="width:18px;height:20px" />
+          <span class="input-row-text">2023年10月24日 · 16:22</span>
+        </div>
+        <div class="input-row">
+          <img src="assets/icon-note.png" alt="" style="width:18px;height:16px" />
+          <span class="input-row-placeholder">添加备注（如：午餐...）</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer seal button -->
+    <div class="footer-seal">
+      <div class="seal-btn-wrap">
+        <div class="seal-btn">
+          <img src="assets/icon-check.png" alt="完成" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  function switchToggle(type) {
+    const ind = document.getElementById('toggleIndicator');
+    if (type === 'income') {
+      ind.classList.add('income');
+      document.getElementById('btnExpense').className = 'toggle-btn inactive';
+      document.getElementById('btnIncome').className = 'toggle-btn active';
+    } else {
+      ind.classList.remove('income');
+      document.getElementById('btnExpense').className = 'toggle-btn active';
+      document.getElementById('btnIncome').className = 'toggle-btn inactive';
+    }
+  }
+  function selectCat(el) {
+    document.querySelectorAll('.cat-cell').forEach(c => {
+      c.classList.remove('selected');
+      c.querySelector('.cat-icon-wrap').classList.remove('selected');
+    });
+    el.classList.add('selected');
+    el.querySelector('.cat-icon-wrap').classList.add('selected');
+  }
+</script>
+</body>
+</html>

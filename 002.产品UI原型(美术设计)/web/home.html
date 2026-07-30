@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>留白记账 · 明细</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: 'Noto Serif SC', serif; background: #fdf8f8; }
+
+    .page {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .header {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+      background: rgba(253,248,248,0.8);
+      z-index: 40;
+    }
+    .header-title {
+      font-size: 24px;
+      font-weight: 500;
+      color: #000;
+      letter-spacing: 2.4px;
+      line-height: 32px;
+    }
+
+    /* ── Blurred background ── */
+    .bg-blur {
+      padding: 96px 16px 254px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      max-width: 512px;
+      width: 100%;
+      filter: blur(2px);
+      position: relative;
+    }
+
+    /* ── Summary ── */
+    .summary { display: flex; flex-direction: column; gap: 8px; }
+    .summary-label {
+      font-size: 11px; font-weight: 500;
+      color: #6b6b6b; text-align: center;
+      letter-spacing: 1.1px; line-height: 16px;
+    }
+    .summary-balance {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 32px; font-weight: 600;
+      color: #000; text-align: center;
+      letter-spacing: 1.6px; line-height: 40px;
+    }
+    .summary-row {
+      display: flex;
+      padding-top: 16px;
+    }
+    .summary-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .summary-side.right { padding-left: 32px; }
+    .summary-side .label {
+      font-size: 11px; font-weight: 500;
+      color: #6b6b6b; letter-spacing: 1.1px; line-height: 16px;
+    }
+    .summary-income {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 18px; font-weight: 500;
+      color: #2e7d5e; line-height: 24px;
+    }
+    .summary-expense {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 18px; font-weight: 500;
+      color: #c0392b; line-height: 24px;
+    }
+
+    /* ── Records section ── */
+    .records { display: flex; flex-direction: column; gap: 24px; }
+    .records-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .records-title {
+      font-size: 20px; font-weight: 500;
+      color: #1c1b1b; line-height: 28px;
+    }
+    .records-date {
+      font-size: 13px; font-weight: 500;
+      color: #6b6b6b; line-height: 20px;
+    }
+    .divider {
+      height: 2px;
+      background: linear-gradient(90deg,
+        rgba(212,204,188,0) 0%,
+        rgba(212,204,188,1) 20%,
+        rgba(212,204,188,1) 80%,
+        rgba(212,204,188,0) 100%);
+      width: 100%;
+    }
+    .record-list { display: flex; flex-direction: column; gap: 16px; }
+    .record-card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(26,26,26,.03);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .record-left {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .record-icon-wrap {
+      width: 40px; height: 40px;
+      background: #e7e2da;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .record-icon-wrap img {
+      width: 18px; height: 18px;
+      object-fit: contain;
+    }
+    .record-text { padding-left: 16px; }
+    .record-name {
+      font-size: 16px; font-weight: 500;
+      color: #1c1b1b; line-height: 24px;
+    }
+    .record-note {
+      font-size: 13px; font-weight: 500;
+      color: #6b6b6b; line-height: 20px;
+    }
+    .record-amount {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 18px; font-weight: 500;
+      color: #c0392b; line-height: 24px;
+      white-space: nowrap;
+    }
+
+    /* ── FAB ── */
+    .fab {
+      position: fixed;
+      bottom: 96px;
+      right: calc(50% - 195px + 24px);
+      width: 56px; height: 56px;
+      background: #c0392b;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 30;
+    }
+    .fab img { width: 17.5px; height: 17.5px; object-fit: contain; }
+
+    /* ── Bottom Nav ── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 480px;
+      height: 64px;
+      background: rgba(255,255,255,.8);
+      backdrop-filter: blur(6px);
+      border-top: 1px solid rgba(212,204,188,.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 44.64px;
+      z-index: 30;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 16px;
+      border-radius: 12px;
+      gap: 2px;
+      cursor: pointer;
+    }
+    .nav-item.active { background: #e7e2da; }
+    .nav-item img {
+      width: 18px; height: 18px;
+      object-fit: contain;
+    }
+    .nav-item.active img.nav-icon { width: 18px; height: 20px; }
+    .nav-label {
+      font-size: 11px; font-weight: 500;
+      color: #6b6b6b; line-height: 16px;
+      letter-spacing: 1.1px;
+    }
+    .nav-item.active .nav-label { color: #000; }
+
+    /* ══════════════════════════════════════
+       OVERLAY PANEL — Month Selector
+    ══════════════════════════════════════ */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .overlay-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(212,204,188,.4);
+      backdrop-filter: blur(2px);
+    }
+    .panel {
+      position: relative;
+      z-index: 1;
+      background: #fdf8f8;
+      border: 1px solid rgba(212,204,188,.2);
+      border-radius: 8px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,.25);
+      max-width: 448px;
+      width: calc(100% - 32px);
+      overflow: hidden;
+    }
+
+    /* Panel header */
+    .panel-header {
+      border-bottom: 1px solid rgba(212,204,188,.1);
+      padding: 16px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .panel-title {
+      font-size: 16px; font-weight: 500;
+      color: #000; line-height: 24px;
+    }
+
+    /* Panel body */
+    .panel-body {
+      padding: 24px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Month / Year toggle */
+    .toggle-wrap {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .toggle {
+      background: #f1edec;
+      border-radius: 12px;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .toggle-pill {
+      padding: 6px 24px;
+      border-radius: 12px;
+      font-size: 11px; font-weight: 500;
+      color: #fff;
+      background: #000;
+      cursor: pointer;
+      letter-spacing: 1.1px;
+      line-height: 16px;
+    }
+    .toggle-pill.inactive {
+      background: transparent;
+      color: #6b6b6b;
+      cursor: pointer;
+    }
+
+    /* Year navigator */
+    .year-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+    .year-nav img {
+      width: 7.4px; height: 12px;
+      object-fit: contain;
+      cursor: pointer;
+    }
+    .year-display {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .year-display::before {
+      content: '';
+      position: absolute;
+      inset: -3.5px -5.65px;
+      background: radial-gradient(circle at center,
+        rgba(212,204,188,.4) 0%,
+        transparent 70%);
+      border-radius: 12px;
+      opacity: .5;
+    }
+    .year-text {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 20px; font-weight: 700;
+      color: #000; line-height: 28px;
+    }
+
+    /* Year divider */
+    .year-divider {
+      height: 2px;
+      background: linear-gradient(90deg,
+        rgba(212,204,188,0) 0%,
+        rgba(212,204,188,1) 20%,
+        rgba(212,204,188,1) 80%,
+        rgba(212,204,188,0) 100%);
+      opacity: .4;
+    }
+
+    /* Month grid */
+    .month-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px 16px;
+      padding-top: 8px;
+    }
+    .month-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8.5px 22.01px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 16px; font-weight: 400;
+      color: #6b6b6b;
+      line-height: 24px;
+      position: relative;
+      transition: background .15s;
+    }
+    .month-cell:hover { background: #f5f0e8; }
+    .month-cell.selected {
+      background: #000;
+      transform: rotate(-2deg);
+    }
+    .month-cell.selected .month-text { color: #fff; }
+
+    /* Panel footer */
+    .panel-footer {
+      border-top: 1px solid rgba(212,204,188,.1);
+      padding: 17px 16px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: #f7f3f2;
+    }
+    .panel-footer-text {
+      font-size: 16px; font-weight: 500;
+      color: #000; letter-spacing: 1.6px;
+      line-height: 24px;
+    }
+
+    /* Utility */
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══ HEADER ══ -->
+  <header class="header">
+    <h1 class="header-title">留白记账</h1>
+  </header>
+
+  <!-- ══ BLURRED BACKGROUND (behind overlay) ══ -->
+  <div class="bg-blur" id="bgBlur">
+
+    <!-- Summary -->
+    <div class="summary">
+      <div class="summary-label">本月结余</div>
+      <div class="summary-balance">¥ 12,480.00</div>
+      <div class="summary-row">
+        <div class="summary-side">
+          <div class="label">收入</div>
+          <div class="summary-income">24,000.00</div>
+        </div>
+        <div class="summary-side right">
+          <div class="label">支出</div>
+          <div class="summary-expense">11,520.00</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Records -->
+    <div class="records">
+      <div class="records-header">
+        <span class="records-title">今日</span>
+        <span class="records-date">8月24日 星期六</span>
+      </div>
+      <div class="divider"></div>
+      <div class="record-list">
+        <div class="record-card">
+          <div class="record-left">
+            <div class="record-icon-wrap">
+              <img src="assets/icon-coffee.png" alt="" />
+            </div>
+            <div class="record-text">
+              <div class="record-name">手冲咖啡</div>
+              <div class="record-note">午后小憩</div>
+            </div>
+          </div>
+          <div class="record-amount">-38.00</div>
+        </div>
+        <div class="record-card">
+          <div class="record-left">
+            <div class="record-icon-wrap">
+              <img src="assets/icon-transport.png" alt="" />
+            </div>
+            <div class="record-text">
+              <div class="record-name">交通出行</div>
+              <div class="record-note">地铁往返</div>
+            </div>
+          </div>
+          <div class="record-amount">-12.00</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ FAB ══ -->
+  <div class="fab">
+    <img src="assets/fab-plus.png" alt="记账" />
+  </div>
+
+  <!-- ══ BOTTOM NAV ══ -->
+  <nav class="bottom-nav">
+    <div class="nav-item active">
+      <img src="assets/nav-list.png" alt="明细" class="nav-icon" />
+      <span class="nav-label">明细</span>
+    </div>
+    <div class="nav-item" onclick="location.href='stats.html'">
+      <img src="assets/nav-stats2.png" alt="统计" />
+      <span class="nav-label">统计</span>
+    </div>
+    <div class="nav-item">
+      <img src="assets/nav-community.png" alt="社区" />
+      <span class="nav-label">社区</span>
+    </div>
+    <div class="nav-item">
+      <img src="assets/nav-settings.png" alt="设置" />
+      <span class="nav-label">设置</span>
+    </div>
+  </nav>
+
+  <!-- ══ MONTH SELECTOR OVERLAY ══ -->
+  <div class="overlay" id="monthOverlay">
+    <div class="overlay-backdrop" onclick="closePanel()"></div>
+    <div class="panel">
+
+      <div class="panel-header">
+        <span class="panel-title">留白记账</span>
+      </div>
+
+      <div class="panel-body">
+
+        <!-- 按月 / 按年 toggle -->
+        <div class="toggle-wrap">
+          <div class="toggle">
+            <span class="toggle-pill" id="pillMonth" onclick="setMode('month')">按月</span>
+            <span class="toggle-pill inactive" id="pillYear" onclick="setMode('year')">按年</span>
+          </div>
+        </div>
+
+        <!-- Year navigator -->
+        <div class="year-nav">
+          <img src="assets/btn-prev.png" alt="上一页" onclick="changeYear(-1)" />
+          <div class="year-display">
+            <span class="year-text" id="yearText">2024</span>
+          </div>
+          <img src="assets/btn-next.png" alt="下一页" onclick="changeYear(1)" />
+        </div>
+
+        <!-- Divider -->
+        <div class="year-divider"></div>
+
+        <!-- Month grid -->
+        <div class="month-grid" id="monthGrid">
+          <!-- Generated by JS -->
+        </div>
+
+      </div>
+
+      <div class="panel-footer" onclick="closePanel()">
+        <span class="panel-footer-text">收起面板</span>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const MONTHS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  const grid = document.getElementById('monthGrid');
+  let selectedMonth = 7; // 0-indexed (8月)
+  let currentYear = 2024;
+
+  function renderGrid() {
+    grid.innerHTML = '';
+    // Grid order: row1=[1,2,3,4], row2=[5,6,7,x], row3=[9,10,11,12]
+    const order = [0,1,2,3, 4,5,6,-1, 7,8,9,10]; // -1 = empty (8月 slot)
+    order.forEach(idx => {
+      const cell = document.createElement('div');
+      cell.className = 'month-cell' + (idx === selectedMonth ? ' selected' : '');
+      if (idx === -1) {
+        cell.innerHTML = '<span class="month-text">8月</span>';
+      } else {
+        const m = MONTHS[idx];
+        cell.innerHTML = `<span class="month-text">${m}</span>`;
+        cell.onclick = () => selectMonth(idx);
+      }
+      grid.appendChild(cell);
+    });
+  }
+
+  function selectMonth(idx) {
+    selectedMonth = idx;
+    renderGrid();
+    // close after selection
+    setTimeout(closePanel, 200);
+  }
+
+  function changeYear(dir) {
+    currentYear += dir;
+    document.getElementById('yearText').textContent = currentYear;
+  }
+
+  function setMode(mode) {
+    if (mode === 'month') {
+      document.getElementById('pillMonth').classList.remove('inactive');
+      document.getElementById('pillYear').classList.add('inactive');
+    } else {
+      document.getElementById('pillYear').classList.remove('inactive');
+      document.getElementById('pillMonth').classList.add('inactive');
+    }
+  }
+
+  function closePanel() {
+    const overlay = document.getElementById('monthOverlay');
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  function openPanel() {
+    const overlay = document.getElementById('monthOverlay');
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Click on balance to open panel (as in Figma)
+  document.querySelector('.summary-label').style.cursor = 'pointer';
+  document.querySelector('.summary').onclick = openPanel;
+
+  renderGrid();
+
+  // Auto-open the panel on load to match Figma design state
+  openPanel();
+</script>
+</body>
+</html>

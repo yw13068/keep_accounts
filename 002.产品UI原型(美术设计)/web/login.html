@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>留白记账 · 登录</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    /* ── Page shell ── */
+    .page {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      background-color: #f5f0e8;
+      background-image: url('assets/bg-texture.png');
+      background-size: 523px 384px;
+      background-position: top left;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      overflow: hidden;
+    }
+
+    /* ── Main content ── */
+    .main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 105px 24px;
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 384px;
+    }
+
+    /* ── Logo & Branding ── */
+    .branding {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+      padding-bottom: 40px;
+    }
+
+    .logo-wrap {
+      width: 128px;
+      height: 128px;
+      flex-shrink: 0;
+    }
+
+    .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .app-title {
+      margin-top: 14px;
+      font-size: 24px;
+      font-weight: 700;
+      color: #000;
+      text-align: center;
+      letter-spacing: -0.6px;
+      line-height: 32px;
+    }
+
+    .app-tagline {
+      font-size: 13px;
+      font-weight: 400;
+      color: #6b6b6b;
+      text-align: center;
+      line-height: 20px;
+    }
+
+    /* ── Login Form ── */
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .field-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #6b6b6b;
+      letter-spacing: 1.1px;
+      line-height: 16px;
+    }
+
+    .field-input-wrap {
+      border-bottom: 1px solid #d4ccbc;
+      padding: 8px 0 10px 0;
+      width: 100%;
+    }
+
+    .field-input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 16px;
+      font-weight: 400;
+      color: #1a1a1a;
+      line-height: normal;
+    }
+
+    .field-input::placeholder {
+      color: #c4c7c7;
+    }
+
+    /* ── Remember / Forgot ── */
+    .row-aux {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0 24px 0;
+      width: 100%;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .checkbox {
+      width: 16px;
+      height: 16px;
+      border: 1px solid #6b7280;
+      background: #fff;
+      flex-shrink: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .checkbox:checked::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      background: #1a1a1a;
+    }
+
+    .remember-label {
+      font-size: 13px;
+      font-weight: 400;
+      color: #444748;
+      line-height: 20px;
+      user-select: none;
+    }
+
+    .forgot-link {
+      font-size: 13px;
+      font-weight: 400;
+      color: #2b6cb0;
+      line-height: 20px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ── Login Button ── */
+    .btn-login {
+      width: 100%;
+      background: #000;
+      border: 1px solid #000;
+      padding: 17px 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .btn-login:hover {
+      background: #2c2c2c;
+    }
+
+    .btn-login:active {
+      background: #444;
+    }
+
+    .btn-login-text {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      line-height: 16px;
+    }
+
+    /* ── Secondary Actions ── */
+    .secondary {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      width: 100%;
+      padding-top: 40px;
+    }
+
+    .divider-wrap {
+      position: relative;
+      height: 2px;
+      width: 100%;
+    }
+
+    .divider-line {
+      position: absolute;
+      inset: 0;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(212,204,188,0) 0%, #d4ccbc 50%, rgba(212,204,188,0) 100%);
+    }
+
+    .register-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .register-hint {
+      font-size: 13px;
+      font-weight: 400;
+      color: #444748;
+      text-align: center;
+      line-height: 20px;
+    }
+
+    .btn-register {
+      border: 1px solid #000;
+      padding: 13px 33px;
+      background: transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .btn-register:hover {
+      background: rgba(0,0,0,0.04);
+    }
+
+    .btn-register-text {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #000;
+      letter-spacing: 1.65px;
+      text-transform: uppercase;
+      line-height: 16px;
+    }
+
+    /* ── Bottom atmosphere ── */
+    .bg-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 390px;
+      height: 256px;
+      overflow: hidden;
+      opacity: 0.1;
+      pointer-events: none;
+    }
+
+    .bg-bottom img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Main content -->
+    <main class="main">
+      <div class="container">
+
+        <!-- Logo & Branding -->
+        <div class="branding">
+          <div class="logo-wrap">
+            <img src="assets/logo.png" alt="留白记账 Logo" />
+          </div>
+          <h1 class="app-title">留白记账</h1>
+          <p class="app-tagline">记账，是一种生活的修行。</p>
+        </div>
+
+        <!-- Login Form -->
+        <form class="form" onsubmit="return false;">
+
+          <!-- 手机号 -->
+          <div class="field">
+            <label class="field-label" for="phone">手机号</label>
+            <div class="field-input-wrap">
+              <input
+                class="field-input"
+                id="phone"
+                type="tel"
+                placeholder="请输入手机号"
+                autocomplete="tel"
+              />
+            </div>
+          </div>
+
+          <!-- 密码 -->
+          <div class="field">
+            <label class="field-label" for="password">密码</label>
+            <div class="field-input-wrap">
+              <input
+                class="field-input"
+                id="password"
+                type="password"
+                placeholder="请输入密码"
+                autocomplete="current-password"
+              />
+            </div>
+          </div>
+
+          <!-- Remember / Forgot -->
+          <div class="row-aux">
+            <label class="remember">
+              <input class="checkbox" type="checkbox" checked />
+              <span class="remember-label">记住登录状态</span>
+            </label>
+            <a class="forgot-link" href="#">忘记密码？</a>
+          </div>
+
+          <!-- Login Button -->
+          <button class="btn-login" type="submit">
+            <span class="btn-login-text">登 录</span>
+          </button>
+
+        </form>
+
+        <!-- Secondary Actions -->
+        <div class="secondary">
+          <div class="divider-wrap">
+            <div class="divider-line"></div>
+          </div>
+          <div class="register-section">
+            <p class="register-hint">初识留白？</p>
+            <button class="btn-register" type="button">
+              <span class="btn-register-text">注 册 账 号</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom atmospheric element -->
+    <div class="bg-bottom">
+      <img src="assets/bg-bottom.svg" alt="" />
+    </div>
+
+  </div>
+</body>
+</html>

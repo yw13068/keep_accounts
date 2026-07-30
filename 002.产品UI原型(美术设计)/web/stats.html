@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>留白记账 · 统计</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: 'Noto Serif SC', serif; background: #f5f0e8; }
+
+    /* ── Page shell ── */
+    .page {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      background: linear-gradient(90deg, #f5f0e8 0%, #f5f0e8 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 80px;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: #fdf8f8;
+      display: flex;
+      align-items: center;
+      padding: 8px 24px;
+      width: 100%;
+      flex-shrink: 0;
+    }
+    .header-title {
+      flex: 1;
+      font-size: 24px;
+      font-weight: 500;
+      color: #000;
+      text-align: center;
+      letter-spacing: -0.6px;
+      line-height: 32px;
+    }
+
+    /* ── Main scroll area ── */
+    .main {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 448px;
+      padding: 24px 24px 48px;
+    }
+
+    /* ── Monthly nav ── */
+    .month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      padding: 8px 0;
+      width: 100%;
+    }
+    .month-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      cursor: pointer;
+      user-select: none;
+    }
+    .month-btn-text {
+      font-size: 16px;
+      font-weight: 400;
+      color: #000;
+      line-height: 24px;
+    }
+    .month-btn-arrow {
+      width: 8.5px;
+      height: 5px;
+      margin-left: 8px;
+      object-fit: contain;
+    }
+
+    /* Dropdown */
+    .month-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      border: 1px solid #c4c7c7;
+      border-radius: 4px;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1);
+      width: 160px;
+      z-index: 10;
+      padding: 8px;
+    }
+    .month-dropdown.open { display: block; }
+    .month-option {
+      padding: 8px 12px;
+      border-radius: 2px;
+      font-size: 13px;
+      color: #1c1b1b;
+      cursor: pointer;
+      line-height: 20px;
+    }
+    .month-option:hover { background: #f5f0e8; }
+    .month-option.active { background: #e7e2da; font-weight: 700; color: #000; }
+
+    /* ── Toggle (支出 / 收入) ── */
+    .toggle-wrap {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 8px;
+      width: 100%;
+    }
+    .toggle {
+      position: relative;
+      background: #f7f3f2;
+      border: 1px solid #c4c7c7;
+      border-radius: 12px;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      width: 192px;
+    }
+    .toggle-indicator {
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      left: 4px;
+      width: 91px;
+      background: #000;
+      border-radius: 12px;
+      transition: transform 0.2s ease;
+    }
+    .toggle-indicator.income { transform: translateX(91px); }
+    .toggle-btn {
+      flex: 1;
+      position: relative;
+      z-index: 1;
+      padding: 6.5px 0;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: color 0.2s;
+    }
+    .toggle-btn.active { color: #fff; }
+    .toggle-btn.inactive { color: #6b6b6b; }
+
+    /* ── Donut chart card ── */
+    .donut-card {
+      position: relative;
+      background: #faf7f2;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px 0 rgba(26,26,26,.04);
+      width: 100%;
+      height: 388px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    /* watermark texture */
+    .donut-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/stats-bg-texture.png');
+      background-size: 7px 7px;
+      background-position: top left;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+    .donut-label {
+      position: absolute;
+      top: 24px;
+      left: 24px; right: 24px;
+      font-size: 11px;
+      font-weight: 500;
+      color: #6b6b6b;
+      text-align: center;
+      letter-spacing: 1.1px;
+      line-height: 16px;
+    }
+    /* SVG donut */
+    .donut-wrap {
+      position: absolute;
+      top: 64px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 220px;
+    }
+    .donut-svg {
+      width: 220px;
+      height: 220px;
+      transform: rotate(-90deg);
+    }
+    .donut-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .donut-center-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #6b6b6b;
+      line-height: 20px;
+    }
+    .donut-center-amount {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: #000;
+      letter-spacing: 1.6px;
+      line-height: 40px;
+    }
+    /* Legend */
+    .legend-grid {
+      position: absolute;
+      left: 24px; right: 24px;
+      top: 308px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      height: 20px;
+    }
+    .legend-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .legend-text {
+      margin-left: 12px;
+      font-size: 13px;
+      color: #000;
+      line-height: 20px;
+      white-space: nowrap;
+    }
+
+    /* ── Monthly overview section ── */
+    .section { width: 100%; display: flex; flex-direction: column; gap: 24px; }
+    .section-title {
+      padding-left: 16px;
+      font-size: 20px;
+      font-weight: 500;
+      color: #1c1b1b;
+      line-height: 28px;
+    }
+    .bars { display: flex; flex-direction: column; gap: 32px; }
+    .bar-group { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+    .bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .bar-month {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1c1b1b;
+      line-height: 24px;
+    }
+    .bar-amount {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: #1c1b1b;
+      line-height: 24px;
+    }
+    .bar-track {
+      background: #e5e2e1;
+      border-radius: 99px;
+      height: 6px;
+      width: 100%;
+      overflow: hidden;
+    }
+    .bar-fill {
+      background: #000;
+      border-radius: 99px;
+      height: 100%;
+      transition: width 0.6s cubic-bezier(.4,0,.2,1);
+    }
+    /* divider between bars */
+    .bar-divider {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.08) 20%, rgba(0,0,0,0.08) 80%, rgba(0,0,0,0) 100%);
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    /* ── Quote ── */
+    .quote-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 64px;
+      width: 100%;
+      opacity: 0.6;
+    }
+    .quote-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: #6b6b6b;
+      text-align: center;
+      line-height: 20px;
+    }
+
+    /* ── FAB ── */
+    .fab {
+      position: fixed;
+      bottom: 96px;
+      right: calc(50% - 195px + 24px); /* aligned within 390px mobile frame */
+      width: 56px; height: 56px;
+      background: #c0392b;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 20;
+    }
+    .fab img { width: 15.7px; height: 15.7px; object-fit: contain; }
+
+    /* ── Bottom Nav ── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      height: 64px;
+      background: #fff;
+      filter: drop-shadow(0 -2px 5px rgba(26,26,26,.05));
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 43px;
+      z-index: 30;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 100%;
+      gap: 2px;
+      cursor: pointer;
+    }
+    .nav-item.active {
+      background: #e7e2da;
+      border-radius: 4px;
+    }
+    .nav-icon { width: 18px; height: 18px; object-fit: contain; }
+    .nav-label {
+      font-size: 10px;
+      font-weight: 500;
+      color: #6b6b6b;
+      line-height: 15px;
+    }
+    .nav-item.active .nav-label { color: #67645e; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <header class="header">
+    <h1 class="header-title">留白记账</h1>
+  </header>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Monthly navigation -->
+    <div class="month-nav">
+      <div class="month-btn" id="monthBtn" onclick="toggleDropdown()">
+        <span class="month-btn-text">2024年度</span>
+        <img class="month-btn-arrow" src="assets/dropdown-arrow.png" alt="" />
+        <div class="month-dropdown" id="monthDropdown">
+          <div class="month-option" onclick="selectMonth(event,'2024年10月')">2024年10月</div>
+          <div class="month-option" onclick="selectMonth(event,'2024年9月')">2024年9月</div>
+          <div class="month-option active" onclick="selectMonth(event,'2024年8月')">2024年8月</div>
+          <div class="month-option" onclick="selectMonth(event,'2024年7月')">2024年7月</div>
+          <div class="month-option" onclick="selectMonth(event,'2024年6月')">2024年6月</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Income / Expense toggle -->
+    <div class="toggle-wrap">
+      <div class="toggle" id="toggle">
+        <div class="toggle-indicator" id="toggleIndicator"></div>
+        <div class="toggle-btn active" id="btnExpense" onclick="switchToggle('expense')">支出</div>
+        <div class="toggle-btn inactive" id="btnIncome" onclick="switchToggle('income')">收入</div>
+      </div>
+    </div>
+
+    <!-- Donut chart card -->
+    <div class="donut-card">
+      <div class="donut-label">本月洞察</div>
+
+      <div class="donut-wrap">
+        <!-- Pure SVG donut — matches Figma proportions: 居住38% 餐饮25% 健康22% 休闲15% -->
+        <svg class="donut-svg" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- track -->
+          <circle cx="110" cy="110" r="83.6" fill="none" stroke="#e5e2e1" stroke-width="26.4"/>
+          <!-- 居住 38% → 0.38×2π×83.6 ≈ 199.6, full=2π×83.6≈525.3 -->
+          <circle cx="110" cy="110" r="83.6" fill="none" stroke="#000000"
+            stroke-width="26.4"
+            stroke-dasharray="199.6 525.3"
+            stroke-dashoffset="0"/>
+          <!-- 餐饮 25% — offset 199.6 -->
+          <circle cx="110" cy="110" r="83.6" fill="none" stroke="#c0392b"
+            stroke-width="26.4"
+            stroke-dasharray="131.3 525.3"
+            stroke-dashoffset="-199.6"/>
+          <!-- 健康 22% — offset 330.9 -->
+          <circle cx="110" cy="110" r="83.6" fill="none" stroke="#2b6cb0"
+            stroke-width="26.4"
+            stroke-dasharray="115.6 525.3"
+            stroke-dashoffset="-330.9"/>
+          <!-- 休闲 15% — offset 446.5 -->
+          <circle cx="110" cy="110" r="83.6" fill="none" stroke="#2e7d5e"
+            stroke-width="26.4"
+            stroke-dasharray="78.8 525.3"
+            stroke-dashoffset="-446.5"/>
+          <!-- inner white hole -->
+          <circle cx="110" cy="110" r="70.4" fill="#faf7f2"/>
+        </svg>
+
+        <div class="donut-center">
+          <span class="donut-center-label">年度总支出</span>
+          <span class="donut-center-amount">¥52,480</span>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend-grid">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#000"></div>
+          <span class="legend-text">居住 (38%)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#2b6cb0"></div>
+          <span class="legend-text">健康 (22%)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#c0392b"></div>
+          <span class="legend-text">餐饮 (25%)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#2e7d5e"></div>
+          <span class="legend-text">休闲 (15%)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Annual monthly overview -->
+    <div class="section">
+      <h2 class="section-title">年度月度概览</h2>
+      <div class="bars">
+
+        <div class="bar-group">
+          <div class="bar-header">
+            <span class="bar-month">八月</span>
+            <span class="bar-amount">¥4,280.00</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:83.6%"></div>
+          </div>
+        </div>
+
+        <div class="bar-divider"></div>
+
+        <div class="bar-group">
+          <div class="bar-header">
+            <span class="bar-month">七月</span>
+            <span class="bar-amount">¥5,120.00</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:100%"></div>
+          </div>
+        </div>
+
+        <div class="bar-divider"></div>
+
+        <div class="bar-group">
+          <div class="bar-header">
+            <span class="bar-month">六月</span>
+            <span class="bar-amount">¥3,850.00</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:75.2%"></div>
+          </div>
+        </div>
+
+        <div class="bar-divider"></div>
+
+        <div class="bar-group">
+          <div class="bar-header">
+            <span class="bar-month">五月</span>
+            <span class="bar-amount">¥4,600.00</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:89.8%"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Quote -->
+    <div class="quote-section">
+      <p class="quote-text">"平衡并非寻得，</p>
+      <p class="quote-text">而是由你创造。"</p>
+    </div>
+
+  </main>
+
+  <!-- FAB -->
+  <div class="fab">
+    <img src="assets/fab-icon.png" alt="记账" />
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <div class="nav-item" onclick="location.href='login.html'">
+      <img class="nav-icon" src="assets/nav-home.png" alt="首页" />
+      <span class="nav-label">首页</span>
+    </div>
+    <div class="nav-item active">
+      <img class="nav-icon" src="assets/nav-stats.png" alt="统计" />
+      <span class="nav-label">统计</span>
+    </div>
+    <div class="nav-item">
+      <img class="nav-icon" src="assets/nav-profile.png" alt="我的" />
+      <span class="nav-label">我的</span>
+    </div>
+  </nav>
+
+</div>
+
+<script>
+  // Dropdown
+  function toggleDropdown() {
+    document.getElementById('monthDropdown').classList.toggle('open');
+  }
+  function selectMonth(e, label) {
+    e.stopPropagation();
+    document.querySelector('.month-btn-text').textContent = label;
+    document.getElementById('monthDropdown').classList.remove('open');
+    document.querySelectorAll('.month-option').forEach(el => el.classList.remove('active'));
+    e.target.classList.add('active');
+  }
+  document.addEventListener('click', (e) => {
+    if (!document.getElementById('monthBtn').contains(e.target)) {
+      document.getElementById('monthDropdown').classList.remove('open');
+    }
+  });
+
+  // Toggle
+  function switchToggle(type) {
+    const ind = document.getElementById('toggleIndicator');
+    const exp = document.getElementById('btnExpense');
+    const inc = document.getElementById('btnIncome');
+    if (type === 'income') {
+      ind.classList.add('income');
+      exp.className = 'toggle-btn inactive';
+      inc.className = 'toggle-btn active';
+    } else {
+      ind.classList.remove('income');
+      exp.className = 'toggle-btn active';
+      inc.className = 'toggle-btn inactive';
+    }
+  }
+</script>
+</body>
+</html>
