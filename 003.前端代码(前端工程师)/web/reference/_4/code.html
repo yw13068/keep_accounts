@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>留白记账 - 注册账号</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&amp;family=Noto+Serif+SC:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#484645",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#615e58",
+                    "outline-variant": "#c4c7c7",
+                    "error": "#ba1a1a",
+                    "cinnabar-red": "#C0392B",
+                    "surface-dim": "#ddd9d8",
+                    "on-secondary-fixed-variant": "#494741",
+                    "on-surface-variant": "#444748",
+                    "primary-fixed-dim": "#c8c6c5",
+                    "on-error": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#f7f3f2",
+                    "on-secondary-container": "#67645e",
+                    "ochre-warning": "#B7610A",
+                    "primary": "#000000",
+                    "on-primary-fixed-variant": "#474746",
+                    "primary-fixed": "#e5e2e1",
+                    "on-secondary-fixed": "#1d1c17",
+                    "on-primary-container": "#858383",
+                    "surface-container-high": "#ebe7e6",
+                    "error-container": "#ffdad6",
+                    "outline": "#747878",
+                    "on-tertiary-container": "#868382",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#f1edec",
+                    "inverse-on-surface": "#f4f0ef",
+                    "tertiary": "#000000",
+                    "surface-bright": "#fdf8f8",
+                    "inverse-surface": "#313030",
+                    "tertiary-fixed": "#e6e2df",
+                    "background": "#fdf8f8",
+                    "secondary-container": "#e7e2da",
+                    "pale-ink": "#6B6B6B",
+                    "surface-container-highest": "#e5e2e1",
+                    "primary-container": "#1c1b1b",
+                    "secondary-fixed": "#e7e2da",
+                    "pine-green": "#2E7D5E",
+                    "on-primary-fixed": "#1c1b1b",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e5e2e1",
+                    "on-background": "#1c1b1b",
+                    "tertiary-container": "#1c1b1a",
+                    "surface-tint": "#5f5e5e",
+                    "tertiary-fixed-dim": "#cac6c4",
+                    "on-surface": "#1c1b1b",
+                    "inverse-primary": "#c8c6c5",
+                    "ink-wash-gray": "#D4CCBC",
+                    "secondary-fixed-dim": "#cac6be",
+                    "slate-blue": "#2B6CB0",
+                    "surface": "#fdf8f8",
+                    "on-tertiary-fixed": "#1c1b1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "ink-stroke-thick": "3px",
+                    "section-gap": "40px",
+                    "gutter": "16px",
+                    "container-margin": "24px",
+                    "unit": "8px",
+                    "ink-stroke-thin": "1px"
+            },
+            "fontFamily": {
+                    "number-display": ["Hanken Grotesk"],
+                    "label-caps": ["Hanken Grotesk"],
+                    "body-sm": ["Noto Serif SC"],
+                    "headline-md": ["Noto Serif SC"],
+                    "headline-lg-mobile": ["Noto Serif SC"],
+                    "headline-lg": ["Noto Serif SC"],
+                    "body-lg": ["Noto Serif SC"],
+                    "number-standard": ["Hanken Grotesk"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .ink-texture {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            background-color: #fdf8f8;
+        }
+
+        .brush-border {
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(to right, transparent, #D4CCBC 20%, #747878 50%, #D4CCBC 80%, transparent) 1;
+        }
+
+        .ink-fade-in {
+            animation: inkFade 1.5s ease-out forwards;
+        }
+
+        @keyframes inkFade {
+            from { opacity: 0; filter: blur(4px); transform: translateY(10px); }
+            to { opacity: 1; filter: blur(0); transform: translateY(0); }
+        }
+
+        .seal-transition {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .seal-transition:active {
+            transform: scale(0.92);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="ink-texture min-h-screen text-on-surface selection:bg-secondary-container">
+<!-- Top AppBar (Back & Title) -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md px-4 h-14 flex items-center justify-between">
+<button class="flex items-center justify-center w-10 h-10 hover:opacity-80 transition-opacity active:scale-95 transition-transform" onclick="history.back()">
+<span class="material-symbols-outlined text-primary">arrow_back_ios_new</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold tracking-[0.2em] text-primary">注册账号</h1>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</nav>
+<!-- Main Content Canvas -->
+<main class="px-container-margin max-w-md mx-auto flex flex-col min-h-screen pt-2 pb-2">
+<!-- Brand Illustration (Subtle Ink Wash) -->
+<div class="ink-fade-in mb-unit*4" style="animation-delay: 0.2s;">
+<p class="font-body-lg text-body-lg text-pale-ink text-center mb-unit*4 italic">“始于落笔，成于静心。”</p>
+</div>
+<!-- Registration Form -->
+<form class="ink-fade-in mt-4 gap-3 gap-2" style="animation-delay: 0.4s;">
+<!-- Username Input -->
+<div class="relative group mt-4">
+<label class="block font-label-caps text-label-caps text-pale-ink uppercase mt-1" for="contact">手机号</label>
+<div class="flex items-center">
+<span class="material-symbols-outlined absolute left-0 text-ink-wash-gray group-focus-within:text-primary transition-colors">phone_iphone</span>
+<input class="w-full pl-8 pr-4 py-3 bg-transparent border-0 border-b border-ink-wash-gray focus:ring-0 focus:border-primary font-body-lg text-body-lg transition-all placeholder:text-outline-variant" id="contact" name="contact" placeholder="请输入手机号" type="text"/>
+</div>
+</div><div class="relative group mt-4">
+<label class="block font-label-caps text-label-caps text-pale-ink uppercase mt-1" for="username">用户名 / 笔名</label>
+<div class="flex items-center">
+<span class="material-symbols-outlined absolute left-0 text-ink-wash-gray group-focus-within:text-primary transition-colors">person</span>
+<input class="w-full pl-8 pr-4 py-3 bg-transparent border-0 border-b border-ink-wash-gray focus:ring-0 focus:border-primary font-body-lg text-body-lg transition-all placeholder:text-outline-variant" id="username" name="username" placeholder="请输入您的称呼" type="text"/>
+</div>
+</div>
+<!-- Password Input -->
+<div class="relative group mt-4">
+<label class="block font-label-caps text-label-caps text-pale-ink uppercase mt-1" for="password">密码</label>
+<div class="flex items-center">
+<span class="material-symbols-outlined absolute left-0 text-ink-wash-gray group-focus-within:text-primary transition-colors">lock</span>
+<input class="w-full pl-8 pr-4 py-3 bg-transparent border-0 border-b border-ink-wash-gray focus:ring-0 focus:border-primary font-body-lg text-body-lg transition-all placeholder:text-outline-variant" id="password" name="password" placeholder="请输入密码" type="password"/>
+<button class="absolute right-0 text-ink-wash-gray hover:text-primary" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<!-- Confirm Password Input -->
+<div class="relative group mt-4">
+<label class="block font-label-caps text-label-caps text-pale-ink uppercase mt-1" for="confirm-password">确认密码</label>
+<div class="flex items-center">
+<span class="material-symbols-outlined absolute left-0 text-ink-wash-gray group-focus-within:text-primary transition-colors">verified_user</span>
+<input class="w-full pl-8 pr-4 py-3 bg-transparent border-0 border-b border-ink-wash-gray focus:ring-0 focus:border-primary font-body-lg text-body-lg transition-all placeholder:text-outline-variant" id="confirm-password" name="confirm-password" placeholder="请再次输入密码" type="password"/>
+</div>
+</div>
+<!-- Agreement -->
+<div class="flex items-start gap-3 py-2">
+<input class="mt-1 w-4 h-4 text-primary border-ink-wash-gray rounded-sm focus:ring-primary focus:ring-offset-surface" id="terms" type="checkbox"/>
+<label class="font-body-sm text-body-sm text-pale-ink leading-relaxed mt-1" for="terms">
+                    我已阅读并同意 <a class="text-primary border-b border-ink-wash-gray" href="#">《服务协议》</a> 与 <a class="text-primary border-b border-ink-wash-gray" href="#">《隐私政策》</a>，承诺如实记录每一笔收支。
+                </label>
+</div>
+<!-- Primary Action -->
+<div class="pt-2 pt-6">
+<button class="w-full h-14 bg-primary text-on-primary font-headline-md text-headline-md rounded-lg shadow-lg seal-transition flex items-center justify-center gap-2 hover:opacity-90 active:bg-inverse-surface" type="submit">
+<span class="">开启记账之旅</span>
+<span class="material-symbols-outlined">brush</span>
+</button>
+</div>
+</form>
+<!-- Secondary Action / Redirect -->
+<footer class="pb-6 text-center ink-fade-in pt-2 mt-4" style="animation-delay: 0.6s;">
+<div class="inline-flex items-center gap-2 text-pale-ink font-body-lg text-body-lg">
+<span class="">已有账号？</span>
+<a class="text-primary font-bold hover:underline decoration-cinnabar-red decoration-2 underline-offset-4 transition-all" href="/login">
+                    立即登录
+                </a>
+</div>
+<div class="flex justify-center opacity-30 mt-4">
+<div class="w-24 h-[1px] bg-gradient-to-r from-transparent via-ink-wash-gray to-transparent"></div>
+</div>
+<p class="mt-4 font-label-caps text-[10px] text-outline tracking-[0.2em] uppercase">Liubai Finance · 留白记账</p>
+</footer>
+</main>
+<!-- Decorative Corner Element -->
+<div class="fixed bottom-0 right-0 w-32 h-32 pointer-events-none opacity-10 rotate-180 z-0">
+<div class="w-full h-full bg-cover" data-alt="A close-up shot of heavy black ink bleeding into textured white rice paper, creating an abstract, organic pattern with soft feathered edges and deep carbon tones, typical of classical ink wash aesthetics." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDVkdS0WC2IdM5bL-gcUxQhgDLIvgkaM5dolJCIR2u_IlkMMT4iU7_C5IE2g8_RUBSnfLG8a8Jz2cmrHfRlX7bsKeJhOvaF0ZM5YXKvlkNQg6iiEY59XR7QLQL4NEUpNPJdFne4CRJYsQGgdUSpPcYOmOLdbzO8iVgxQ0uGopvaNv6sJbGs4RPPG3VcwsJBeLV3t4UEsRWCY0R8jotsVvFubqYdwNEVvPsTTn53ZdS3KSnoJk1V7CuZjQ')"></div>
+</div>
+<script>
+        // Simple micro-interaction for password visibility
+        document.querySelectorAll('button').forEach(btn => {
+            if (btn.querySelector('.material-symbols-outlined')?.textContent === 'visibility') {
+                btn.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    const icon = this.querySelector('.material-symbols-outlined');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.textContent = 'visibility_off';
+                    } else {
+                        input.type = 'password';
+                        icon.textContent = 'visibility';
+                    }
+                });
+            }
+        });
+
+        // Form submission animation mock
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span>';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<span>入账成功</span><span class="material-symbols-outlined">check_circle</span>';
+                btn.classList.replace('bg-primary', 'bg-pine-green');
+            }, 1200);
+        });
+    </script>
+</body></html>

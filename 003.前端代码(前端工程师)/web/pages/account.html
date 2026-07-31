@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>账本管理 - 留白记账</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "background": "#fdf8f8",
+        "surface": "#fdf8f8",
+        "surface-bright": "#fdf8f8",
+        "surface-container-lowest": "#ffffff",
+        "surface-container-low": "#f7f3f2",
+        "surface-container": "#f1edec",
+        "surface-container-high": "#ebe7e6",
+        "surface-container-highest": "#e5e2e1",
+        "on-background": "#1c1b1b",
+        "on-surface": "#1c1b1b",
+        "on-surface-variant": "#444748",
+        "inverse-surface": "#313030",
+        "inverse-on-surface": "#f4f0ef",
+        "outline": "#747878",
+        "outline-variant": "#c4c7c7",
+        "surface-tint": "#5f5e5e",
+        "primary": "#000000",
+        "on-primary": "#ffffff",
+        "primary-container": "#1c1b1b",
+        "on-primary-container": "#858383",
+        "inverse-primary": "#c8c6c5",
+        "secondary": "#615e58",
+        "on-secondary": "#ffffff",
+        "secondary-container": "#e7e2da",
+        "on-secondary-container": "#67645e",
+        "secondary-fixed": "#e7e2da",
+        "secondary-fixed-dim": "#cac6be",
+        "on-secondary-fixed": "#1d1c17",
+        "on-secondary-fixed-variant": "#494741",
+        "tertiary": "#000000",
+        "on-tertiary": "#ffffff",
+        "tertiary-container": "#1c1b1a",
+        "on-tertiary-container": "#868382",
+        "tertiary-fixed": "#e6e2df",
+        "tertiary-fixed-dim": "#cac6c4",
+        "on-tertiary-fixed": "#1c1b1a",
+        "on-tertiary-fixed-variant": "#484645",
+        "error": "#ba1a1a",
+        "on-error": "#ffffff",
+        "error-container": "#ffdad6",
+        "on-error-container": "#93000a",
+        "primary-fixed": "#e5e2e1",
+        "primary-fixed-dim": "#c8c6c5",
+        "on-primary-fixed": "#1c1b1b",
+        "on-primary-fixed-variant": "#474746",
+        "ink-wash-gray": "#D4CCBC",
+        "pine-green": "#2E7D5E",
+        "cinnabar-red": "#C0392B",
+        "slate-blue": "#2B6CB0",
+        "ochre-warning": "#B7610A",
+        "pale-ink": "#6B6B6B",
+      },
+      borderRadius: {
+        "DEFAULT": "0.125rem",
+        "lg": "0.25rem",
+        "xl": "0.5rem",
+        "full": "0.75rem"
+      },
+      spacing: {
+        "unit": "8px",
+        "container-margin": "24px",
+        "section-gap": "40px",
+        "gutter": "16px",
+        "ink-stroke-thick": "3px",
+        "ink-stroke-thin": "1px"
+      },
+      fontFamily: {
+        "headline-lg": ["Noto Serif SC", "serif"],
+        "headline-lg-mobile": ["Noto Serif SC", "serif"],
+        "headline-md": ["Noto Serif SC", "serif"],
+        "body-lg": ["Noto Serif SC", "serif"],
+        "body-sm": ["Noto Serif SC", "serif"],
+        "number-display": ["Hanken Grotesk", "sans-serif"],
+        "number-standard": ["Hanken Grotesk", "sans-serif"],
+        "label-caps": ["Hanken Grotesk", "sans-serif"],
+      },
+      fontSize: {
+        "headline-lg": ["28px", {lineHeight: "36px", letterSpacing: "-0.02em", fontWeight: "700"}],
+        "headline-lg-mobile": ["24px", {lineHeight: "32px", fontWeight: "700"}],
+        "headline-md": ["20px", {lineHeight: "28px", fontWeight: "600"}],
+        "body-lg": ["16px", {lineHeight: "24px", fontWeight: "400"}],
+        "body-sm": ["13px", {lineHeight: "20px", fontWeight: "400"}],
+        "number-display": ["32px", {lineHeight: "40px", letterSpacing: "0.05em", fontWeight: "600"}],
+        "number-standard": ["18px", {lineHeight: "24px", fontWeight: "500"}],
+        "label-caps": ["11px", {lineHeight: "16px", letterSpacing: "0.1em", fontWeight: "700"}],
+      }
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+.ink-brush-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #D4CCBC 20%, #D4CCBC 80%, transparent 100%);
+  margin: 1.5rem 0;
+}
+.ink-category-bg {
+  background: radial-gradient(circle, rgba(212, 204, 188, 0.4) 0%, rgba(212, 204, 188, 0) 70%);
+  transition: all 0.3s ease;
+}
+.category-item {
+  transition: transform 0.15s ease;
+}
+.category-item:active {
+  transform: scale(0.92);
+}
+.custom-dashed-border {
+  background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' fill='none' rx='100' ry='100' stroke='%23D4CCBC' stroke-width='2' stroke-dasharray='6%2c 8' stroke-dashoffset='0' stroke-linecap='square'/%3E%3C/svg%3E");
+  border-radius: 100px;
+}
+.delete-btn {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.category-item:hover .delete-btn {
+  opacity: 1;
+}
+</style>
+</head>
+<body class="min-h-dvh pb-24" style="background-color:#F5F0E8;font-family:'Noto Serif SC',serif">
+<!-- Top AppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md flex items-center justify-center h-16 border-b" style="background:rgba(245,240,232,0.8);border-color:rgba(212,204,188,0.3)">
+<button onclick="history.back()" class="absolute left-6 flex items-center justify-center w-10 h-10 hover:opacity-70 transition-opacity active:scale-95">
+<span class="material-symbols-outlined text-primary">arrow_back_ios_new</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">账本管理</h1>
+</header>
+
+<main class="pt-20 px-container-margin">
+<!-- 品牌头图 -->
+<div class="w-full h-48 mb-6 rounded-xl overflow-hidden relative shadow-sm" style="box-shadow:0 4px 20px rgba(26,26,26,0.05)">
+<div class="w-full h-full bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=800&q=80');background-position:center 50%"></div>
+<div class="absolute bottom-4 left-6">
+<p class="font-body-sm text-pale-ink italic">笔墨之间，收支有道</p>
+</div>
+</div>
+
+<!-- 支出分类 -->
+<section class="mb-section-gap">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="w-1 h-6 bg-cinnabar-red rounded-full"></span>
+支出分类
+</h2>
+<span id="expenseCount" class="font-body-sm text-body-sm text-pale-ink">共 8 个分类</span>
+</div>
+<div id="expenseGrid" class="grid grid-cols-4 gap-y-8 gap-x-4">
+<!-- 动态渲染 -->
+</div>
+</section>
+
+<!-- 分割线 -->
+<div class="ink-brush-divider"></div>
+
+<!-- 收入分类 -->
+<section class="mb-12">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="w-1 h-6 bg-pine-green rounded-full"></span>
+收入分类
+</h2>
+<span id="incomeCount" class="font-body-sm text-body-sm text-pale-ink">共 4 个分类</span>
+</div>
+<div id="incomeGrid" class="grid grid-cols-4 gap-y-8 gap-x-4">
+<!-- 动态渲染 -->
+</div>
+</section>
+</main>
+
+<!-- 新增分类弹窗 -->
+<div id="addModal" class="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm hidden items-center justify-center" onclick="closeModal(event)">
+<div class="bg-surface-container-lowest rounded-xl p-6 w-80 shadow-xl" onclick="event.stopPropagation()">
+<p class="font-headline-md text-headline-md text-primary mb-4" id="modalTitle">新增分类</p>
+<div class="mb-4">
+<label class="font-label-caps text-label-caps text-pale-ink block mb-2">分类名称</label>
+<input type="text" id="newCategoryName" class="w-full bg-transparent border-b-2 border-ink-wash-gray focus:border-slate-blue py-2 font-body-lg text-body-lg text-primary outline-none transition-colors" placeholder="请输入分类名称">
+</div>
+<div class="mb-4">
+<label class="font-label-caps text-label-caps text-pale-ink block mb-2">选择图标</label>
+<div class="grid grid-cols-5 gap-2 max-h-40 overflow-y-auto" id="iconPicker">
+<!-- 图标选项 -->
+</div>
+</div>
+<div class="flex gap-3">
+<button onclick="closeAddModal()" class="flex-1 py-3 border border-primary text-primary font-label-caps text-label-caps rounded-lg hover:bg-surface-container-low transition-colors">取消</button>
+<button onclick="confirmAddCategory()" class="flex-1 py-3 bg-primary text-white font-label-caps text-label-caps rounded-lg hover:opacity-90 transition-opacity">确认</button>
+</div>
+</div>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="fixed bottom-0 left-0 right-0 z-40 bg-surface-container-lowest flex justify-around items-center h-16 border-t" style="border-color:rgba(212,204,188,0.3);box-shadow:0 -2px 5px rgba(26,26,26,0.05)">
+<a class="flex flex-col items-center justify-center py-2 px-4 rounded-xl" href="home.html">
+<span class="material-symbols-outlined text-pale-ink">home</span>
+<span class="font-label-caps text-label-caps mt-1 text-pale-ink">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center py-2 px-4 rounded-xl" href="stats.html">
+<span class="material-symbols-outlined text-pale-ink">analytics</span>
+<span class="font-label-caps text-label-caps mt-1 text-pale-ink">统计</span>
+</a>
+<a class="flex flex-col items-center justify-center py-2 px-4 rounded-xl" href="budget.html">
+<span class="material-symbols-outlined text-pale-ink">calendar_today</span>
+<span class="font-label-caps text-label-caps mt-1 text-pale-ink">预算</span>
+</a>
+<a class="flex flex-col items-center justify-center py-2 px-4 rounded-xl" href="profile.html">
+<span class="material-symbols-outlined text-primary">person</span>
+<span class="font-label-caps text-label-caps mt-1" style="color:#1c1b1b">我的</span>
+</a>
+</nav>
+
+<script>
+// 预设图标库
+const ICONS = ['restaurant', 'directions_bus', 'shopping_bag', 'home', 'movie', 'health_and_safety', 'school', 'pets', 'flight', 'fitness_center', 'spa', 'music_note', 'book', 'coffee', 'local_bar', 'sports_esports', 'attach_money', 'savings', 'card_giftcard', 'redeem', 'trending_up', 'account_balance_wallet', 'payments', 'work', 'business_center', 'local_atm'];
+
+// 初始分类数据
+let expenseCategories = [
+  { id: 1, name: '餐饮', icon: 'restaurant' },
+  { id: 2, name: '交通', icon: 'directions_bus' },
+  { id: 3, name: '购物', icon: 'shopping_bag' },
+  { id: 4, name: '居住', icon: 'home' },
+  { id: 5, name: '娱乐', icon: 'movie' },
+  { id: 6, name: '医疗', icon: 'health_and_safety' },
+  { id: 7, name: '教育', icon: 'school' },
+  { id: 8, name: '人情', icon: 'favorite' },
+];
+
+let incomeCategories = [
+  { id: 101, name: '工资', icon: 'payments' },
+  { id: 102, name: '奖金', icon: 'redeem' },
+  { id: 103, name: '理财', icon: 'trending_up' },
+  { id: 104, name: '兼职', icon: 'account_balance_wallet' },
+];
+
+let currentType = 'expense';
+let selectedIcon = 'restaurant';
+let nextExpenseId = 9;
+let nextIncomeId = 105;
+
+// 渲染支出分类
+function renderExpenseCategories() {
+  const grid = document.getElementById('expenseGrid');
+  grid.innerHTML = expenseCategories.map(cat => `
+    <div class="category-item flex flex-col items-center gap-2 relative">
+      <div class="relative">
+        <div class="w-14 h-14 rounded-full ink-category-bg flex items-center justify-center border border-transparent hover:border-ink-wash-gray cursor-pointer transition-all" onclick="flashEffect(this)">
+          <span class="material-symbols-outlined text-primary text-2xl">${cat.icon}</span>
+        </div>
+        <button class="delete-btn absolute -top-1 -right-1 w-5 h-5 bg-cinnabar-red rounded-full flex items-center justify-center shadow-md hover:bg-red-700 transition-colors" onclick="deleteCategory('expense', ${cat.id})">
+          <span class="material-symbols-outlined text-white text-xs" style="font-size:12px">close</span>
+        </button>
+      </div>
+      <span class="font-body-sm text-on-surface">${cat.name}</span>
+    </div>
+  `).join('') + `
+    <div class="category-item flex flex-col items-center gap-2 relative cursor-pointer" onclick="openAddModal('expense')">
+      <div class="w-14 h-14 custom-dashed-border flex items-center justify-center">
+        <span class="material-symbols-outlined text-pale-ink">add</span>
+      </div>
+      <span class="font-body-sm text-pale-ink">新增</span>
+    </div>
+  `;
+  document.getElementById('expenseCount').textContent = `共 ${expenseCategories.length} 个分类`;
+}
+
+// 渲染收入分类
+function renderIncomeCategories() {
+  const grid = document.getElementById('incomeGrid');
+  grid.innerHTML = incomeCategories.map(cat => `
+    <div class="category-item flex flex-col items-center gap-2 relative">
+      <div class="relative">
+        <div class="w-14 h-14 rounded-full ink-category-bg flex items-center justify-center border border-transparent hover:border-ink-wash-gray cursor-pointer transition-all" onclick="flashEffect(this)">
+          <span class="material-symbols-outlined text-primary text-2xl">${cat.icon}</span>
+        </div>
+        <button class="delete-btn absolute -top-1 -right-1 w-5 h-5 bg-cinnabar-red rounded-full flex items-center justify-center shadow-md hover:bg-red-700 transition-colors" onclick="deleteCategory('income', ${cat.id})">
+          <span class="material-symbols-outlined text-white text-xs" style="font-size:12px">close</span>
+        </button>
+      </div>
+      <span class="font-body-sm text-on-surface">${cat.name}</span>
+    </div>
+  `).join('') + `
+    <div class="category-item flex flex-col items-center gap-2 relative cursor-pointer" onclick="openAddModal('income')">
+      <div class="w-14 h-14 custom-dashed-border flex items-center justify-center">
+        <span class="material-symbols-outlined text-pale-ink">add</span>
+      </div>
+      <span class="font-body-sm text-pale-ink">新增</span>
+    </div>
+  `;
+  document.getElementById('incomeCount').textContent = `共 ${incomeCategories.length} 个分类`;
+}
+
+// 闪烁效果
+function flashEffect(el) {
+  el.classList.add('bg-ink-wash-gray/60');
+  setTimeout(() => el.classList.remove('bg-ink-wash-gray/60'), 200);
+}
+
+// 删除分类
+function deleteCategory(type, id) {
+  if (type === 'expense') {
+    expenseCategories = expenseCategories.filter(c => c.id !== id);
+    renderExpenseCategories();
+  } else {
+    incomeCategories = incomeCategories.filter(c => c.id !== id);
+    renderIncomeCategories();
+  }
+}
+
+// 打开新增弹窗
+function openAddModal(type) {
+  currentType = type;
+  selectedIcon = ICONS[0];
+  document.getElementById('newCategoryName').value = '';
+  document.getElementById('modalTitle').textContent = type === 'expense' ? '新增支出分类' : '新增收入分类';
+
+  // 渲染图标选择器
+  const picker = document.getElementById('iconPicker');
+  picker.innerHTML = ICONS.map(icon => `
+    <div class="w-10 h-10 rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-container-low transition-colors ${icon === selectedIcon ? 'bg-secondary-container border-2 border-primary' : ''}" onclick="selectIcon('${icon}', this)">
+      <span class="material-symbols-outlined text-primary text-xl">${icon}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('addModal').classList.remove('hidden');
+  document.getElementById('addModal').classList.add('flex');
+  document.getElementById('newCategoryName').focus();
+}
+
+// 选择图标
+function selectIcon(icon, el) {
+  selectedIcon = icon;
+  document.querySelectorAll('#iconPicker > div').forEach(d => {
+    d.classList.remove('bg-secondary-container', 'border-2', 'border-primary');
+  });
+  el.classList.add('bg-secondary-container', 'border-2', 'border-primary');
+}
+
+// 关闭弹窗
+function closeAddModal() {
+  document.getElementById('addModal').classList.add('hidden');
+  document.getElementById('addModal').classList.remove('flex');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('addModal')) {
+    closeAddModal();
+  }
+}
+
+// 确认新增
+function confirmAddCategory() {
+  const name = document.getElementById('newCategoryName').value.trim();
+
+  if (!name) {
+    alert('请输入分类名称');
+    return;
+  }
+
+  // 检查是否重复
+  const allNames = [...expenseCategories.map(c => c.name), ...incomeCategories.map(c => c.name)];
+  if (allNames.includes(name)) {
+    alert('该分类已存在，请使用其他名称');
+    return;
+  }
+
+  if (currentType === 'expense') {
+    expenseCategories.push({ id: nextExpenseId++, name, icon: selectedIcon });
+    renderExpenseCategories();
+  } else {
+    incomeCategories.push({ id: nextIncomeId++, name, icon: selectedIcon });
+    renderIncomeCategories();
+  }
+
+  closeAddModal();
+}
+
+// 初始化
+renderExpenseCategories();
+renderIncomeCategories();
+</script>
+</body>
+</html>

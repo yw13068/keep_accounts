@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "code-review-graph": {
+      "command": "/opt/miniconda3/bin/python3.14",
+      "args": [
+        "-m",
+        "code_review_graph",
+        "serve"
+      ],
+      "cwd": "/Users/yangwei/Desktop/yangwei/claude_demo/my-project",
+      "type": "stdio"
+    }
+  }
+}

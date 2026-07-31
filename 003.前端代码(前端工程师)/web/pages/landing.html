@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>留白记账 - 记账，是一种生活的修行</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "background": "#fdf8f8",
+        "surface": "#fdf8f8",
+        "surface-bright": "#fdf8f8",
+        "surface-container-lowest": "#ffffff",
+        "surface-container-low": "#f7f3f2",
+        "surface-container": "#f1edec",
+        "surface-container-high": "#ebe7e6",
+        "surface-container-highest": "#e5e2e1",
+        "on-background": "#1c1b1b",
+        "on-surface": "#1c1b1b",
+        "on-surface-variant": "#444748",
+        "inverse-surface": "#313030",
+        "inverse-on-surface": "#f4f0ef",
+        "outline": "#747878",
+        "outline-variant": "#c4c7c7",
+        "surface-tint": "#5f5e5e",
+        "primary": "#000000",
+        "on-primary": "#ffffff",
+        "primary-container": "#1c1b1b",
+        "on-primary-container": "#858383",
+        "inverse-primary": "#c8c6c5",
+        "secondary": "#615e58",
+        "on-secondary": "#ffffff",
+        "secondary-container": "#e7e2da",
+        "on-secondary-container": "#67645e",
+        "secondary-fixed": "#e7e2da",
+        "secondary-fixed-dim": "#cac6be",
+        "on-secondary-fixed": "#1d1c17",
+        "on-secondary-fixed-variant": "#494741",
+        "tertiary": "#000000",
+        "on-tertiary": "#ffffff",
+        "tertiary-container": "#1c1b1a",
+        "on-tertiary-container": "#868382",
+        "tertiary-fixed": "#e6e2df",
+        "tertiary-fixed-dim": "#cac6c4",
+        "on-tertiary-fixed": "#1c1b1a",
+        "on-tertiary-fixed-variant": "#484645",
+        "error": "#ba1a1a",
+        "on-error": "#ffffff",
+        "error-container": "#ffdad6",
+        "on-error-container": "#93000a",
+        "primary-fixed": "#e5e2e1",
+        "primary-fixed-dim": "#c8c6c5",
+        "on-primary-fixed": "#1c1b1b",
+        "on-primary-fixed-variant": "#474746",
+        "ink-wash-gray": "#D4CCBC",
+        "pine-green": "#2E7D5E",
+        "cinnabar-red": "#C0392B",
+        "slate-blue": "#2B6CB0",
+        "ochre-warning": "#B7610A",
+        "pale-ink": "#6B6B6B",
+      },
+      borderRadius: {
+        "DEFAULT": "0.125rem",
+        "lg": "0.25rem",
+        "xl": "0.5rem",
+        "full": "0.75rem"
+      },
+      spacing: {
+        "unit": "8px",
+        "container-margin": "24px",
+        "section-gap": "40px",
+        "gutter": "16px",
+        "ink-stroke-thick": "3px",
+        "ink-stroke-thin": "1px"
+      },
+      fontFamily: {
+        "headline-lg": ["Noto Serif SC", "serif"],
+        "headline-lg-mobile": ["Noto Serif SC", "serif"],
+        "headline-md": ["Noto Serif SC", "serif"],
+        "body-lg": ["Noto Serif SC", "serif"],
+        "body-sm": ["Noto Serif SC", "serif"],
+        "number-display": ["Hanken Grotesk", "sans-serif"],
+        "number-standard": ["Hanken Grotesk", "sans-serif"],
+        "label-caps": ["Hanken Grotesk", "sans-serif"],
+      },
+      fontSize: {
+        "headline-lg": ["28px", {lineHeight: "36px", letterSpacing: "-0.02em", fontWeight: "700"}],
+        "headline-lg-mobile": ["24px", {lineHeight: "32px", fontWeight: "700"}],
+        "headline-md": ["20px", {lineHeight: "28px", fontWeight: "600"}],
+        "body-lg": ["16px", {lineHeight: "24px", fontWeight: "400"}],
+        "body-sm": ["13px", {lineHeight: "20px", fontWeight: "400"}],
+        "number-display": ["32px", {lineHeight: "40px", letterSpacing: "0.05em", fontWeight: "600"}],
+        "number-standard": ["18px", {lineHeight: "24px", fontWeight: "500"}],
+        "label-caps": ["11px", {lineHeight: "16px", letterSpacing: "0.1em", fontWeight: "700"}],
+      }
+    },
+  },
+}
+</script>
+<style>
+.brush-divider {
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, #D4CCBC 50%, transparent 100%);
+  border-radius: 50%;
+  width: 120px;
+}
+.xuan-bg {
+  background-color: #F5F0E8;
+  background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+}
+</style>
+</head>
+<body class="xuan-bg min-h-dvh flex flex-col">
+<!-- 背景水墨晕染 -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+<div class="absolute -bottom-20 -left-1/4 w-3/4 h-3/4" style="background:radial-gradient(ellipse at center, rgba(212,204,188,0.2) 0%, transparent 70%);animation:ink-drift 20s ease-in-out infinite alternate"></div>
+</div>
+
+<main class="flex-grow flex flex-col items-center justify-center px-container-margin py-12 relative z-10">
+<!-- Logo & 品牌 -->
+<div class="text-center mb-12" style="animation:fadeUp 0.8s ease-out forwards;opacity:0">
+<div class="mb-6">
+<svg class="mx-auto" width="96" height="96" viewBox="0 0 96 96" fill="none">
+  <circle cx="48" cy="48" r="44" fill="#FAF7F2" stroke="#D4CCBC" stroke-width="1.5"/>
+  <circle cx="48" cy="48" r="36" fill="none" stroke="#D4CCBC" stroke-width="0.5" stroke-dasharray="4 4"/>
+  <text x="48" y="60" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="40" font-weight="700" fill="#1c1b1b">留</text>
+</svg>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-primary mb-3">留白记账</h1>
+<p class="font-body-sm text-pale-ink italic">记账，是一种生活的修行。</p>
+</div>
+
+<!-- 装饰线 -->
+<div class="brush-divider mb-12" style="animation:fadeUp 0.8s ease-out 0.2s forwards;opacity:0"></div>
+
+<!-- 品牌理念 -->
+<div class="text-center mb-16" style="animation:fadeUp 0.8s ease-out 0.4s forwards;opacity:0">
+<p class="font-body-lg text-pale-ink leading-relaxed max-w-xs">
+轻触之间，记录每一笔收支<br>
+让财务了然于心
+</p>
+</div>
+
+<!-- CTA 按钮 -->
+<div class="w-full max-w-sm flex flex-col gap-4" style="animation:fadeUp 0.8s ease-out 0.6s forwards;opacity:0">
+<a href="register.html" class="w-full bg-primary text-on-primary py-4 font-label-caps text-label-caps tracking-[0.2em] uppercase flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all">
+开启记账之旅
+<svg class="w-4 h-4" viewBox="0 0 17 17" fill="none"><path d="M3 8.5h11M9.5 4l5 4.5-5 4.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</a>
+<a href="login.html" class="w-full py-4 font-label-caps text-primary tracking-[0.15em] uppercase text-center border border-primary hover:bg-surface-container-low transition-colors">
+已有账号？立即登录
+</a>
+</div>
+
+<!-- 底部品牌 -->
+<div class="mt-16 text-center" style="animation:fadeUp 0.8s ease-out 0.8s forwards;opacity:0">
+<p class="font-label-caps text-[10px] opacity-30 tracking-[0.2em] uppercase text-pale-ink">Liubai Finance · 留白记账</p>
+</div>
+</main>
+
+<style>
+@keyframes ink-drift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(5%, 3%) scale(1.1); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</body>
+</html>

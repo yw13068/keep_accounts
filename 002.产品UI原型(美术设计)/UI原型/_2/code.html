@@ -1,0 +1,262 @@
+<!DOCTYPE html><html class="light" lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>留白记账 - 登录</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#1d1c17",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f7f3f2",
+                    "inverse-on-surface": "#f4f0ef",
+                    "surface-container-highest": "#e5e2e1",
+                    "ochre-warning": "#B7610A",
+                    "on-surface-variant": "#444748",
+                    "on-error": "#ffffff",
+                    "on-background": "#1c1b1b",
+                    "surface-container": "#f1edec",
+                    "outline": "#747878",
+                    "primary-container": "#1c1b1b",
+                    "primary-fixed-dim": "#c8c6c5",
+                    "background": "#F5F0E8",
+                    "on-surface": "#1c1b1b",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#e7e2da",
+                    "outline-variant": "#c4c7c7",
+                    "on-primary-fixed": "#1c1b1b",
+                    "surface-container-high": "#ebe7e6",
+                    "on-tertiary-fixed-variant": "#484645",
+                    "tertiary-container": "#1c1b1a",
+                    "on-primary-container": "#858383",
+                    "tertiary-fixed": "#e6e2df",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#000000",
+                    "on-primary-fixed-variant": "#474746",
+                    "on-tertiary-container": "#868382",
+                    "secondary-fixed-dim": "#cac6be",
+                    "ink-wash-gray": "#D4CCBC",
+                    "pine-green": "#2E7D5E",
+                    "surface": "#F5F0E8",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#1c1b1a",
+                    "inverse-primary": "#c8c6c5",
+                    "tertiary-fixed-dim": "#cac6c4",
+                    "surface-dim": "#ddd9d8",
+                    "surface-variant": "#e5e2e1",
+                    "pale-ink": "#6B6B6B",
+                    "surface-tint": "#5f5e5e",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#e5e2e1",
+                    "surface-bright": "#F5F0E8",
+                    "on-secondary-fixed-variant": "#494741",
+                    "secondary-container": "#e7e2da",
+                    "secondary": "#615e58",
+                    "inverse-surface": "#313030",
+                    "on-secondary-container": "#67645e",
+                    "slate-blue": "#2B6CB0",
+                    "cinnabar-red": "#C0392B",
+                    "tertiary": "#000000"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "container-margin": "24px",
+                    "ink-stroke-thick": "3px",
+                    "ink-stroke-thin": "1px",
+                    "section-gap": "40px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Noto Serif SC"],
+                    "number-display": ["Hanken Grotesk"],
+                    "body-sm": ["Noto Serif SC"],
+                    "headline-md": ["Noto Serif SC"],
+                    "headline-lg-mobile": ["Noto Serif SC"],
+                    "number-standard": ["Hanken Grotesk"],
+                    "label-caps": ["Hanken Grotesk", "Noto Serif SC"],
+                    "body-lg": ["Noto Serif SC"]
+            },
+            "fontSize": {
+                    "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "number-display": ["32px", {"lineHeight": "40px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "number-standard": ["18px", {"lineHeight": "24px", "fontWeight": "500"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Liubai Brush Stroke Effect */
+        .brush-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #D4CCBC 50%, transparent 100%);
+            mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 2" xmlns="http://www.w3.org/2000/svg"><path d="M0 1 C 20 0, 80 2, 100 1" stroke="black" stroke-width="2" fill="none"/></svg>');
+            width: 100%;
+        }
+
+        .xuan-paper {
+            background-color: #F5F0E8;
+            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .ink-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Custom Checkbox Style */
+        .ink-checkbox {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 1px solid #747878;
+            border-radius: 2px;
+            background-color: transparent;
+            display: grid;
+            place-content: center;
+            cursor: pointer;
+        }
+
+        .ink-checkbox:checked {
+            background-color: #000;
+            border-color: #000;
+        }
+
+        .ink-checkbox:checked::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            transform: scale(1);
+            background-color: white;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+    </style>
+</head>
+<body class="xuan-paper text-on-background min-h-screen flex flex-col font-body-lg text-body-lg selection:bg-ink-wash-gray selection:text-primary">
+<main class="flex-grow flex flex-col items-center justify-center px-container-margin py-section-gap">
+<div class="w-full max-w-sm flex flex-col items-center animate-fade-in">
+<!-- Centered Logo & Branding -->
+<div class="mb-section-gap text-center">
+<div class="mb-4 inline-block">
+<img alt="留白记账 Logo" class="w-32 h-32 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuT2qaNeaCYp6sOHBMPp5o62yFcSaq_FQC2FlKdGTylXpCp1z2nz0xzjXueV40Js6uyVUvscCLzusKxlrryjOyrS9tz2XMcMpAA-LebscjyWVdHZP6RgMEpR3Se_SeKv3e6_iPxyTkgDa7RS_xYlIPx8KBIu3ArFxmSFQEFyA2EUkXzaH1FU20UQwB80WoyHJ6Z7RhX2hUQT16oAz_oLeuc7BOaTQEpsVkfbzEe1ynd2fB0iDE0fjuUA">
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">
+                留白记账
+            </h1>
+<p class="font-body-sm text-body-sm text-pale-ink mt-2 italic">
+                记账，是一种生活的修行。
+            </p>
+</div>
+<!-- Login Form -->
+<form class="w-full space-y-gutter">
+<!-- Username -->
+<div class="relative group">
+<label class="font-label-caps text-label-caps text-pale-ink block mb-1" for="username">手机号</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b border-ink-wash-gray focus:border-b-2 focus:border-slate-blue focus:ring-0 py-2 px-0 font-body-lg text-body-lg ink-transition placeholder:text-outline-variant" id="username" placeholder="请输入手机号" required="" type="text">
+</div>
+<!-- Password -->
+<div class="relative group">
+<div class="flex justify-between items-end mb-1">
+<label class="font-label-caps text-label-caps text-pale-ink block" for="password">密码</label>
+</div>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b border-ink-wash-gray focus:border-b-2 focus:border-slate-blue focus:ring-0 py-2 px-0 font-body-lg text-body-lg ink-transition placeholder:text-outline-variant" id="password" placeholder="请输入密码" required="" type="password">
+</div>
+<!-- Remember Me & Forgot Password -->
+<div class="flex items-center justify-between py-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="ink-checkbox ink-transition" type="checkbox">
+<span class="font-body-sm text-body-sm text-on-surface-variant group-hover:text-primary transition-colors">记住登录状态</span>
+</label>
+<a class="font-body-sm text-body-sm text-slate-blue hover:opacity-80 transition-opacity" href="#">忘记密码？</a>
+</div>
+<!-- Login Button -->
+<div class="pt-4">
+<button class="w-full bg-primary text-on-primary py-4 font-label-caps text-label-caps tracking-[0.2em] uppercase ink-transition active:scale-[0.98] hover:bg-opacity-90 border border-primary" type="submit">
+                    登 录
+                </button>
+</div>
+</form>
+<!-- Secondary Actions -->
+<div class="mt-section-gap w-full">
+<div class="brush-divider mb-8"></div>
+<div class="text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">初识留白？</p>
+<a class="inline-block px-8 py-3 border border-primary text-primary font-label-caps text-label-caps tracking-[0.15em] uppercase hover:bg-surface-container-low transition-colors" href="#">
+                    注 册 账 号
+                </a>
+</div>
+</div>
+</div>
+</main>
+<!-- Background Atmospheric micro-interaction -->
+<div class="fixed bottom-0 left-0 w-full opacity-10 pointer-events-none select-none overflow-hidden h-64">
+<svg class="w-full h-full fill-ink-wash-gray" preserveAspectRatio="none" viewBox="0 0 1000 100">
+<path d="M0,50 Q250,10 500,50 T1000,50 L1000,100 L0,100 Z" opacity="0.3"></path>
+<path d="M0,70 Q300,30 600,70 T1000,70 L1000,100 L0,100 Z" opacity="0.5"></path>
+</svg>
+</div>
+<script>
+    // Simple form interaction
+    document.querySelector('form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        const originalText = btn.innerText;
+        
+        btn.disabled = true;
+        btn.innerText = "正在验证...";
+        
+        setTimeout(() => {
+            btn.innerText = "欢迎回来";
+            btn.classList.remove('bg-primary');
+            btn.classList.add('bg-pine-green', 'border-pine-green');
+            
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerText = originalText;
+                btn.classList.add('bg-primary');
+                btn.classList.remove('bg-pine-green', 'border-pine-green');
+            }, 2000);
+        }, 1200);
+    });
+
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+        input.addEventListener('focus', () => {
+            document.body.style.backgroundColor = '#FAF7F2';
+        });
+        input.addEventListener('blur', () => {
+            document.body.style.backgroundColor = '#F5F0E8';
+        });
+    });
+</script>
+
+
+</body></html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>留白记账 - 找回密码</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "background": "#fdf8f8",
+        "surface": "#fdf8f8",
+        "surface-bright": "#fdf8f8",
+        "surface-container-lowest": "#ffffff",
+        "surface-container-low": "#f7f3f2",
+        "surface-container": "#f1edec",
+        "surface-container-high": "#ebe7e6",
+        "surface-container-highest": "#e5e2e1",
+        "on-background": "#1c1b1b",
+        "on-surface": "#1c1b1b",
+        "on-surface-variant": "#444748",
+        "inverse-surface": "#313030",
+        "inverse-on-surface": "#f4f0ef",
+        "outline": "#747878",
+        "outline-variant": "#c4c7c7",
+        "surface-tint": "#5f5e5e",
+        "primary": "#000000",
+        "on-primary": "#ffffff",
+        "primary-container": "#1c1b1b",
+        "on-primary-container": "#858383",
+        "inverse-primary": "#c8c6c5",
+        "secondary": "#615e58",
+        "on-secondary": "#ffffff",
+        "secondary-container": "#e7e2da",
+        "on-secondary-container": "#67645e",
+        "secondary-fixed": "#e7e2da",
+        "secondary-fixed-dim": "#cac6be",
+        "on-secondary-fixed": "#1d1c17",
+        "on-secondary-fixed-variant": "#494741",
+        "tertiary": "#000000",
+        "on-tertiary": "#ffffff",
+        "tertiary-container": "#1c1b1a",
+        "on-tertiary-container": "#868382",
+        "tertiary-fixed": "#e6e2df",
+        "tertiary-fixed-dim": "#cac6c4",
+        "on-tertiary-fixed": "#1c1b1a",
+        "on-tertiary-fixed-variant": "#484645",
+        "error": "#ba1a1a",
+        "on-error": "#ffffff",
+        "error-container": "#ffdad6",
+        "on-error-container": "#93000a",
+        "primary-fixed": "#e5e2e1",
+        "primary-fixed-dim": "#c8c6c5",
+        "on-primary-fixed": "#1c1b1b",
+        "on-primary-fixed-variant": "#474746",
+        "ink-wash-gray": "#D4CCBC",
+        "pine-green": "#2E7D5E",
+        "cinnabar-red": "#C0392B",
+        "slate-blue": "#2B6CB0",
+        "ochre-warning": "#B7610A",
+        "pale-ink": "#6B6B6B",
+      },
+      borderRadius: {
+        "DEFAULT": "0.125rem",
+        "lg": "0.25rem",
+        "xl": "0.5rem",
+        "full": "0.75rem"
+      },
+      spacing: {
+        "unit": "8px",
+        "container-margin": "24px",
+        "section-gap": "40px",
+        "gutter": "16px",
+        "ink-stroke-thick": "3px",
+        "ink-stroke-thin": "1px"
+      },
+      fontFamily: {
+        "headline-lg": ["Noto Serif SC", "serif"],
+        "headline-lg-mobile": ["Noto Serif SC", "serif"],
+        "headline-md": ["Noto Serif SC", "serif"],
+        "body-lg": ["Noto Serif SC", "serif"],
+        "body-sm": ["Noto Serif SC", "serif"],
+        "number-display": ["Hanken Grotesk", "sans-serif"],
+        "number-standard": ["Hanken Grotesk", "sans-serif"],
+        "label-caps": ["Hanken Grotesk", "sans-serif"],
+      },
+      fontSize: {
+        "headline-lg": ["28px", {lineHeight: "36px", letterSpacing: "-0.02em", fontWeight: "700"}],
+        "headline-lg-mobile": ["24px", {lineHeight: "32px", fontWeight: "700"}],
+        "headline-md": ["20px", {lineHeight: "28px", fontWeight: "600"}],
+        "body-lg": ["16px", {lineHeight: "24px", fontWeight: "400"}],
+        "body-sm": ["13px", {lineHeight: "20px", fontWeight: "400"}],
+        "number-display": ["32px", {lineHeight: "40px", letterSpacing: "0.05em", fontWeight: "600"}],
+        "number-standard": ["18px", {lineHeight: "24px", fontWeight: "500"}],
+        "label-caps": ["11px", {lineHeight: "16px", letterSpacing: "0.1em", fontWeight: "700"}],
+      }
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+</style>
+</head>
+<body class="min-h-dvh flex flex-col" style="background-color:#F5F0E8;font-family:'Noto Serif SC',serif">
+<!-- Top Nav -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md h-14 flex items-center justify-center px-4" style="background:rgba(245,240,232,0.8)">
+<button onclick="history.back()" class="absolute left-4 flex items-center justify-center w-10 h-10 hover:opacity-70 transition-opacity active:scale-95">
+<span class="material-symbols-outlined text-primary">arrow_back_ios_new</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold tracking-[0.2em] text-primary">找回密码</h1>
+</nav>
+
+<!-- Main Content -->
+<main class="max-w-md mx-auto px-container-margin pt-24 pb-8 flex flex-col items-center flex-grow w-full">
+
+<!-- 步骤1：验证手机号 & 重置密码 -->
+<div id="step1" class="w-full flex flex-col gap-6">
+<div class="text-center">
+<div class="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center mx-auto mb-4">
+<span class="material-symbols-outlined text-5xl text-primary" style="font-variation-settings:'FILL' 0,'wght' 200,'GRAD' 0,'opsz' 24">lock_reset</span>
+</div>
+<p class="font-body-lg text-pale-ink leading-relaxed">请输入您注册的手机号<br>我们将为您发送验证码</p>
+</div>
+
+<div class="flex flex-col gap-5">
+<!-- 手机号 -->
+<div class="relative group">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-pale-ink" style="font-size:20px">smartphone</div>
+<input class="w-full bg-transparent border-b-2 border-ink-wash-gray focus:border-slate-blue py-4 pl-8 pr-0 font-body-lg text-body-lg text-primary outline-none transition-colors placeholder:text-outline-variant" id="phone" placeholder="请输入手机号" type="tel" maxlength="11">
+</div>
+
+<!-- 验证码 -->
+<div class="relative group">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-pale-ink" style="font-size:20px">chat</div>
+<input class="w-full bg-transparent border-b-2 border-ink-wash-gray focus:border-slate-blue py-4 pl-8 pr-24 font-number-standard text-number-standard text-primary outline-none transition-colors placeholder:text-outline-variant tracking-[0.2em]" id="verifyCode" placeholder="请输入验证码" type="text" maxlength="6">
+<button id="sendCodeBtn" class="absolute right-0 top-1/2 -translate-y-1/2 font-label-caps text-label-caps text-slate-blue hover:opacity-70 transition-opacity" onclick="sendCode()">发送验证码</button>
+</div>
+
+<!-- 新密码 -->
+<div class="relative group">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-pale-ink" style="font-size:20px">lock</div>
+<input class="w-full bg-transparent border-b-2 border-ink-wash-gray focus:border-slate-blue py-4 pl-8 pr-10 font-body-lg text-body-lg text-primary outline-none transition-colors placeholder:text-outline-variant" id="newPwd" placeholder="请输入新密码（8-20位）" type="password">
+<button class="absolute right-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-pale-ink hover:text-primary transition-colors" style="font-size:20px" onclick="togglePwd('newPwd', this)">
+<span class="material-symbols-outlined" style="font-size:20px">visibility_off</span>
+</button>
+</div>
+
+<!-- 确认新密码 -->
+<div class="relative group">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-pale-ink" style="font-size:20px">verified_user</div>
+<input class="w-full bg-transparent border-b-2 border-ink-wash-gray focus:border-slate-blue py-4 pl-8 pr-10 font-body-lg text-body-lg text-primary outline-none transition-colors placeholder:text-outline-variant" id="confirmPwd" placeholder="请再次输入新密码" type="password">
+<button class="absolute right-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-pale-ink hover:text-primary transition-colors" style="font-size:20px" onclick="togglePwd('confirmPwd', this)">
+<span class="material-symbols-outlined" style="font-size:20px">visibility_off</span>
+</button>
+</div>
+</div>
+
+<button class="w-full bg-primary text-white py-4 font-label-caps text-label-caps tracking-[0.2em] rounded-lg mt-4 hover:opacity-90 active:scale-[0.98] transition-all" onclick="resetPassword()">重置</button>
+</div>
+
+<!-- 步骤2：完成 -->
+<div id="step2" class="w-full flex flex-col gap-6 hidden">
+<div class="text-center pt-8">
+<div class="w-20 h-20 bg-pine-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
+<span class="material-symbols-outlined text-5xl text-pine-green" style="font-variation-settings:'FILL' 1,'wght' 200,'GRAD' 0,'opsz' 24">check_circle</span>
+</div>
+<p class="font-headline-md text-headline-md text-primary mb-2">密码重置成功</p>
+<p class="font-body-sm text-pale-ink">请使用新密码登录您的账号</p>
+</div>
+
+<a href="login.html" class="w-full bg-primary text-white py-4 font-label-caps text-label-caps tracking-[0.2em] rounded-lg mt-8 hover:opacity-90 active:scale-[0.98] transition-all text-center">返回登录</a>
+</div>
+</main>
+
+<!-- 底部引言 -->
+<footer class="py-8 text-center">
+<p class="font-body-sm text-pale-ink italic opacity-60">"见微知著，静心记账"</p>
+</footer>
+
+<script>
+let countdown = 0;
+let timer = null;
+
+// 切换密码可见性
+function togglePwd(inputId, btn) {
+  const input = document.getElementById(inputId);
+  const icon = btn.querySelector('.material-symbols-outlined');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.textContent = 'visibility';
+  } else {
+    input.type = 'password';
+    icon.textContent = 'visibility_off';
+  }
+}
+
+// 发送验证码
+function sendCode() {
+  const phone = document.getElementById('phone').value.trim();
+  if (!phone || phone.length !== 11) {
+    alert('请输入正确的手机号');
+    return;
+  }
+
+  // 开始倒计时
+  countdown = 60;
+  const btn = document.getElementById('sendCodeBtn');
+  btn.disabled = true;
+  btn.classList.add('opacity-50');
+
+  timer = setInterval(() => {
+    countdown--;
+    if (countdown > 0) {
+      btn.textContent = `${countdown}s`;
+    } else {
+      clearInterval(timer);
+      btn.textContent = '发送验证码';
+      btn.disabled = false;
+      btn.classList.remove('opacity-50');
+    }
+  }, 1000);
+
+  alert(`验证码已发送至 ${phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}`);
+}
+
+// 重置密码
+function resetPassword() {
+  const phone = document.getElementById('phone').value.trim();
+  const code = document.getElementById('verifyCode').value.trim();
+  const newPwd = document.getElementById('newPwd').value;
+  const confirmPwd = document.getElementById('confirmPwd').value;
+
+  if (!phone || phone.length !== 11) {
+    alert('请输入正确的手机号');
+    return;
+  }
+  if (!code || code.length < 4) {
+    alert('请输入验证码');
+    return;
+  }
+  if (!newPwd || newPwd.length < 8 || newPwd.length > 20) {
+    alert('密码长度需为8-20位');
+    return;
+  }
+  if (!/\d/.test(newPwd) || !/[a-zA-Z]/.test(newPwd)) {
+    alert('密码须包含字母和数字');
+    return;
+  }
+  if (newPwd !== confirmPwd) {
+    alert('两次输入的密码不一致');
+    return;
+  }
+
+  // 停止倒计时
+  if (timer) clearInterval(timer);
+
+  // 切换到步骤2
+  document.getElementById('step1').classList.add('hidden');
+  document.getElementById('step2').classList.remove('hidden');
+}
+</script>
+</body>
+</html>

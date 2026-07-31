@@ -1,0 +1,313 @@
+<!DOCTYPE html><html lang="zh-CN" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>账本管理 - 留白记账</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;family=Hanken+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#000000",
+                        "primary-fixed": "#e5e2e1",
+                        "outline-variant": "#c4c7c7",
+                        "surface-tint": "#5f5e5e",
+                        "tertiary-container": "#1c1b1a",
+                        "surface-container-low": "#f7f3f2",
+                        "surface": "#fdf8f8",
+                        "secondary": "#615e58",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "on-surface-variant": "#444748",
+                        "tertiary-fixed": "#e6e2df",
+                        "on-primary-container": "#858383",
+                        "surface-dim": "#ddd9d8",
+                        "ochre-warning": "#B7610A",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#494741",
+                        "primary": "#000000",
+                        "tertiary-fixed-dim": "#cac6c4",
+                        "surface-container-lowest": "#ffffff",
+                        "pine-green": "#2E7D5E",
+                        "on-primary-fixed": "#1c1b1b",
+                        "background": "#fdf8f8",
+                        "secondary-container": "#e7e2da",
+                        "outline": "#747878",
+                        "primary-container": "#1c1b1b",
+                        "on-secondary-fixed": "#1d1c17",
+                        "surface-container": "#f1edec",
+                        "slate-blue": "#2B6CB0",
+                        "surface-bright": "#fdf8f8",
+                        "cinnabar-red": "#C0392B",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#1c1b1a",
+                        "on-tertiary-fixed-variant": "#484645",
+                        "on-tertiary-container": "#868382",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "on-surface": "#1c1b1b",
+                        "inverse-on-surface": "#f4f0ef",
+                        "inverse-surface": "#313030",
+                        "on-primary-fixed-variant": "#474746",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e5e2e1",
+                        "ink-wash-gray": "#D4CCBC",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#e7e2da",
+                        "on-secondary-container": "#67645e",
+                        "inverse-primary": "#c8c6c5",
+                        "error": "#ba1a1a",
+                        "pale-ink": "#6B6B6B",
+                        "secondary-fixed-dim": "#cac6be",
+                        "surface-variant": "#e5e2e1",
+                        "surface-container-high": "#ebe7e6",
+                        "on-background": "#1c1b1b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-margin": "24px",
+                        "section-gap": "40px",
+                        "ink-stroke-thin": "1px",
+                        "ink-stroke-thick": "3px",
+                        "unit": "8px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Noto Serif SC", "serif"],
+                        "headline-lg-mobile": ["Noto Serif SC", "serif"],
+                        "headline-lg": ["Noto Serif SC", "serif"],
+                        "body-lg": ["Noto Serif SC", "serif"],
+                        "number-display": ["Hanken Grotesk", "sans-serif"],
+                        "label-caps": ["Hanken Grotesk", "sans-serif"],
+                        "number-standard": ["Hanken Grotesk", "sans-serif"],
+                        "body-sm": ["Noto Serif SC", "serif"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "number-display": ["32px", {"lineHeight": "40px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "number-standard": ["18px", {"lineHeight": "24px", "fontWeight": "500"}],
+                        "body-sm": ["13px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #F5F0E8; /* Xuan Paper background */
+            color: #1c1b1b;
+            font-family: 'Noto Serif SC', serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .ink-brush-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #D4CCBC 20%, #D4CCBC 80%, transparent 100%);
+            mask-image: url("data:image/svg+xml,%3Csvg width='300' height='2' viewBox='0 0 300 2' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 1C50 0.5 100 1.5 150 1C200 0.5 250 1.5 300 1' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
+            margin: 1.5rem 0;
+        }
+
+        .ink-category-bg {
+            background: radial-gradient(circle, rgba(212, 204, 188, 0.4) 0%, rgba(212, 204, 188, 0) 70%);
+            transition: all 0.3s ease;
+        }
+
+        .category-item:active {
+            transform: scale(0.92);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .custom-dashed-border {
+            background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' fill='none' rx='100' ry='100' stroke='%23D4CCBC' stroke-width='2' stroke-dasharray='6%2c 8' stroke-dashoffset='0' stroke-linecap='square'/%3E%3C/svg%3E");
+            border-radius: 100px;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-container-low flex items-center px-container-margin h-16 justify-center">
+<button class="active:scale-95 duration-200 hover:opacity-80 transition-opacity absolute left-6">
+<span class="material-symbols-outlined text-primary">arrow_back_ios_new</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-primary-fixed tracking-tight">账本管理</h1>
+
+</header>
+<main class="pt-20 px-container-margin">
+<!-- Brand Illustration / Atmospheric Image -->
+<div class="w-full h-48 mb-8 rounded-xl overflow-hidden relative shadow-[0_4px_20px_rgba(26,26,26,0.05)]">
+<div class="bg-cover bg-center w-full h-full" data-alt="A tranquil, minimalist ink wash painting of a single bamboo branch and a traditional red seal on high-texture Xuan paper. The lighting is soft and natural, emphasizing the organic textures of the paper and the varying weights of the black ink. The overall mood is contemplative, scholarly, and serene, fitting the Liubai design philosophy." style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuApLwnvOe0mv2Xd5ED4wOEf4tthna_cIuHRhnJftOj7dw1e-y90PgJeqDjxHKocBDaPWEDXhuVNoDl96bmRXzOekfTSsmeGj0gwqWJWUNz2kpY0uPY_bpkqNi-zXwUYd06jjEUs8P_APhTuDqlQXx2BkALWuJxaJINz6G3xR_rgsvt1xSMRXsXasINIgi5rtaT71mg5VYG3Q8D74gg-mMpVCJcKenT_5hQUmSgoNFlHzvv5SWnAuJlvrw&quot;); background-position: center 50%;"></div>
+<div class="absolute bottom-4 left-6">
+<p class="text-pale-ink font-body-sm italic">笔墨之间，收支有道</p>
+</div>
+</div>
+<!-- Section 1: Expense Categories -->
+<section class="mb-section-gap">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="w-1 h-6 bg-cinnabar-red rounded-full"></span>
+                    支出分类
+                </h2>
+<span class="text-body-sm text-pale-ink">共 12 个分类</span>
+</div>
+<div class="grid grid-cols-4 gap-y-8 gap-x-4">
+<!-- Category Grid Item -->
+<div class="category-item flex flex-col items-center gap-2 transition-transform relative">
+<div class="w-14 h-14 rounded-full ink-category-bg flex items-center justify-center border border-transparent hover:border-ink-wash-gray">
+<span class="material-symbols-outlined text-primary text-2xl">restaurant</span>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-cinnabar-red rounded-full flex items-center justify-center text-white shadow-sm"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'wght' 700;">close</span></div></div>
+<span class="font-body-sm text-on-surface">餐饮</span>
+</div>
+<div class="category-item flex flex-col items-center gap-2 transition-transform relative">
+<div class="w-14 h-14 rounded-full ink-category-bg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">directions_bus</span>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-cinnabar-red rounded-full flex items-center justify-center text-white shadow-sm"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'wght' 700;">close</span></div></div>
+<span class="font-body-sm text-on-surface">交通</span>
+</div>
+<div class="category-item flex flex-col items-center gap-2 transition-transform relative">
+<div class="w-14 h-14 rounded-full ink-category-bg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">shopping_bag</span>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-cinnabar-red rounded-full flex items-center justify-center text-white shadow-sm"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'wght' 700;">close</span></div></div>
+<span class="font-body-sm text-on-surface">购物</span>
+</div>
+<div class="category-item flex flex-col items-center gap-2 transition-transform relative">
+<div class="w-14 h-14 rounded-full ink-category-bg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">home</span>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-cinnabar-red rounded-full flex items-center justify-center text-white shadow-sm"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'wght' 700;">close</span></div></div>
+<span class="font-body-sm text-on-surface">住房</span>
+</div>
+<div class="category-item flex flex-col items-center gap-2 transition-transform relative">
+<div class="w-14 h-14 rounded-full ink-category-bg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">movie</span>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-cinnabar-red rounded-full flex items-center justify-center text-white shadow-sm"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'wght' 700;">close</span></div></div>
+<span class="font-body-sm text-on-surface">娱乐</span>
+</div>
+<div class="category-item flex flex-col items-center gap-2 transition-transform relative">
+<div class="w-14 h-14 rounded-full ink-category-bg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">health_and_safety</span>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-cinnabar-red rounded-full flex items-center justify-center text-white shadow-sm"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'wght' 700;">close</span></div></div>
+<span class="font-body-sm text-on-surface">医疗</span>
+</div>
+<div class="category-item flex flex-col items-center gap-2 transition-transform relative">
+<div class="w-14 h-14 rounded-full ink-category-bg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">school</span>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-cinnabar-red rounded-full flex items-center justify-center text-white shadow-sm"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'wght' 700;">close</span></div></div>
+<span class="font-body-sm text-on-surface">教育</span>
+</div>
+<!-- Add Button -->
+<button class="category-item flex flex-col items-center gap-2 active:scale-95 transition-transform relative">
+<div class="w-14 h-14 custom-dashed-border flex items-center justify-center">
+<span class="material-symbols-outlined text-pale-ink">add</span>
+</div>
+<span class="font-body-sm text-pale-ink">新增</span>
+</button>
+</div>
+</section>
+<!-- Brush Stroke Divider -->
+<div class="ink-brush-divider"></div>
+<!-- Section 2: Income Categories -->
+<section class="mb-12">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="w-1 h-6 bg-pine-green rounded-full"></span>
+                    收入分类
+                </h2>
+<span class="text-body-sm text-pale-ink">共 4 个分类</span>
+</div>
+<div class="grid grid-cols-4 gap-y-8 gap-x-4">
+<div class="category-item flex flex-col items-center gap-2 transition-transform relative">
+<div class="w-14 h-14 rounded-full ink-category-bg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">payments</span>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-cinnabar-red rounded-full flex items-center justify-center text-white shadow-sm"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'wght' 700;">close</span></div></div>
+<span class="font-body-sm text-on-surface">工资</span>
+</div>
+<div class="category-item flex flex-col items-center gap-2 transition-transform relative">
+<div class="w-14 h-14 rounded-full ink-category-bg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">redeem</span>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-cinnabar-red rounded-full flex items-center justify-center text-white shadow-sm"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'wght' 700;">close</span></div></div>
+<span class="font-body-sm text-on-surface">奖金</span>
+</div>
+<div class="category-item flex flex-col items-center gap-2 transition-transform relative">
+<div class="w-14 h-14 rounded-full ink-category-bg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">trending_up</span>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-cinnabar-red rounded-full flex items-center justify-center text-white shadow-sm"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'wght' 700;">close</span></div></div>
+<span class="font-body-sm text-on-surface">理财</span>
+</div>
+<div class="category-item flex flex-col items-center gap-2 transition-transform relative">
+<div class="w-14 h-14 rounded-full ink-category-bg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">account_balance_wallet</span>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-cinnabar-red rounded-full flex items-center justify-center text-white shadow-sm"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'wght' 700;">close</span></div></div>
+<span class="font-body-sm text-on-surface">兼职</span>
+</div>
+<!-- Add Button -->
+<button class="category-item flex flex-col items-center gap-2 active:scale-95 transition-transform relative">
+<div class="w-14 h-14 custom-dashed-border flex items-center justify-center">
+<span class="material-symbols-outlined text-pale-ink">add</span>
+</div>
+<span class="font-body-sm text-pale-ink">新增</span>
+</button>
+</div>
+</section>
+<!-- Secondary Card Example -->
+
+</main>
+<!-- FAB: Add Transaction (Seal Style) -->
+
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center py-2 px-4 bg-surface dark:bg-surface-container-low border-t border-surface-container z-50 shadow-[0_-1px_10px_rgba(26,26,26,0.05)]">
+<a class="flex flex-col items-center justify-center text-outline dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-caps text-label-caps mt-1">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps mt-1">统计</span>
+</a>
+<a class="flex flex-col items-center justify-center text-cinnabar-red dark:text-cinnabar-red font-bold active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-caps text-label-caps mt-1">我的</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for category items
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', () => {
+                // Flash feedback
+                const bg = item.querySelector('.ink-category-bg');
+                if (bg) {
+                    bg.classList.add('bg-ink-wash-gray/60');
+                    setTimeout(() => {
+                        bg.classList.remove('bg-ink-wash-gray/60');
+                    }, 200);
+                }
+            });
+        });
+
+        // Add a subtle drift animation to the atmospheric background
+        const headerImage = document.querySelector('div[data-alt]');
+        if (headerImage) {
+            headerImage.style.transition = 'background-position 10s ease-in-out infinite alternate';
+            let pos = 0;
+            setInterval(() => {
+                pos = pos === 0 ? 5 : 0;
+                headerImage.style.backgroundPosition = `center ${50 + pos}%`;
+            }, 10000);
+        }
+    </script>
+
+
+</body></html>

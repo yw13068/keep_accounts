@@ -1,0 +1,303 @@
+<!DOCTYPE html><html class="light" lang="zh-CN" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>留白记账 - Ink &amp; Balance</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#1d1c17",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f7f3f2",
+                        "inverse-on-surface": "#f4f0ef",
+                        "surface-container-highest": "#e5e2e1",
+                        "ochre-warning": "#B7610A",
+                        "on-surface-variant": "#444748",
+                        "on-error": "#ffffff",
+                        "on-background": "#1c1b1b",
+                        "surface-container": "#f1edec",
+                        "outline": "#747878",
+                        "primary-container": "#1c1b1b",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "background": "#fdf8f8",
+                        "on-surface": "#1c1b1b",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#e7e2da",
+                        "outline-variant": "#c4c7c7",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface-container-high": "#ebe7e6",
+                        "on-tertiary-fixed-variant": "#484645",
+                        "tertiary-container": "#1c1b1a",
+                        "on-primary-container": "#858383",
+                        "tertiary-fixed": "#e6e2df",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#000000",
+                        "on-primary-fixed-variant": "#474746",
+                        "on-tertiary-container": "#868382",
+                        "secondary-fixed-dim": "#cac6be",
+                        "ink-wash-gray": "#D4CCBC",
+                        "pine-green": "#2E7D5E",
+                        "surface": "#fdf8f8",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#1c1b1a",
+                        "inverse-primary": "#c8c6c5",
+                        "tertiary-fixed-dim": "#cac6c4",
+                        "surface-dim": "#ddd9d8",
+                        "surface-variant": "#e5e2e1",
+                        "pale-ink": "#6B6B6B",
+                        "surface-tint": "#5f5e5e",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#e5e2e1",
+                        "surface-bright": "#fdf8f8",
+                        "on-secondary-fixed-variant": "#494741",
+                        "secondary-container": "#e7e2da",
+                        "secondary": "#615e58",
+                        "inverse-surface": "#313030",
+                        "on-secondary-container": "#67645e",
+                        "slate-blue": "#2B6CB0",
+                        "cinnabar-red": "#C0392B",
+                        "tertiary": "#000000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "container-margin": "24px",
+                        "ink-stroke-thick": "3px",
+                        "ink-stroke-thin": "1px",
+                        "section-gap": "40px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Noto Serif SC", "Noto Serif", "serif"],
+                        "number-display": ["Hanken Grotesk"],
+                        "body-sm": ["Noto Serif SC", "Noto Serif", "serif"],
+                        "headline-md": ["Noto Serif SC", "Noto Serif", "serif"],
+                        "headline-lg-mobile": ["Noto Serif SC", "Noto Serif", "serif"],
+                        "number-standard": ["Hanken Grotesk"],
+                        "label-caps": ["Hanken Grotesk"],
+                        "body-lg": ["Noto Serif SC", "Noto Serif", "serif"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "number-display": ["32px", {"lineHeight": "40px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "number-standard": ["18px", {"lineHeight": "24px", "fontWeight": "500"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .brush-divider {
+            height: 4px;
+            background: linear-gradient(90deg, transparent 0%, #D4CCBC 50%, transparent 100%);
+            mask-image: url("data:image/svg+xml,%3Csvg width='100' height='4' viewBox='0 0 100 4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 2C10 1 20 3 30 2C40 1 50 2 60 2.5C70 3 80 1 100 2' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            mask-size: cover;
+            width: 100%;
+            margin: 8px 0;
+            opacity: 0.6;
+        }
+        
+        .ink-card {
+            background-color: #FAF7F2;
+            box-shadow: 0 4px 20px rgba(26, 26, 26, 0.05);
+            transition: transform 0.2s ease;
+        }
+        
+        .ink-card:active {
+            transform: scale(0.98);
+        }
+
+        .seal-button {
+            background-color: #C0392B;
+            box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .xuan-paper {
+            background-color: #F5F0E8;
+            background-image: radial-gradient(circle, rgba(0,0,0,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .active-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="xuan-paper text-on-surface min-h-screen font-body-lg overflow-x-hidden pb-24">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b-ink-stroke-thin border-outline-variant w-full flex items-center px-container-margin py-unit justify-center"><h1 class="font-headline-md text-headline-md text-primary">留白记账</h1></header>
+<main class="max-w-md mx-auto px-container-margin pt-6">
+<!-- Monthly Summary Card -->
+<section class="mb-section-gap">
+<div class="ink-card rounded-xl p-6 relative overflow-hidden">
+<!-- Subtle texture overlay -->
+<div class="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/rice-paper.png')]"></div>
+<div class="relative z-10">
+<p class="font-label-caps text-label-caps text-pale-ink mb-1">当前结余</p>
+<h2 class="font-number-display text-number-display text-primary mb-6">¥ 24,850.00</h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col">
+<span class="flex items-center gap-1 font-label-caps text-label-caps text-pale-ink mb-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="arrow_downward">arrow_downward</span> 收入
+                        </span>
+<span class="font-number-standard text-number-standard text-pine-green">+ 12,400</span>
+</div>
+<div class="flex flex-col">
+<span class="flex items-center gap-1 font-label-caps text-label-caps text-pale-ink mb-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="arrow_upward">arrow_upward</span> 支出
+                        </span>
+<span class="font-number-standard text-number-standard text-cinnabar-red">- 4,550</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Transaction List -->
+<section class="space-y-8">
+<!-- Group: 今日 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<h3 class="font-headline-md text-headline-md text-primary">今日</h3>
+<span class="font-body-sm text-body-sm text-pale-ink">12月24日</span>
+</div>
+<div class="brush-divider"></div>
+<div class="space-y-4 mt-4">
+<!-- Item 1 -->
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-ink-wash-gray/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant">restaurant</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg text-primary leading-tight">禅意花园午餐</p>
+<p class="font-body-sm text-body-sm text-pale-ink">餐饮美食</p>
+</div>
+</div>
+<span class="font-number-standard text-number-standard text-cinnabar-red">- 128.00</span>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-ink-wash-gray/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="shopping_bag">shopping_bag</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg text-primary leading-tight">笔墨纸砚</p>
+<p class="font-body-sm text-body-sm text-pale-ink">文房雅玩</p>
+</div>
+</div>
+<span class="font-number-standard text-number-standard text-cinnabar-red">- 350.00</span>
+</div>
+</div>
+</div>
+<!-- Group: 昨日 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<h3 class="font-headline-md text-headline-md text-primary">昨日</h3>
+<span class="font-body-sm text-body-sm text-pale-ink">12月23日</span>
+</div>
+<div class="brush-divider"></div>
+<div class="space-y-4 mt-4">
+<!-- Item 3 -->
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-ink-wash-gray/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="payments">payments</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg text-primary leading-tight">月度薪俸</p>
+<p class="font-body-sm text-body-sm text-pale-ink">收入</p>
+</div>
+</div>
+<span class="font-number-standard text-number-standard text-pine-green">+ 12,000.00</span>
+</div>
+<!-- Item 4 -->
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-ink-wash-gray/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="home">home</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg text-primary leading-tight">房租物业</p>
+<p class="font-body-sm text-body-sm text-pale-ink">居住</p>
+</div>
+</div>
+<span class="font-number-standard text-number-standard text-cinnabar-red">- 3,200.00</span>
+</div>
+<!-- Item 5 -->
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-ink-wash-gray/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="local_cafe">local_cafe</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg text-primary leading-tight">晨间清茶</p>
+<p class="font-body-sm text-body-sm text-pale-ink">餐饮美食</p>
+</div>
+</div>
+<span class="font-number-standard text-number-standard text-cinnabar-red">- 45.00</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB: Seal Button -->
+<button class="seal-button fixed bottom-24 right-6 w-14 h-14 rounded-full flex items-center justify-center text-white z-50 hover:scale-110 active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined text-3xl" data-icon="add" style="font-variation-settings: 'wght' 500;">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 h-16 bg-surface-container-lowest dark:bg-surface-container-low shadow-[0_-2px_10px_rgba(26,26,26,0.05)] flex justify-around items-center px-4 pb-safe">
+<a class="flex flex-col items-center justify-center gap-0.5 text-primary active:scale-90 transition-transform duration-200" href="#">
+<div class="bg-secondary-container dark:bg-secondary-fixed-dim rounded-full w-12 h-8 flex items-center justify-center">
+<span class="material-symbols-outlined active-icon" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+</div>
+<span class="text-[10px] font-label-caps">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 text-pale-ink dark:text-outline hover:text-primary active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
+<span class="text-[10px] font-label-caps">统计</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 text-pale-ink dark:text-outline hover:text-primary active:scale-90 transition-transform duration-200" href="/profile">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px] font-label-caps">我的</span>
+</a>
+</nav>
+<script>
+    // Simple micro-interaction for buttons
+    document.querySelectorAll('button, a').forEach(el => {
+        el.addEventListener('mousedown', () => {
+            el.style.transform = 'scale(0.95)';
+        });
+        el.addEventListener('mouseup', () => {
+            el.style.transform = '';
+        });
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = '';
+        });
+    });
+</script>
+
+
+</body></html>

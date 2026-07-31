@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>留白记账 - 注册账号</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "background": "#fdf8f8",
+        "surface": "#fdf8f8",
+        "surface-bright": "#fdf8f8",
+        "surface-container-lowest": "#ffffff",
+        "surface-container-low": "#f7f3f2",
+        "surface-container": "#f1edec",
+        "surface-container-high": "#ebe7e6",
+        "surface-container-highest": "#e5e2e1",
+        "on-background": "#1c1b1b",
+        "on-surface": "#1c1b1b",
+        "on-surface-variant": "#444748",
+        "inverse-surface": "#313030",
+        "inverse-on-surface": "#f4f0ef",
+        "outline": "#747878",
+        "outline-variant": "#c4c7c7",
+        "surface-tint": "#5f5e5e",
+        "primary": "#000000",
+        "on-primary": "#ffffff",
+        "primary-container": "#1c1b1b",
+        "on-primary-container": "#858383",
+        "inverse-primary": "#c8c6c5",
+        "secondary": "#615e58",
+        "on-secondary": "#ffffff",
+        "secondary-container": "#e7e2da",
+        "on-secondary-container": "#67645e",
+        "secondary-fixed": "#e7e2da",
+        "secondary-fixed-dim": "#cac6be",
+        "on-secondary-fixed": "#1d1c17",
+        "on-secondary-fixed-variant": "#494741",
+        "tertiary": "#000000",
+        "on-tertiary": "#ffffff",
+        "tertiary-container": "#1c1b1a",
+        "on-tertiary-container": "#868382",
+        "tertiary-fixed": "#e6e2df",
+        "tertiary-fixed-dim": "#cac6c4",
+        "on-tertiary-fixed": "#1c1b1a",
+        "on-tertiary-fixed-variant": "#484645",
+        "error": "#ba1a1a",
+        "on-error": "#ffffff",
+        "error-container": "#ffdad6",
+        "on-error-container": "#93000a",
+        "primary-fixed": "#e5e2e1",
+        "primary-fixed-dim": "#c8c6c5",
+        "on-primary-fixed": "#1c1b1b",
+        "on-primary-fixed-variant": "#474746",
+        "ink-wash-gray": "#D4CCBC",
+        "pine-green": "#2E7D5E",
+        "cinnabar-red": "#C0392B",
+        "slate-blue": "#2B6CB0",
+        "ochre-warning": "#B7610A",
+        "pale-ink": "#6B6B6B",
+      },
+      borderRadius: {
+        "DEFAULT": "0.125rem",
+        "lg": "0.25rem",
+        "xl": "0.5rem",
+        "full": "0.75rem"
+      },
+      spacing: {
+        "unit": "8px",
+        "container-margin": "24px",
+        "section-gap": "40px",
+        "gutter": "16px",
+        "ink-stroke-thick": "3px",
+        "ink-stroke-thin": "1px"
+      },
+      fontFamily: {
+        "headline-lg": ["Noto Serif SC", "serif"],
+        "headline-lg-mobile": ["Noto Serif SC", "serif"],
+        "headline-md": ["Noto Serif SC", "serif"],
+        "body-lg": ["Noto Serif SC", "serif"],
+        "body-sm": ["Noto Serif SC", "serif"],
+        "number-display": ["Hanken Grotesk", "sans-serif"],
+        "number-standard": ["Hanken Grotesk", "sans-serif"],
+        "label-caps": ["Hanken Grotesk", "sans-serif"],
+      },
+      fontSize: {
+        "headline-lg": ["28px", {lineHeight: "36px", letterSpacing: "-0.02em", fontWeight: "700"}],
+        "headline-lg-mobile": ["24px", {lineHeight: "32px", fontWeight: "700"}],
+        "headline-md": ["20px", {lineHeight: "28px", fontWeight: "600"}],
+        "body-lg": ["16px", {lineHeight: "24px", fontWeight: "400"}],
+        "body-sm": ["13px", {lineHeight: "20px", fontWeight: "400"}],
+        "number-display": ["32px", {lineHeight: "40px", letterSpacing: "0.05em", fontWeight: "600"}],
+        "number-standard": ["18px", {lineHeight: "24px", fontWeight: "500"}],
+        "label-caps": ["11px", {lineHeight: "16px", letterSpacing: "0.1em", fontWeight: "700"}],
+      }
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+.brush-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #D4CCBC 50%, transparent 100%);
+  width: 100%;
+}
+.seal-transition {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.seal-transition:active {
+  transform: scale(0.92);
+}
+</style>
+</head>
+<body class="min-h-screen text-on-surface" style="background-color:#F5F0E8;font-family:'Noto Serif SC',serif">
+<!-- Top AppBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md px-4 h-14 flex items-center justify-between" style="background:rgba(245,240,232,0.8)">
+<button class="flex items-center justify-center w-10 h-10 hover:opacity-80 transition-opacity active:scale-95" onclick="history.back()">
+<span class="material-symbols-outlined text-primary">arrow_back_ios_new</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold tracking-[0.2em] text-primary">注册账号</h1>
+<div class="w-10"></div>
+</nav>
+<!-- Main Content -->
+<main class="px-container-margin max-w-md mx-auto flex flex-col min-h-screen pt-20 pb-8">
+<!-- Brand Quote -->
+<div class="mb-8 text-center">
+<p class="font-body-lg text-pale-ink italic">"始于落笔，成于静心。"</p>
+</div>
+<!-- Registration Form -->
+<form class="flex flex-col gap-4" onsubmit="handleRegister(event)">
+<!-- Phone -->
+<div class="relative group">
+<label class="block font-label-caps text-label-caps text-pale-ink uppercase mb-1">手机号</label>
+<div class="flex items-center">
+<span class="material-symbols-outlined absolute left-0 text-ink-wash-gray group-focus-within:text-primary transition-colors">phone_iphone</span>
+<input class="w-full pl-8 pr-4 py-3 bg-transparent border-0 border-b border-ink-wash-gray focus:ring-0 focus:border-primary font-body-lg text-body-lg transition-all placeholder:text-outline-variant" id="phone" placeholder="请输入手机号" required type="text">
+</div>
+</div>
+<!-- Username -->
+<div class="relative group">
+<label class="block font-label-caps text-label-caps text-pale-ink uppercase mb-1">用户名 / 笔名</label>
+<div class="flex items-center">
+<span class="material-symbols-outlined absolute left-0 text-ink-wash-gray group-focus-within:text-primary transition-colors">person</span>
+<input class="w-full pl-8 pr-4 py-3 bg-transparent border-0 border-b border-ink-wash-gray focus:ring-0 focus:border-primary font-body-lg text-body-lg transition-all placeholder:text-outline-variant" id="username" placeholder="请输入您的称呼" required type="text">
+</div>
+</div>
+<!-- Password -->
+<div class="relative group">
+<label class="block font-label-caps text-label-caps text-pale-ink uppercase mb-1">密码</label>
+<div class="flex items-center">
+<span class="material-symbols-outlined absolute left-0 text-ink-wash-gray group-focus-within:text-primary transition-colors">lock</span>
+<input class="w-full pl-8 pr-10 py-3 bg-transparent border-0 border-b border-ink-wash-gray focus:ring-0 focus:border-primary font-body-lg text-body-lg transition-all placeholder:text-outline-variant" id="pwd" placeholder="请输入密码" required type="password">
+<button class="absolute right-0 text-ink-wash-gray hover:text-primary" type="button" onclick="togglePwd()">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<!-- Confirm Password -->
+<div class="relative group">
+<label class="block font-label-caps text-label-caps text-pale-ink uppercase mb-1">确认密码</label>
+<div class="flex items-center">
+<span class="material-symbols-outlined absolute left-0 text-ink-wash-gray group-focus-within:text-primary transition-colors">verified_user</span>
+<input class="w-full pl-8 pr-4 py-3 bg-transparent border-0 border-b border-ink-wash-gray focus:ring-0 focus:border-primary font-body-lg text-body-lg transition-all placeholder:text-outline-variant" id="confirmPwd" placeholder="请再次输入密码" required type="password">
+</div>
+</div>
+<!-- Agreement -->
+<div class="flex items-start gap-3 py-2">
+<input class="mt-1 w-4 h-4 text-primary border-ink-wash-gray rounded-sm focus:ring-primary focus:ring-offset-surface" id="terms" type="checkbox" required>
+<label class="font-body-sm text-pale-ink leading-relaxed mt-1" for="terms">
+我已阅读并同意 <a class="text-primary border-b border-ink-wash-gray" href="#">《服务协议》</a> 与 <a class="text-primary border-b border-ink-wash-gray" href="#">《隐私政策》</a>，承诺如实记录每一笔收支。
+</label>
+</div>
+<!-- Submit Button -->
+<div class="pt-4">
+<button class="w-full h-14 bg-primary text-on-primary font-headline-md rounded-lg shadow-lg seal-transition flex items-center justify-center gap-2 hover:opacity-90 active:bg-inverse-surface" type="submit" id="regBtn">
+<span>开启记账之旅</span>
+<span class="material-symbols-outlined">brush</span>
+</button>
+</div>
+</form>
+<!-- Login Link -->
+<div class="mt-8 text-center">
+<p class="font-body-sm text-pale-ink">已有账号？<a class="text-primary font-bold hover:underline decoration-cinnabar-red decoration-2 underline-offset-4" href="login.html">立即登录</a></p>
+</div>
+<div class="flex justify-center opacity-30 mt-4">
+<div class="w-24 h-[1px] bg-gradient-to-r from-transparent via-ink-wash-gray to-transparent"></div>
+</div>
+<p class="mt-4 font-label-caps text-[10px] text-outline tracking-[0.2em] uppercase text-center">Liubai Finance · 留白记账</p>
+</main>
+<script>
+function togglePwd() {
+  const input = document.getElementById('pwd');
+  const icon = event.currentTarget.querySelector('.material-symbols-outlined');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.textContent = 'visibility_off';
+  } else {
+    input.type = 'password';
+    icon.textContent = 'visibility';
+  }
+}
+function handleRegister(e) {
+  e.preventDefault();
+  const pwd = document.getElementById('pwd').value;
+  const confirm = document.getElementById('confirmPwd').value;
+  if (pwd !== confirm) { alert('两次密码不一致'); return; }
+  const btn = document.getElementById('regBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span>';
+  setTimeout(() => {
+    btn.innerHTML = '<span>注册成功</span><span class="material-symbols-outlined">check_circle</span>';
+    btn.classList.replace('bg-primary', 'bg-pine-green');
+    setTimeout(() => window.location.href = 'home.html', 800);
+  }, 1200);
+}
+</script>
+</body>
+</html>

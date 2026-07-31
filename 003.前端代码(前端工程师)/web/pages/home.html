@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>留白记账 - 首页</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "background": "#fdf8f8",
+        "surface": "#fdf8f8",
+        "surface-bright": "#fdf8f8",
+        "surface-container-lowest": "#ffffff",
+        "surface-container-low": "#f7f3f2",
+        "surface-container": "#f1edec",
+        "surface-container-high": "#ebe7e6",
+        "surface-container-highest": "#e5e2e1",
+        "on-background": "#1c1b1b",
+        "on-surface": "#1c1b1b",
+        "on-surface-variant": "#444748",
+        "inverse-surface": "#313030",
+        "inverse-on-surface": "#f4f0ef",
+        "outline": "#747878",
+        "outline-variant": "#c4c7c7",
+        "surface-tint": "#5f5e5e",
+        "primary": "#000000",
+        "on-primary": "#ffffff",
+        "primary-container": "#1c1b1b",
+        "on-primary-container": "#858383",
+        "inverse-primary": "#c8c6c5",
+        "secondary": "#615e58",
+        "on-secondary": "#ffffff",
+        "secondary-container": "#e7e2da",
+        "on-secondary-container": "#67645e",
+        "secondary-fixed": "#e7e2da",
+        "secondary-fixed-dim": "#cac6be",
+        "on-secondary-fixed": "#1d1c17",
+        "on-secondary-fixed-variant": "#494741",
+        "tertiary": "#000000",
+        "on-tertiary": "#ffffff",
+        "tertiary-container": "#1c1b1a",
+        "on-tertiary-container": "#868382",
+        "tertiary-fixed": "#e6e2df",
+        "tertiary-fixed-dim": "#cac6c4",
+        "on-tertiary-fixed": "#1c1b1a",
+        "on-tertiary-fixed-variant": "#484645",
+        "error": "#ba1a1a",
+        "on-error": "#ffffff",
+        "error-container": "#ffdad6",
+        "on-error-container": "#93000a",
+        "primary-fixed": "#e5e2e1",
+        "primary-fixed-dim": "#c8c6c5",
+        "on-primary-fixed": "#1c1b1b",
+        "on-primary-fixed-variant": "#474746",
+        "ink-wash-gray": "#D4CCBC",
+        "pine-green": "#2E7D5E",
+        "cinnabar-red": "#C0392B",
+        "slate-blue": "#2B6CB0",
+        "ochre-warning": "#B7610A",
+        "pale-ink": "#6B6B6B",
+      },
+      borderRadius: {
+        "DEFAULT": "0.125rem",
+        "lg": "0.25rem",
+        "xl": "0.5rem",
+        "full": "0.75rem"
+      },
+      spacing: {
+        "unit": "8px",
+        "container-margin": "24px",
+        "section-gap": "40px",
+        "gutter": "16px",
+        "ink-stroke-thick": "3px",
+        "ink-stroke-thin": "1px"
+      },
+      fontFamily: {
+        "headline-lg": ["Noto Serif SC", "serif"],
+        "headline-lg-mobile": ["Noto Serif SC", "serif"],
+        "headline-md": ["Noto Serif SC", "serif"],
+        "body-lg": ["Noto Serif SC", "serif"],
+        "body-sm": ["Noto Serif SC", "serif"],
+        "number-display": ["Hanken Grotesk", "sans-serif"],
+        "number-standard": ["Hanken Grotesk", "sans-serif"],
+        "label-caps": ["Hanken Grotesk", "sans-serif"],
+      },
+      fontSize: {
+        "headline-lg": ["28px", {lineHeight: "36px", letterSpacing: "-0.02em", fontWeight: "700"}],
+        "headline-lg-mobile": ["24px", {lineHeight: "32px", fontWeight: "700"}],
+        "headline-md": ["20px", {lineHeight: "28px", fontWeight: "600"}],
+        "body-lg": ["16px", {lineHeight: "24px", fontWeight: "400"}],
+        "body-sm": ["13px", {lineHeight: "20px", fontWeight: "400"}],
+        "number-display": ["32px", {lineHeight: "40px", letterSpacing: "0.05em", fontWeight: "600"}],
+        "number-standard": ["18px", {lineHeight: "24px", fontWeight: "500"}],
+        "label-caps": ["11px", {lineHeight: "16px", letterSpacing: "0.1em", fontWeight: "700"}],
+      }
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+.brush-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #D4CCBC 50%, transparent 100%);
+  width: 100%;
+}
+</style>
+</head>
+<body class="min-h-dvh" style="background-color:#F5F0E8;font-family:'Noto Serif SC',serif">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-30 bg-surface/90 backdrop-blur-md flex items-center justify-center h-16 border-b" style="border-color:rgba(212,204,188,0.3)">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-widest">留白记账</h1>
+</header>
+
+<main class="max-w-md mx-auto px-container-margin py-6 pb-32 flex flex-col gap-8">
+<!-- 月份导航 -->
+<div class="flex items-center justify-center py-2">
+<button onclick="toggleMonthPicker()" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-surface-container-low transition-colors">
+<span id="monthLabel" class="font-body-lg text-body-lg text-primary">2024年8月</span>
+<svg class="w-2 h-2" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="#1c1b1b" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+</div>
+
+<!-- 月份选择器浮层 -->
+<div id="monthPicker" class="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm hidden" onclick="closePicker(event)">
+<div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface-container-lowest rounded-xl p-6 shadow-xl min-w-[280px]" onclick="event.stopPropagation()">
+<p class="font-headline-md text-headline-md text-center mb-4 text-primary">选择月份</p>
+<div class="grid grid-cols-3 gap-2">
+<button onclick="selectMonth('2024年10月')" class="py-3 px-2 rounded-lg border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">2024年10月</button>
+<button onclick="selectMonth('2024年9月')" class="py-3 px-2 rounded-lg border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">2024年9月</button>
+<button onclick="selectMonth('2024年8月')" class="py-3 px-2 rounded-lg border-2 border-primary bg-primary text-white font-bold">2024年8月</button>
+<button onclick="selectMonth('2024年7月')" class="py-3 px-2 rounded-lg border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">2024年7月</button>
+<button onclick="selectMonth('2024年6月')" class="py-3 px-2 rounded-lg border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">2024年6月</button>
+<button onclick="selectMonth('2024年5月')" class="py-3 px-2 rounded-lg border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">2024年5月</button>
+</div>
+<button onclick="closePickerAll()" class="mt-4 w-full py-3 bg-surface-container-low rounded-lg text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">取消</button>
+</div>
+</div>
+
+<!-- 本月结余卡片 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 flex flex-col gap-3 shadow-sm">
+<p class="font-label-caps text-label-caps text-pale-ink text-center uppercase">本月结余</p>
+<p class="font-number-display text-number-display text-primary text-center tracking-wide">¥ 12,480.00</p>
+<div class="flex gap-8 justify-center pt-2">
+<div class="flex-1 text-center">
+<p class="font-label-caps text-label-caps text-pine-green uppercase mb-1">收入</p>
+<p class="font-number-standard text-number-standard text-pine-green">24,000.00</p>
+</div>
+<div class="flex-1 text-center">
+<p class="font-label-caps text-label-caps text-cinnabar-red uppercase mb-1">支出</p>
+<p class="font-number-standard text-number-standard text-cinnabar-red">11,520.00</p>
+</div>
+</div>
+</div>
+
+<!-- 支出/收入切换 -->
+<div class="flex justify-center">
+<div class="relative flex items-center bg-surface-container-low p-1 rounded-full border border-outline-variant/30 w-48">
+<div id="typeIndicator" class="absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-primary rounded-full transition-transform duration-300"></div>
+<button class="relative z-10 flex-1 py-2 text-center transition-colors duration-300" id="btnExpense" onclick="switchType('expense')">
+<span class="font-body-lg text-white font-medium">支出</span>
+</button>
+<button class="relative z-10 flex-1 py-2 text-center transition-colors duration-300" id="btnIncome" onclick="switchType('income')">
+<span class="font-body-lg text-pale-ink">收入</span>
+</button>
+</div>
+</div>
+
+<!-- 账单列表 -->
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-end">
+<span class="font-headline-md text-headline-md text-primary">今日</span>
+<span class="font-body-sm text-pale-ink">8月24日 星期六</span>
+</div>
+<div class="brush-divider opacity-50"></div>
+
+<!-- 单条账单 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-ink-wash-gray/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">restaurant</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg text-primary">手冲咖啡</p>
+<p class="font-body-sm text-pale-ink mt-0.5">午后小憩</p>
+</div>
+</div>
+<span class="font-number-standard text-number-standard text-cinnabar-red">-38.00</span>
+</div>
+
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-ink-wash-gray/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">directions_bus</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg text-primary">城市地铁</p>
+<p class="font-body-sm text-pale-ink mt-0.5">地铁往返</p>
+</div>
+</div>
+<span class="font-number-standard text-number-standard text-cinnabar-red">-12.00</span>
+</div>
+
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-ink-wash-gray/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">payments</span>
+</div>
+<div>
+<p class="font-body-lg text-body-lg text-primary">工资入账</p>
+<p class="font-body-sm text-pale-ink mt-0.5">月度工资</p>
+</div>
+</div>
+<span class="font-number-standard text-number-standard text-pine-green">+8,000.00</span>
+</div>
+
+<!-- 展开全部 -->
+<a href="#" class="block text-center py-3 border border-ink-wash-gray rounded-lg font-body-sm text-pale-ink hover:bg-surface-container-low transition-colors">展开全部明细 ↓</a>
+</div>
+</main>
+
+<!-- FAB -->
+<a href="add-record.html" class="fixed bottom-24 right-6 w-14 h-14 bg-cinnabar-red rounded-xl flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform z-40">
+<svg class="w-4 h-4" viewBox="0 0 15.7 15.7" fill="none"><path d="M7.85 1.05v13.6M1.05 7.85h13.6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+</a>
+
+<!-- Bottom Nav -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-surface-container-lowest flex justify-around items-center h-16 border-t" style="border-color:rgba(212,204,188,0.3);box-shadow:0 -2px 5px rgba(26,26,26,0.05)">
+<a class="flex flex-col items-center justify-center py-2 px-4 rounded-xl bg-surface-container-high" href="home.html">
+<span class="material-symbols-outlined text-primary">home</span>
+<span class="font-label-caps text-label-caps mt-1" style="color:#1c1b1b">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center py-2 px-4 rounded-xl" href="stats.html">
+<span class="material-symbols-outlined text-pale-ink">analytics</span>
+<span class="font-label-caps text-label-caps mt-1 text-pale-ink">统计</span>
+</a>
+<a class="flex flex-col items-center justify-center py-2 px-4 rounded-xl" href="budget.html">
+<span class="material-symbols-outlined text-pale-ink">calendar_today</span>
+<span class="font-label-caps text-label-caps mt-1 text-pale-ink">预算</span>
+</a>
+<a class="flex flex-col items-center justify-center py-2 px-4 rounded-xl" href="profile.html">
+<span class="material-symbols-outlined text-pale-ink">person</span>
+<span class="font-label-caps text-label-caps mt-1 text-pale-ink">我的</span>
+</a>
+</nav>
+
+<script>
+function toggleMonthPicker() {
+  const p = document.getElementById('monthPicker');
+  p.style.display = p.style.display === 'none' ? 'flex' : 'none';
+}
+function closePicker(e) { if (e.target === e.currentTarget) e.currentTarget.style.display = 'none'; }
+function closePickerAll() { document.getElementById('monthPicker').style.display = 'none'; }
+function selectMonth(label) {
+  document.getElementById('monthLabel').textContent = label;
+  closePickerAll();
+}
+function switchType(type) {
+  const ind = document.getElementById('typeIndicator');
+  const prefix = ind.previousElementSibling || ind.nextElementSibling;
+  if (type === 'income') {
+    ind.style.transform = 'translateX(88px)';
+    document.getElementById('btnExpense').querySelector('span').className = 'font-body-lg text-pale-ink';
+    document.getElementById('btnIncome').querySelector('span').className = 'font-body-lg text-white font-medium';
+  } else {
+    ind.style.transform = 'translateX(0)';
+    document.getElementById('btnExpense').querySelector('span').className = 'font-body-lg text-white font-medium';
+    document.getElementById('btnIncome').querySelector('span').className = 'font-body-lg text-pale-ink';
+  }
+}
+</script>
+</body>
+</html>

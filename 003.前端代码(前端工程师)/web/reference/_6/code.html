@@ -1,0 +1,399 @@
+<!DOCTYPE html><html class="light" lang="zh-CN" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>留白记账 - 统计</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&amp;family=Noto+Serif:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#1d1c17",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f7f3f2",
+                        "inverse-on-surface": "#f4f0ef",
+                        "surface-container-highest": "#e5e2e1",
+                        "ochre-warning": "#B7610A",
+                        "on-surface-variant": "#444748",
+                        "on-error": "#ffffff",
+                        "on-background": "#1c1b1b",
+                        "surface-container": "#f1edec",
+                        "outline": "#747878",
+                        "primary-container": "#1c1b1b",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "background": "#fdf8f8",
+                        "on-surface": "#1c1b1b",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#e7e2da",
+                        "outline-variant": "#c4c7c7",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface-container-high": "#ebe7e6",
+                        "on-tertiary-fixed-variant": "#484645",
+                        "tertiary-container": "#1c1b1a",
+                        "on-primary-container": "#858383",
+                        "tertiary-fixed": "#e6e2df",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#000000",
+                        "on-primary-fixed-variant": "#474746",
+                        "on-tertiary-container": "#868382",
+                        "secondary-fixed-dim": "#cac6be",
+                        "ink-wash-gray": "#D4CCBC",
+                        "pine-green": "#2E7D5E",
+                        "surface": "#fdf8f8",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#1c1b1a",
+                        "inverse-primary": "#c8c6c5",
+                        "tertiary-fixed-dim": "#cac6c4",
+                        "surface-dim": "#ddd9d8",
+                        "surface-variant": "#e5e2e1",
+                        "pale-ink": "#6B6B6B",
+                        "surface-tint": "#5f5e5e",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#e5e2e1",
+                        "surface-bright": "#fdf8f8",
+                        "on-secondary-fixed-variant": "#494741",
+                        "secondary-container": "#e7e2da",
+                        "secondary": "#615e58",
+                        "inverse-surface": "#313030",
+                        "on-secondary-container": "#67645e",
+                        "slate-blue": "#2B6CB0",
+                        "cinnabar-red": "#C0392B",
+                        "tertiary": "#000000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "container-margin": "24px",
+                        "ink-stroke-thick": "3px",
+                        "ink-stroke-thin": "1px",
+                        "section-gap": "40px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Noto Serif"],
+                        "number-display": ["Hanken Grotesk"],
+                        "body-sm": ["Noto Serif"],
+                        "headline-md": ["Noto Serif"],
+                        "headline-lg-mobile": ["Noto Serif"],
+                        "number-standard": ["Hanken Grotesk"],
+                        "label-caps": ["Hanken Grotesk"],
+                        "body-lg": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "number-display": ["32px", {"lineHeight": "40px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "number-standard": ["18px", {"lineHeight": "24px", "fontWeight": "500"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #F5F0E8; /* Xuan Paper Color */
+            color: #1c1b1b;
+            font-family: 'Noto Serif', serif;
+        }
+
+        .brush-divider {
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+            mask-image: url("data:image/svg+xml,%3Csvg width='100' height='4' viewBox='0 0 100 4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 2C10 0.5 20 3.5 30 2C40 0.5 60 3.5 70 2C80 0.5 90 3.5 100 2' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
+            opacity: 0.15;
+        }
+
+        .ink-bleed-progress {
+            position: relative;
+            height: 6px;
+            background: #E5E2E1;
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .ink-bleed-fill {
+            height: 100%;
+            background: #000;
+            border-radius: 99px;
+            position: relative;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .ink-bleed-fill::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 0;
+            width: 20px;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0,0,0,0.4) 0%, transparent 70%);
+            filter: blur(2px);
+        }
+
+        .donut-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 0 auto;
+        }
+
+        .donut-segment {
+            fill: none;
+            stroke-width: 24;
+            transition: stroke-dashoffset 1s ease-out;
+            stroke-linecap: round;
+        }
+
+        .ink-texture-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.08;
+            background-image: url("https://www.transparenttextures.com/patterns/dark-matter.png");
+        }
+
+        .month-chip {
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .month-chip.active {
+            border-bottom-color: #000;
+            font-weight: 700;
+        }
+
+        .glass-card {
+            background-color: #FAF7F2;
+            box-shadow: 0 4px 20px rgba(26, 26, 26, 0.04);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center pb-20">
+<!-- Top App Bar -->
+<header class="w-full top-0 bg-background flex justify-between items-center px-container-margin py-unit z-40 border-b-ink-stroke-thin border-outline-variant">
+
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight text-center w-full">留白记账</h1>
+
+</header>
+<main class="w-full max-w-md px-container-margin pt-6 flex-grow">
+<!-- Monthly Navigation -->
+<section class="mb-section-gap overflow-x-auto"><div class="flex justify-center items-center py-2">
+  <div class="relative group">
+    <button class="flex items-center space-x-2 font-headline-md text-primary hover:opacity-80 transition-opacity">
+      <span class="font-body-lg">2024年8月</span>
+      <span class="material-symbols-outlined text-pale-ink text-lg" style="font-variation-settings: 'wght' 300;">expand_more</span>
+    </button>
+    <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-40 bg-surface-container-lowest rounded-lg shadow-lg border border-outline-variant opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all z-50">
+      <div class="p-2 space-y-1">
+        <button class="w-full text-left px-3 py-2 text-body-sm hover:bg-surface-container rounded transition-colors">2024年10月</button>
+        <button class="w-full text-left px-3 py-2 text-body-sm hover:bg-surface-container rounded transition-colors">2024年9月</button>
+        <button class="w-full text-left px-3 py-2 text-body-sm bg-secondary-container text-primary rounded font-bold">2024年8月</button>
+        <button class="w-full text-left px-3 py-2 text-body-sm hover:bg-surface-container rounded transition-colors">2024年7月</button>
+        <button class="w-full text-left px-3 py-2 text-body-sm hover:bg-surface-container rounded transition-colors">2024年6月</button>
+      </div>
+    </div>
+  </div>
+</div></section><div class="flex justify-center mb-8">
+  <div class="relative flex items-center bg-surface-container-low p-1 rounded-full border border-outline-variant w-48"><!-- Active Indicator (Ink-dark sliding state) -->
+    <div class="absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-primary rounded-full transition-transform duration-300 transform translate-x-0"></div>
+    
+    <!-- Expenditure Button -->
+    <button class="relative z-10 flex-1 py-1.5 text-center transition-colors duration-300">
+      <span class="font-label-caps text-white">支出</span>
+    </button>
+    
+    <!-- Income Button -->
+    <button class="relative z-10 flex-1 py-1.5 text-center transition-colors duration-300">
+      <span class="font-label-caps text-pale-ink hover:text-pine-green">收入</span>
+    </button></div>
+</div>
+<!-- Donut Chart Section -->
+<section class="glass-card rounded-xl p-6 mb-8 text-center relative overflow-hidden">
+<div class="ink-texture-overlay"></div>
+<h2 class="font-label-caps text-label-caps text-pale-ink mb-6 tracking-widest">本月洞察</h2>
+<div class="donut-container mb-6">
+<svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+<!-- Background Circle -->
+<circle class="stroke-surface-container-high fill-none" cx="50" cy="50" r="38" stroke-width="12"></circle>
+<!-- Ink Segments (Simplified visualization) -->
+<circle class="donut-segment stroke-primary" cx="50" cy="50" r="38" stroke-dasharray="100 238" stroke-width="12"></circle>
+<circle class="donut-segment stroke-slate-blue" cx="50" cy="50" r="38" stroke-dasharray="60 238" stroke-dashoffset="-100" stroke-width="12"></circle>
+<circle class="donut-segment stroke-cinnabar-red" cx="50" cy="50" r="38" stroke-dasharray="40 238" stroke-dashoffset="-160" stroke-width="12"></circle>
+<circle class="donut-segment stroke-pine-green" cx="50" cy="50" r="38" stroke-dasharray="38 238" stroke-dashoffset="-200" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-body-sm text-body-sm text-pale-ink">本月支出</span>
+<span class="font-number-display text-number-display text-primary">¥4,280</span>
+</div>
+</div>
+<!-- Legend Grid -->
+<div class="grid grid-cols-2 gap-4 text-left">
+<div class="flex items-center space-x-3">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="font-body-sm text-body-sm text-primary">居住 (42%)</span>
+</div>
+<div class="flex items-center space-x-3">
+<div class="w-3 h-3 rounded-full bg-slate-blue"></div>
+<span class="font-body-sm text-body-sm text-primary">健康 (25%)</span>
+</div>
+<div class="flex items-center space-x-3">
+<div class="w-3 h-3 rounded-full bg-cinnabar-red"></div>
+<span class="font-body-sm text-body-sm text-primary">餐饮 (16%)</span>
+</div>
+<div class="flex items-center space-x-3">
+<div class="w-3 h-3 rounded-full bg-pine-green"></div>
+<span class="font-body-sm text-body-sm text-primary">休闲 (17%)</span>
+</div>
+</div>
+</section>
+<!-- Top 5 Expenses -->
+<section class="mb-12">
+<h3 class="font-headline-md text-headline-md mb-6 border-l-ink-stroke-thick border-primary pl-4">支出排行</h3>
+<div class="space-y-8">
+<!-- Item 1 -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-pale-ink">home</span>
+<span class="font-body-lg text-body-lg">每月房租</span>
+</div>
+<span class="font-number-standard text-number-standard">¥1,800.00</span>
+</div>
+<div class="ink-bleed-progress">
+<div class="ink-bleed-fill" style="width: 85%;"></div>
+</div>
+</div>
+<div class="brush-divider"></div>
+<!-- Item 2 -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-pale-ink">restaurant</span>
+<span class="font-body-lg text-body-lg">茶馆雅座</span>
+</div>
+<span class="font-number-standard text-number-standard">¥680.00</span>
+</div>
+<div class="ink-bleed-progress">
+<div class="ink-bleed-fill" style="width: 45%;"></div>
+</div>
+</div>
+<div class="brush-divider"></div>
+<!-- Item 3 -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-pale-ink">self_improvement</span>
+<span class="font-body-lg text-body-lg">书法课</span>
+</div>
+<span class="font-number-standard text-number-standard">¥420.00</span>
+</div>
+<div class="ink-bleed-progress">
+<div class="ink-bleed-fill" style="width: 30%;"></div>
+</div>
+</div>
+<div class="brush-divider"></div>
+<!-- Item 4 -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-pale-ink">shopping_bag</span>
+<span class="font-body-lg text-body-lg">有机丝绸</span>
+</div>
+<span class="font-number-standard text-number-standard">¥350.00</span>
+</div>
+<div class="ink-bleed-progress">
+<div class="ink-bleed-fill" style="width: 25%;"></div>
+</div>
+</div>
+<div class="brush-divider"></div>
+<!-- Item 5 -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-pale-ink">flight</span>
+<span class="font-body-lg text-body-lg">京都禅修订金</span>
+</div>
+<span class="font-number-standard text-number-standard">¥250.00</span>
+</div>
+<div class="ink-bleed-progress">
+<div class="ink-bleed-fill" style="width: 15%;"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Aesthetic Quote for "Liubai" feel -->
+<section class="py-12 italic text-center text-pale-ink opacity-60">
+<p class="font-body-sm text-body-sm">“平衡并非寻得，<br>而是由你创造。”</p>
+</section>
+</main>
+<!-- FAB Seal Button -->
+<button class="fixed bottom-24 right-container-margin w-14 h-14 bg-cinnabar-red text-white rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform z-50">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 0, 'wght' 700">add</span>
+</button>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 h-16 flex justify-around items-center px-4 pb-safe bg-surface-container-lowest shadow-[0_-2px_10px_rgba(26,26,26,0.05)]">
+<a class="flex flex-col items-center justify-center text-pale-ink w-16 h-full hover:text-primary active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-label-caps">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-lg w-16 h-12 active:scale-90 transition-transform duration-200 active" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bar_chart</span>
+<span class="text-[10px] font-label-caps">统计</span>
+</a>
+<a class="flex flex-col items-center justify-center text-pale-ink w-16 h-full hover:text-primary active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-label-caps">我的</span>
+</a>
+</nav>
+<script>
+        // Simple interactivity for month selection
+        document.querySelectorAll('.month-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelector('.month-chip.active').classList.remove('active', 'text-primary');
+                document.querySelectorAll('.month-chip:not(.active)').forEach(c => c.classList.add('text-pale-ink')); // Reset others
+                
+                chip.classList.add('active', 'text-primary');
+                chip.classList.remove('text-pale-ink');
+            });
+        });
+
+        // Micro-interaction: Hovering the donut chart items
+        const segments = document.querySelectorAll('.donut-segment');
+        segments.forEach(seg => {
+            seg.addEventListener('mouseenter', () => {
+                seg.style.strokeWidth = "16";
+            });
+            seg.addEventListener('mouseleave', () => {
+                seg.style.strokeWidth = "12";
+            });
+        });
+    </script>
+
+
+
+
+</body></html>

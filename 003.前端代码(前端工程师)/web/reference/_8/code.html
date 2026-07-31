@@ -1,0 +1,299 @@
+<!DOCTYPE html><html class="light" lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>留白记账 - 我的</title>
+<!-- Google Fonts: Noto Serif for Ink Aesthetic, Hanken Grotesk for numbers/labels -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "ochre-warning": "#B7610A",
+                    "outline": "#747878",
+                    "primary-fixed-dim": "#c8c6c5",
+                    "slate-blue": "#2B6CB0",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#1c1b1a",
+                    "tertiary-fixed-dim": "#cac6c4",
+                    "cinnabar-red": "#C0392B",
+                    "tertiary": "#000000",
+                    "secondary-fixed": "#e7e2da",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed": "#1c1b1b",
+                    "primary-container": "#1c1b1b",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#868382",
+                    "inverse-primary": "#c8c6c5",
+                    "tertiary-fixed": "#e6e2df",
+                    "on-background": "#1c1b1b",
+                    "pine-green": "#2E7D5E",
+                    "ink-wash-gray": "#D4CCBC",
+                    "secondary-fixed-dim": "#cac6be",
+                    "surface-container-high": "#ebe7e6",
+                    "outline-variant": "#c4c7c7",
+                    "on-primary-fixed-variant": "#474746",
+                    "surface-bright": "#fdf8f8",
+                    "on-surface-variant": "#444748",
+                    "on-error-container": "#93000a",
+                    "surface": "#fdf8f8",
+                    "inverse-surface": "#313030",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#e5e2e1",
+                    "tertiary-container": "#1c1b1a",
+                    "inverse-on-surface": "#f4f0ef",
+                    "primary": "#000000",
+                    "on-secondary-fixed-variant": "#494741",
+                    "on-primary-container": "#858383",
+                    "surface-container": "#f1edec",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#ddd9d8",
+                    "on-secondary-fixed": "#1d1c17",
+                    "primary-fixed": "#e5e2e1",
+                    "pale-ink": "#6B6B6B",
+                    "on-primary": "#ffffff",
+                    "on-secondary-container": "#67645e",
+                    "surface-container-low": "#f7f3f2",
+                    "on-tertiary-fixed-variant": "#484645",
+                    "secondary-container": "#e7e2da",
+                    "on-surface": "#1c1b1b",
+                    "secondary": "#615e58",
+                    "surface-tint": "#5f5e5e",
+                    "background": "#fdf8f8",
+                    "surface-variant": "#e5e2e1",
+                    "xuan-paper": "#F5F0E8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "ink-stroke-thick": "3px",
+                    "container-margin": "24px",
+                    "section-gap": "40px",
+                    "gutter": "16px",
+                    "unit": "8px",
+                    "ink-stroke-thin": "1px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Noto Serif SC", "serif"],
+                    "headline-lg": ["Noto Serif SC", "serif"],
+                    "body-lg": ["Noto Serif SC", "serif"],
+                    "number-display": ["Hanken Grotesk", "sans-serif"],
+                    "number-standard": ["Hanken Grotesk", "sans-serif"],
+                    "label-caps": ["Hanken Grotesk", "sans-serif"],
+                    "headline-md": ["Noto Serif SC", "serif"],
+                    "body-sm": ["Noto Serif SC", "serif"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "number-display": ["32px", {"lineHeight": "40px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "number-standard": ["18px", {"lineHeight": "24px", "fontWeight": "500"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-sm": ["13px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Brush stroke effect for dividers */
+        .brush-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #D4CCBC 20%, #D4CCBC 80%, transparent 100%);
+            mask-image: url('data:image/svg+xml;utf8,<svg preserveAspectRatio="none" viewBox="0 0 100 2" xmlns="http://www.w3.org/2000/svg"><path d="M0 1C20 0.5 40 1.5 60 1C80 0.5 100 1" stroke="black" stroke-width="2" fill="none"/></svg>');
+            width: 100%;
+            margin: 1.5rem 0;
+        }
+
+        /* Paper texture overlay */
+        .paper-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+            z-index: 100;
+        }
+
+        .ink-shadow {
+            box-shadow: 0 4px 20px rgba(26, 26, 26, 0.05);
+        }
+
+        .active-tab-indicator {
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 3px;
+            background: #C0392B; /* Cinnabar Red */
+            border-radius: 2px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-xuan-paper min-h-screen font-body-lg text-primary selection:bg-ink-wash-gray">
+<div class="paper-overlay"></div>
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md">
+<div class="flex items-center justify-between px-gutter h-16 w-full max-w-7xl mx-auto">
+<button class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity active:scale-95">menu</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile tracking-widest text-primary">留白记账</h1>
+<button class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity active:scale-95">account_circle</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-32 px-container-margin max-w-2xl mx-auto">
+<!-- Profile Header Section -->
+<section class="flex flex-col items-center mb-section-gap">
+<div class="relative mb-6">
+<!-- Avatar with Ink Wash Style -->
+<div class="w-24 h-24 rounded-full overflow-hidden border-ink-stroke-thin border-ink-wash-gray ink-shadow bg-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="A portrait of a serene person in a traditional Chinese ink wash painting style. The brush strokes are loose and organic, using varying shades of black and gray ink on a textured off-white paper background. The lighting is soft and diffuse, creating a contemplative and minimalist aesthetic consistent with high-end digital art." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLAm7ejp1uFehSfb8JF__my7MAw1ifErwhTU7BzlmJW4PP390UmWra8CZA-Lo3a7nt9CNcf1KOThtXIM2qUUnBr1I6gL3LgAlAAwAEwTYLRNNMEjb-P3MwfDFOLDbHwdm8W5Ko0qe-FXdwwfJ5RSg0SiTvlOwuSuffhnzqtOjZmQBSFmNp3fFqE46stwhu9u3_KQiSBGrPR6i6Mad3Se_tUi9VOnd3jxjUEIVGnbcjhxLKHfectqab7w">
+</div>
+<!-- Subtle decorative seal-like element -->
+<div class="absolute -bottom-2 -right-2 bg-cinnabar-red text-white w-8 h-8 rounded-sm flex items-center justify-center font-headline-md shadow-sm">
+                    印
+                </div>
+</div>
+<div class="text-center">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">水墨行者</h2>
+<p class="font-body-sm text-body-sm text-pale-ink italic">“见微知著，静心记账”</p>
+</div>
+<!-- Simple Stats Layout (Asymmetric/Bento style) -->
+<div class="grid grid-cols-2 gap-4 w-full mt-8">
+<div class="bg-surface-container-lowest p-6 rounded-xl ink-shadow flex flex-col items-center justify-center border border-ink-wash-gray/20">
+<span class="font-label-caps text-label-caps text-pale-ink mb-1">已记账</span>
+<div class="flex items-baseline">
+<span class="font-number-display text-number-display text-primary">365</span>
+<span class="font-body-sm text-body-sm text-pale-ink ml-1">天</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl ink-shadow flex flex-col items-center justify-center border border-ink-wash-gray/20">
+<span class="font-label-caps text-label-caps text-pale-ink mb-1">本月支出</span>
+<div class="flex items-baseline">
+<span class="font-number-display text-number-display text-cinnabar-red">4,820</span>
+<span class="font-body-sm text-body-sm text-pale-ink ml-1">元</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Settings List -->
+<section class="space-y-4">
+<h3 class="font-label-caps text-label-caps text-pale-ink px-2 mb-2">个人设置</h3>
+<nav class="bg-surface-container-lowest rounded-xl overflow-hidden ink-shadow border border-ink-wash-gray/10">
+<!-- Account Settings -->
+<a class="flex items-center justify-between p-5 hover:bg-surface-container transition-colors active:opacity-90" href="#">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">manage_accounts</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">账号设置</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</a>
+<div class="mx-5 h-px bg-ink-wash-gray/20"></div>
+<!-- Ledger Management -->
+<a class="flex items-center justify-between p-5 hover:bg-surface-container transition-colors active:opacity-90" href="#">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">book</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">账本管理</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</a>
+<div class="mx-5 h-px bg-ink-wash-gray/20"></div>
+<!-- Data Export -->
+<a class="flex items-center justify-between p-5 hover:bg-surface-container transition-colors active:opacity-90" href="#">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">download</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">数据导出</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</a>
+<div class="mx-5 h-px bg-ink-wash-gray/20"></div>
+<!-- Appearance -->
+<a class="flex items-center justify-between p-5 hover:bg-surface-container transition-colors active:opacity-90" href="#">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">palette</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">外观设置</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</a>
+</nav>
+</section>
+<!-- Logout Button -->
+<section class="mt-section-gap flex flex-col items-center">
+<div class="brush-divider opacity-60"></div>
+<button class="mt-4 px-12 py-3 rounded-full border border-cinnabar-red/30 text-cinnabar-red font-headline-md hover:bg-error-container/20 transition-all active:scale-95 group relative">
+                退出登录
+                <!-- Hand-drawn style underline (faint) -->
+<svg class="absolute bottom-1 left-1/2 -translate-x-1/2 w-20 h-2 opacity-30 group-hover:opacity-60 transition-opacity" viewBox="0 0 100 5">
+<path d="M5 2.5 Q 50 1, 95 2.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+</button>
+<p class="mt-8 font-label-caps text-label-caps text-outline-variant">Version 2.4.0 • Liubai Design</p>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<button class="fixed bottom-24 right-container-margin w-14 h-14 bg-cinnabar-red text-white rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform z-50">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 0, 'wght' 700">add</span>
+</button><nav class="fixed bottom-0 w-full z-50 h-16 flex justify-around items-center px-4 pb-safe bg-surface-container-lowest shadow-[0_-2px_10px_rgba(26,26,26,0.05)]">
+<a class="flex flex-col items-center justify-center text-pale-ink w-16 h-full hover:text-primary active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-label-caps">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-pale-ink w-16 h-full hover:text-primary active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="text-[10px] font-label-caps">统计</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-lg w-16 h-12 active:scale-90 transition-transform duration-200 active" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="text-[10px] font-label-caps">我的</span>
+</a>
+</nav>
+<!-- Custom Micro-interaction Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Ripple effect or simple scale for buttons
+            const buttons = document.querySelectorAll('button, a');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Custom active state logic handled by CSS active: classes
+                });
+            });
+
+            // Smooth scroll to top when title clicked
+            document.querySelector('h1').addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+
+
+</body></html>
