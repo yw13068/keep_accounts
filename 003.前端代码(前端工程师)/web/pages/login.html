@@ -204,19 +204,42 @@ tailwind.config = {
 <path d="M0,70 Q300,30 600,70 T1000,70 L1000,100 L0,100 Z" opacity="0.5"></path>
 </svg>
 </div>
+<script src="../assets/js/api.js"></script>
 <script>
-function handleLogin(e) {
+async function handleLogin(e) {
   e.preventDefault();
   const btn = document.getElementById('loginBtn');
-  const orig = btn.innerHTML;
+  const phone = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+
+  // 简单校验
+  if (!phone || !/^1\d{10}$/.test(phone)) {
+    alert('请输入正确的手机号');
+    return;
+  }
+  if (!password) {
+    alert('请输入密码');
+    return;
+  }
+
   btn.disabled = true;
   btn.innerHTML = "正在验证...";
-  setTimeout(() => {
-    btn.innerHTML = "登录成功";
-    btn.classList.remove('bg-primary');
-    btn.classList.add('bg-pine-green', 'border-pine-green');
-    setTimeout(() => window.location.href = 'home.html', 800);
-  }, 1200);
+
+  try {
+    const res = await API.auth.login({ phone, password });
+    if (res.code === 0) {
+      btn.innerHTML = "登录成功";
+      btn.classList.remove('bg-primary');
+      btn.classList.add('bg-pine-green', 'border-pine-green');
+      setTimeout(() => window.location.href = 'home.html', 800);
+    } else {
+      throw new Error(res.message || '登录失败');
+    }
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = "登 录";
+    alert(err.message || '登录失败，请检查手机号和密码');
+  }
 }
 </script>
 </body>

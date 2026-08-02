@@ -1,0 +1,120 @@
+{
+  "pages": [
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/register/register",
+      "style": {
+        "navigationBarTitleText": "注册",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/home/home",
+      "style": {
+        "navigationBarTitleText": "留白记账",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/stats/stats",
+      "style": {
+        "navigationBarTitleText": "留白记账",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/budget/budget",
+      "style": {
+        "navigationBarTitleText": "留白记账",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/profile/profile",
+      "style": {
+        "navigationBarTitleText": "留白记账",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/add-record/add-record",
+      "style": {
+        "navigationBarTitleText": "记一笔",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/account/account",
+      "style": {
+        "navigationBarTitleText": "账本管理",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/budget-edit/budget-edit",
+      "style": {
+        "navigationBarTitleText": "预算管理",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/forgot/forgot",
+      "style": {
+        "navigationBarTitleText": "找回密码",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/landing/landing",
+      "style": {
+        "navigationBarTitleText": "留白记账",
+        "navigationStyle": "custom"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#F5F0E8",
+    "backgroundColor": "#F5F0E8",
+    "navigationBarTitleText": "留白记账"
+  },
+  "tabBar": {
+    "color": "#6B6B6B",
+    "selectedColor": "#1c1b1b",
+    "borderStyle": "white",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "static/tabs/home.png",
+        "selectedIconPath": "static/tabs/home-active.png"
+      },
+      {
+        "pagePath": "pages/stats/stats",
+        "text": "统计",
+        "iconPath": "static/tabs/stats.png",
+        "selectedIconPath": "static/tabs/stats-active.png"
+      },
+      {
+        "pagePath": "pages/budget/budget",
+        "text": "预算",
+        "iconPath": "static/tabs/budget.png",
+        "selectedIconPath": "static/tabs/budget-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "static/tabs/profile.png",
+        "selectedIconPath": "static/tabs/profile-active.png"
+      }
+    ]
+  },
+  "uniIdRouter": {}
+}

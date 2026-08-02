@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>预算管理 - 留白记账</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Hanken+Grotesq:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "background": "#fdf8f8",
+        "surface": "#fdf8f8",
+        "surface-bright": "#fdf8f8",
+        "surface-container-lowest": "#ffffff",
+        "surface-container-low": "#f7f3f2",
+        "surface-container": "#f1edec",
+        "surface-container-high": "#ebe7e6",
+        "surface-container-highest": "#e5e2e1",
+        "on-background": "#1c1b1b",
+        "on-surface": "#1c1b1b",
+        "on-surface-variant": "#444748",
+        "inverse-surface": "#313030",
+        "inverse-on-surface": "#f4f0ef",
+        "outline": "#747878",
+        "outline-variant": "#c4c7c7",
+        "surface-tint": "#5f5e5e",
+        "primary": "#000000",
+        "on-primary": "#ffffff",
+        "primary-container": "#1c1b1b",
+        "on-primary-container": "#858383",
+        "inverse-primary": "#c8c6c5",
+        "secondary": "#615e58",
+        "on-secondary": "#ffffff",
+        "secondary-container": "#e7e2da",
+        "on-secondary-container": "#67645e",
+        "secondary-fixed": "#e7e2da",
+        "secondary-fixed-dim": "#cac6be",
+        "on-secondary-fixed": "#1d1c17",
+        "on-secondary-fixed-variant": "#494741",
+        "tertiary": "#000000",
+        "on-tertiary": "#ffffff",
+        "tertiary-container": "#1c1b1a",
+        "on-tertiary-container": "#868382",
+        "tertiary-fixed": "#e6e2df",
+        "tertiary-fixed-dim": "#cac6c4",
+        "on-tertiary-fixed": "#1c1b1a",
+        "on-tertiary-fixed-variant": "#484645",
+        "error": "#ba1a1a",
+        "on-error": "#ffffff",
+        "error-container": "#ffdad6",
+        "on-error-container": "#93000a",
+        "primary-fixed": "#e5e2e1",
+        "primary-fixed-dim": "#c8c6c5",
+        "on-primary-fixed": "#1c1b1b",
+        "on-primary-fixed-variant": "#474746",
+        "ink-wash-gray": "#D4CCBC",
+        "pine-green": "#2E7D5E",
+        "cinnabar-red": "#C0392B",
+        "slate-blue": "#2B6CB0",
+        "ochre-warning": "#B7610A",
+        "pale-ink": "#6B6B6B",
+      },
+      borderRadius: {
+        "DEFAULT": "0.125rem",
+        "lg": "0.25rem",
+        "xl": "0.5rem",
+        "full": "0.75rem"
+      },
+      spacing: {
+        "unit": "8px",
+        "container-margin": "24px",
+        "section-gap": "40px",
+        "gutter": "16px",
+        "ink-stroke-thick": "3px",
+        "ink-stroke-thin": "1px"
+      },
+      fontFamily: {
+        "headline-lg": ["Noto Serif SC", "serif"],
+        "headline-lg-mobile": ["Noto Serif SC", "serif"],
+        "headline-md": ["Noto Serif SC", "serif"],
+        "body-lg": ["Noto Serif SC", "serif"],
+        "body-sm": ["Noto Serif SC", "serif"],
+        "number-display": ["Hanken Grotesq", "sans-serif"],
+        "number-standard": ["Hanken Grotesq", "sans-serif"],
+        "label-caps": ["Hanken Grotesq", "sans-serif"],
+      },
+      fontSize: {
+        "headline-lg": ["28px", {lineHeight: "36px", letterSpacing: "-0.02em", fontWeight: "700"}],
+        "headline-lg-mobile": ["24px", {lineHeight: "32px", fontWeight: "700"}],
+        "headline-md": ["20px", {lineHeight: "28px", fontWeight: "600"}],
+        "body-lg": ["16px", {lineHeight: "24px", fontWeight: "400"}],
+        "body-sm": ["13px", {lineHeight: "20px", fontWeight: "400"}],
+        "number-display": ["32px", {lineHeight: "40px", letterSpacing: "0.05em", fontWeight: "600"}],
+        "number-standard": ["18px", {lineHeight: "24px", fontWeight: "500"}],
+        "label-caps": ["11px", {lineHeight: "16px", letterSpacing: "0.1em", fontWeight: "700"}],
+      }
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+.ink-brush-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #D4CCBC 20%, #D4CCBC 80%, transparent 100%);
+  margin: 1.5rem 0;
+}
+</style>
+</head>
+<body class="min-h-dvh pb-24" style="background-color:#F5F0E8;font-family:'Noto Serif SC',serif">
+<!-- Top AppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md flex items-center justify-center h-16 border-b" style="background:rgba(245,240,232,0.8);border-color:rgba(212,204,188,0.3)">
+<button onclick="history.back()" class="absolute left-6 flex items-center justify-center w-10 h-10 hover:opacity-70 transition-opacity active:scale-95">
+<span class="material-symbols-outlined text-primary">arrow_back_ios_new</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">预算管理</h1>
+</header>
+
+<main class="pt-20 px-container-margin">
+<!-- 月份选择 -->
+<div class="flex items-center justify-center py-4">
+<button id="monthSelector" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="font-body-lg text-body-lg text-primary" id="currentMonth">2024年8月</span>
+<svg class="w-2 h-2" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="#1c1b1b" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+</div>
+
+<!-- 支出预算设置 -->
+<section class="mb-section-gap">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="w-1 h-6 bg-cinnabar-red rounded-full"></span>
+支出预算
+</h2>
+<span class="font-body-sm text-body-sm text-pale-ink" id="expenseTotal">总计: ¥ 0</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl divide-y" style="border:1px solid rgba(212,204,188,0.3)">
+<!-- 动态渲染支出预算项 -->
+<div id="expenseBudgetList"></div>
+</div>
+</section>
+
+<!-- 保存提示 -->
+<p class="text-center font-body-sm text-pale-ink opacity-60 italic pb-6">"合理的预算，是理财的第一步"</p>
+</main>
+
+<!-- 保存按钮 -->
+<div class="fixed bottom-20 left-0 right-0 px-container-margin z-40">
+<button onclick="saveBudgets()" class="w-full py-4 bg-primary text-white font-label-caps text-label-caps rounded-xl shadow-lg hover:opacity-90 transition-opacity active:scale-[0.98]">
+保存预算设置
+</button>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-surface-container-lowest flex justify-around items-center h-16 border-t" style="border-color:rgba(212,204,188,0.3);box-shadow:0 -2px 5px rgba(26,26,26,0.05)">
+<a class="flex flex-col items-center justify-center py-2 px-4 rounded-xl" href="home.html">
+<span class="material-symbols-outlined text-pale-ink">home</span>
+<span class="font-label-caps text-label-caps mt-1 text-pale-ink">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center py-2 px-4 rounded-xl" href="stats.html">
+<span class="material-symbols-outlined text-pale-ink">analytics</span>
+<span class="font-label-caps text-label-caps mt-1 text-pale-ink">统计</span>
+</a>
+<a class="flex flex-col items-center justify-center py-2 px-4 rounded-xl" href="budget.html">
+<span class="material-symbols-outlined text-pale-ink">calendar_today</span>
+<span class="font-label-caps text-label-caps mt-1 text-pale-ink">预算</span>
+</a>
+<a class="flex flex-col items-center justify-center py-2 px-4 rounded-xl" href="profile.html">
+<span class="material-symbols-outlined text-primary">person</span>
+<span class="font-label-caps text-label-caps mt-1" style="color:#1c1b1b">我的</span>
+</a>
+</nav>
+
+<script src="../assets/js/api.js"></script>
+<script>
+// 支出分类及其预算
+let expenseBudgets = [
+  { id: 1, name: '餐饮', icon: 'restaurant', budget: 0 },
+  { id: 2, name: '交通', icon: 'directions_bus', budget: 0 },
+  { id: 3, name: '购物', icon: 'shopping_bag', budget: 0 },
+  { id: 4, name: '居住', icon: 'home', budget: 0 },
+  { id: 5, name: '娱乐', icon: 'movie', budget: 0 },
+  { id: 6, name: '医疗', icon: 'health_and_safety', budget: 0 },
+  { id: 7, name: '教育', icon: 'school', budget: 0 },
+  { id: 8, name: '人情', icon: 'favorite', budget: 0 },
+];
+
+// 当前月份
+let currentDate = new Date();
+let apiMonth = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+let displayMonth = `${currentDate.getFullYear()}年${currentDate.getMonth() + 1}月`;
+
+// 初始化月份显示
+document.getElementById('currentMonth').textContent = displayMonth;
+
+// 渲染支出预算列表
+function renderExpenseBudgets() {
+  const list = document.getElementById('expenseBudgetList');
+  list.innerHTML = expenseBudgets.map((item, index) => `
+    <div class="flex items-center justify-between px-5 py-4 ${index > 0 ? 'border-t' : ''}" style="border-color:rgba(212,204,188,0.2)">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-surface-container-low rounded-lg flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary">${item.icon}</span>
+        </div>
+        <span class="font-body-lg text-primary">${item.name}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="font-number-standard text-pale-ink">¥</span>
+        <input type="number" value="${item.budget || ''}"
+               onchange="updateExpenseBudget(${item.id}, this.value)"
+               class="w-24 text-right font-number-standard text-primary bg-transparent border-b-2 border-surface-container-high focus:border-primary outline-none transition-colors py-1"
+               placeholder="不限">
+      </div>
+    </div>
+  `).join('');
+  updateExpenseTotal();
+}
+
+// 更新支出预算
+function updateExpenseBudget(id, value) {
+  const item = expenseBudgets.find(b => b.id === id);
+  if (item) {
+    item.budget = parseInt(value) || 0;
+    updateExpenseTotal();
+  }
+}
+
+// 更新支出总计
+function updateExpenseTotal() {
+  const total = expenseBudgets.reduce((sum, b) => sum + (b.budget || 0), 0);
+  document.getElementById('expenseTotal').textContent = `总计: ¥ ${total.toLocaleString('zh-CN')}`;
+}
+
+// 加载已保存的预算设置
+async function loadBudgets() {
+  try {
+    const res = await API.budget.getMonthBudget(apiMonth);
+    if (res.code === 0 && res.data.categories) {
+      res.data.categories.forEach(saved => {
+        const expense = expenseBudgets.find(b => b.id === saved.id);
+        if (expense) {
+          expense.budget = saved.budget || 0;
+        }
+      });
+    }
+  } catch (e) {
+    console.error('加载预算失败:', e);
+  }
+}
+
+// 保存预算设置
+async function saveBudgets() {
+  try {
+    for (const item of expenseBudgets) {
+      await API.budget.saveCategoryBudget({
+        month: apiMonth,
+        categoryId: item.id,
+        amount: item.budget || 0
+      });
+    }
+    alert('预算设置已保存');
+  } catch (e) {
+    console.error('保存预算失败:', e);
+    alert('保存失败，请重试');
+  }
+}
+
+// 页面初始化
+document.addEventListener('DOMContentLoaded', async function() {
+  if (!TokenStorage.get()) {
+    window.location.href = 'login.html';
+    return;
+  }
+  await loadBudgets();
+  renderExpenseBudgets();
+});
+</script>
+</body>
+</html>

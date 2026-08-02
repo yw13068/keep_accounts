@@ -127,39 +127,51 @@ tailwind.config = {
 <!-- 月份导航 -->
 <div class="flex items-center justify-center py-2">
 <button onclick="toggleMonthPicker()" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-surface-container-low transition-colors">
-<span id="monthLabel" class="font-body-lg text-body-lg text-primary">2024年8月</span>
+<span id="monthLabel" class="font-body-lg text-body-lg text-primary">--年--月</span>
 <svg class="w-2 h-2" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="#1c1b1b" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </button>
 </div>
 
 <!-- 月份选择器浮层 -->
 <div id="monthPicker" class="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm hidden" onclick="closePicker(event)">
-<div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface-container-lowest rounded-xl p-6 shadow-xl min-w-[280px]" onclick="event.stopPropagation()">
+<div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface-container-lowest rounded-xl p-6 shadow-xl min-w-[300px]" onclick="event.stopPropagation()">
 <p class="font-headline-md text-headline-md text-center mb-4 text-primary">选择月份</p>
-<div class="grid grid-cols-3 gap-2">
-<button onclick="selectMonth('2024年10月')" class="py-3 px-2 rounded-lg border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">2024年10月</button>
-<button onclick="selectMonth('2024年9月')" class="py-3 px-2 rounded-lg border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">2024年9月</button>
-<button onclick="selectMonth('2024年8月')" class="py-3 px-2 rounded-lg border-2 border-primary bg-primary text-white font-bold">2024年8月</button>
-<button onclick="selectMonth('2024年7月')" class="py-3 px-2 rounded-lg border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">2024年7月</button>
-<button onclick="selectMonth('2024年6月')" class="py-3 px-2 rounded-lg border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">2024年6月</button>
-<button onclick="selectMonth('2024年5月')" class="py-3 px-2 rounded-lg border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">2024年5月</button>
+
+<!-- 年份选择区 -->
+<div id="yearPicker" class="mb-4">
+<p class="font-body-sm text-pale-ink mb-2 text-center">请选择年份</p>
+<div id="yearPickerOptions" class="space-y-2 overflow-y-auto" style="max-height: 50vh; scrollbar-width: none; -ms-overflow-style: none;">
+<!-- 年份选项由JS动态生成 -->
 </div>
-<button onclick="closePickerAll()" class="mt-4 w-full py-3 bg-surface-container-low rounded-lg text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">取消</button>
+</div>
+
+<!-- 月份选择区 -->
+<div id="monthPickerArea" class="hidden">
+<p class="font-body-sm text-pale-ink mb-2 text-center">请选择月份</p>
+<div id="monthPickerOptions" class="grid grid-cols-4 gap-2">
+<!-- 月份选项由JS动态生成 -->
+</div>
+</div>
+
+<div class="flex gap-2 mt-4">
+<button id="btnBackToYears" onclick="showYearPicker()" class="flex-1 py-3 bg-surface-container-low rounded-lg text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors hidden">返回选择年</button>
+<button onclick="closePickerAll()" class="flex-1 py-3 bg-surface-container-low rounded-lg text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">取消</button>
+</div>
 </div>
 </div>
 
 <!-- 本月结余卡片 -->
 <div class="bg-surface-container-lowest rounded-xl p-6 flex flex-col gap-3 shadow-sm">
 <p class="font-label-caps text-label-caps text-pale-ink text-center uppercase">本月结余</p>
-<p class="font-number-display text-number-display text-primary text-center tracking-wide">¥ 12,480.00</p>
+<p id="balanceAmount" class="font-number-display text-number-display text-primary text-center tracking-wide">¥ 0.00</p>
 <div class="flex gap-8 justify-center pt-2">
 <div class="flex-1 text-center">
 <p class="font-label-caps text-label-caps text-pine-green uppercase mb-1">收入</p>
-<p class="font-number-standard text-number-standard text-pine-green">24,000.00</p>
+<p id="incomeAmount" class="font-number-standard text-number-standard text-pine-green">0.00</p>
 </div>
 <div class="flex-1 text-center">
 <p class="font-label-caps text-label-caps text-cinnabar-red uppercase mb-1">支出</p>
-<p class="font-number-standard text-number-standard text-cinnabar-red">11,520.00</p>
+<p id="expenseAmount" class="font-number-standard text-number-standard text-cinnabar-red">0.00</p>
 </div>
 </div>
 </div>
@@ -180,53 +192,21 @@ tailwind.config = {
 <!-- 账单列表 -->
 <div class="flex flex-col gap-4">
 <div class="flex justify-between items-end">
-<span class="font-headline-md text-headline-md text-primary">今日</span>
-<span class="font-body-sm text-pale-ink">8月24日 星期六</span>
+<span id="sectionTitle" class="font-headline-md text-headline-md text-primary"></span>
+<div class="flex flex-col items-end gap-0.5">
+<span id="monthTotal" class="font-number-standard text-number-standard text-cinnabar-red">-¥ 0.00</span>
+<span id="selectedDate" class="font-body-sm text-pale-ink"></span>
+</div>
 </div>
 <div class="brush-divider opacity-50"></div>
 
-<!-- 单条账单 -->
-<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center justify-between shadow-sm">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-ink-wash-gray/20 flex items-center justify-center">
-<span class="material-symbols-outlined text-primary">restaurant</span>
-</div>
-<div>
-<p class="font-body-lg text-body-lg text-primary">手冲咖啡</p>
-<p class="font-body-sm text-pale-ink mt-0.5">午后小憩</p>
-</div>
-</div>
-<span class="font-number-standard text-number-standard text-cinnabar-red">-38.00</span>
-</div>
-
-<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center justify-between shadow-sm">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-ink-wash-gray/20 flex items-center justify-center">
-<span class="material-symbols-outlined text-primary">directions_bus</span>
-</div>
-<div>
-<p class="font-body-lg text-body-lg text-primary">城市地铁</p>
-<p class="font-body-sm text-pale-ink mt-0.5">地铁往返</p>
-</div>
-</div>
-<span class="font-number-standard text-number-standard text-cinnabar-red">-12.00</span>
-</div>
-
-<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center justify-between shadow-sm">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-ink-wash-gray/20 flex items-center justify-center">
-<span class="material-symbols-outlined text-primary">payments</span>
-</div>
-<div>
-<p class="font-body-lg text-body-lg text-primary">工资入账</p>
-<p class="font-body-sm text-pale-ink mt-0.5">月度工资</p>
-</div>
-</div>
-<span class="font-number-standard text-number-standard text-pine-green">+8,000.00</span>
+<!-- 动态渲染的账单列表 -->
+<div id="todayRecords" class="flex flex-col gap-3">
+<!-- 暂无数据时会显示提示 -->
 </div>
 
 <!-- 展开全部 -->
-<a href="#" class="block text-center py-3 border border-ink-wash-gray rounded-lg font-body-sm text-pale-ink hover:bg-surface-container-low transition-colors">展开全部明细 ↓</a>
+<a id="expandBtn" href="#" class="block text-center py-3 border border-ink-wash-gray rounded-lg font-body-sm text-pale-ink hover:bg-surface-container-low transition-colors">展开全部明细 ↓</a>
 </div>
 </main>
 
@@ -255,20 +235,205 @@ tailwind.config = {
 </a>
 </nav>
 
+<script src="../assets/js/api.js"></script>
 <script>
-function toggleMonthPicker() {
-  const p = document.getElementById('monthPicker');
-  p.style.display = p.style.display === 'none' ? 'flex' : 'none';
-}
-function closePicker(e) { if (e.target === e.currentTarget) e.currentTarget.style.display = 'none'; }
-function closePickerAll() { document.getElementById('monthPicker').style.display = 'none'; }
-function selectMonth(label) {
+// 当前选中类型: 1=支出, 2=收入
+let currentType = 1;
+// 当前选中月份 (格式: YYYY-MM)
+let currentMonth = new Date().toISOString().slice(0, 7);
+// 当前选中的年份
+let selectedYear = new Date().getFullYear();
+
+// 初始化月份标签
+function initMonthLabel() {
+  const now = new Date();
+  const label = `${now.getFullYear()}年${now.getMonth() + 1}月`;
   document.getElementById('monthLabel').textContent = label;
-  closePickerAll();
 }
-function switchType(type) {
+
+// 页面初始化
+document.addEventListener('DOMContentLoaded', async function() {
+  // 检查登录状态
+  if (!TokenStorage.get()) {
+    window.location.href = 'login.html';
+    return;
+  }
+  // 初始化月份标签
+  initMonthLabel();
+  // 生成年份选择器
+  generateYearPickerOptions();
+  // 加载数据
+  await loadData();
+});
+
+// 生成年份选择器选项（近15年，一行一个）
+function generateYearPickerOptions() {
+  const container = document.getElementById('yearPickerOptions');
+  const currentYear = new Date().getFullYear();
+  const startYear = currentYear - 14; // 近15年
+
+  let options = [];
+  for (let y = currentYear; y >= startYear; y--) {
+    const isCurrent = y === parseInt(currentMonth.split('-')[0]);
+    options.push({ label: `${y}年`, value: y, isCurrent });
+  }
+
+  container.innerHTML = options.map(opt => `
+    <button onclick="selectYear(${opt.value})"
+            class="w-full py-2 px-4 rounded-lg text-center ${opt.isCurrent ? 'border-2 border-primary bg-primary text-white font-bold' : 'border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors'}">
+      ${opt.label}
+    </button>
+  `).join('');
+}
+
+// 生成月份选择器选项
+function generateMonthPickerOptions(year) {
+  const container = document.getElementById('monthPickerOptions');
+  const currentYear = new Date().getFullYear();
+  const currentMonthNum = new Date().getMonth() + 1;
+  const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+
+  let options = [];
+  for (let m = 1; m <= 12; m++) {
+    // 如果是当前年份，检查月份是否超过当前月
+    const isFuture = year === currentYear && m > currentMonthNum;
+    const isCurrent = year === parseInt(currentMonth.split('-')[0]) && m === parseInt(currentMonth.split('-')[1]);
+    options.push({
+      label: months[m - 1],
+      value: m,
+      isCurrent,
+      disabled: isFuture
+    });
+  }
+
+  container.innerHTML = options.map(opt => `
+    <button onclick="${opt.disabled ? '' : `selectMonth('${opt.label}', '${year}-${String(opt.value).padStart(2, '0')}')`}"
+            class="py-3 px-2 rounded-lg text-center ${opt.isCurrent ? 'border-2 border-primary bg-primary text-white font-bold' : opt.disabled ? 'border border-surface-container-high bg-surface-container-low text-body-lg text-outline cursor-not-allowed opacity-50' : 'border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors'}">
+      ${opt.label}
+    </button>
+  `).join('');
+}
+
+// 选择年份
+function selectYear(year) {
+  selectedYear = year;
+  document.getElementById('yearPicker').classList.add('hidden');
+  document.getElementById('monthPickerArea').classList.remove('hidden');
+  document.getElementById('btnBackToYears').classList.remove('hidden');
+  generateMonthPickerOptions(year);
+}
+
+// 显示年份选择器
+function showYearPicker() {
+  document.getElementById('yearPicker').classList.remove('hidden');
+  document.getElementById('monthPickerArea').classList.add('hidden');
+  document.getElementById('btnBackToYears').classList.add('hidden');
+}
+
+// 加载数据
+async function loadData() {
+  try {
+    // 获取月度账单
+    const monthRes = await API.record.getMonthRecords(currentType, currentMonth);
+    if (monthRes.code === 0) {
+      renderMonthRecords(monthRes.data);
+    }
+
+    // 获取本月统计
+    const summaryRes = await API.record.getMonthSummary(currentMonth);
+    if (summaryRes.code === 0) {
+      renderMonthSummary(summaryRes.data);
+    }
+  } catch (e) {
+    console.error('加载数据失败:', e);
+  }
+}
+
+// 渲染月度账单
+function renderMonthRecords(data) {
+  const container = document.getElementById('todayRecords');
+  const totalEl = document.getElementById('monthTotal');
+  const expandBtn = document.getElementById('expandBtn');
+  const titleEl = document.getElementById('sectionTitle');
+  const dateEl = document.getElementById('selectedDate');
+
+  // 更新标题为当前选择的月份
+  const [year, month] = currentMonth.split('-');
+  titleEl.textContent = `${year}年${parseInt(month)}月`;
+  dateEl.textContent = '';
+
+  // 计算月度总计
+  let total = 0;
+  if (data && data.length > 0) {
+    data.forEach(record => {
+      if (record.type === currentType) {
+        total += record.amount;
+      }
+    });
+  }
+
+  // 更新月度总计
+  const prefix = currentType === 1 ? '-' : '+';
+  totalEl.textContent = `${prefix}¥ ${total.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  totalEl.className = `font-number-standard text-number-standard ${currentType === 1 ? 'text-cinnabar-red' : 'text-pine-green'}`;
+
+  // 渲染账单列表
+  if (data && data.length > 0) {
+    container.innerHTML = data.map(record => `
+      <div class="bg-surface-container-lowest rounded-xl p-4 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-ink-wash-gray/20 flex items-center justify-center">
+            <span class="material-symbols-outlined text-primary">${record.category?.icon || 'receipt'}</span>
+          </div>
+          <div>
+            <p class="font-body-lg text-body-lg text-primary">${record.category?.name || '未知分类'}</p>
+            <p class="font-body-sm text-pale-ink mt-0.5">${record.note || '无备注'}</p>
+          </div>
+        </div>
+        <span class="font-number-standard text-number-standard ${record.type === 1 ? 'text-cinnabar-red' : 'text-pine-green'}">
+          ${record.type === 1 ? '-' : '+'}${record.amount.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </span>
+      </div>
+    `).join('');
+    // 有数据时显示展开按钮（超过10条才显示）
+    expandBtn.style.display = data.length > 10 ? 'block' : 'none';
+  } else {
+    container.innerHTML = `
+      <div class="text-center py-8 text-pale-ink">
+        <span class="material-symbols-outlined text-4xl mb-2">receipt_long</span>
+        <p class="font-body-lg">暂无${currentType === 1 ? '支出' : '收入'}记录</p>
+      </div>
+    `;
+    // 无数据时隐藏展开按钮
+    expandBtn.style.display = 'none';
+  }
+}
+
+// 渲染本月统计
+function renderMonthSummary(data) {
+  const balanceEl = document.getElementById('balanceAmount');
+  const incomeEl = document.getElementById('incomeAmount');
+  const expenseEl = document.getElementById('expenseAmount');
+
+  if (data.balance !== undefined) {
+    balanceEl.textContent = `¥ ${data.balance.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+  if (data.income !== undefined) {
+    incomeEl.textContent = data.income.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  if (data.expense !== undefined) {
+    expenseEl.textContent = data.expense.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+}
+
+// 切换支出/收入类型
+async function switchType(type) {
+  const typeValue = type === 'income' ? 2 : 1;
+  if (currentType === typeValue) return; // 如果已经选中，不做处理
+
+  currentType = typeValue;
+
   const ind = document.getElementById('typeIndicator');
-  const prefix = ind.previousElementSibling || ind.nextElementSibling;
   if (type === 'income') {
     ind.style.transform = 'translateX(88px)';
     document.getElementById('btnExpense').querySelector('span').className = 'font-body-lg text-pale-ink';
@@ -278,6 +443,29 @@ function switchType(type) {
     document.getElementById('btnExpense').querySelector('span').className = 'font-body-lg text-white font-medium';
     document.getElementById('btnIncome').querySelector('span').className = 'font-body-lg text-pale-ink';
   }
+
+  // 重新加载数据
+  await loadData();
+}
+
+// 月份选择器相关
+function toggleMonthPicker() {
+  const p = document.getElementById('monthPicker');
+  p.style.display = p.style.display === 'none' ? 'flex' : 'none';
+  // 每次打开都重置为年份选择
+  showYearPicker();
+}
+function closePicker(e) { if (e.target === e.currentTarget) e.currentTarget.style.display = 'none'; }
+function closePickerAll() {
+  document.getElementById('monthPicker').style.display = 'none';
+  showYearPicker();
+}
+function selectMonth(label, monthValue) {
+  document.getElementById('monthLabel').textContent = label;
+  currentMonth = monthValue;
+  closePickerAll();
+  // 重新加载数据
+  loadData();
 }
 </script>
 </body>

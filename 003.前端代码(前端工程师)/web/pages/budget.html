@@ -121,9 +121,15 @@ tailwind.config = {
 <main class="max-w-md mx-auto px-container-margin py-6 pb-32 flex flex-col gap-6">
 <!-- 月份选择 -->
 <div class="flex items-center justify-center py-2">
-<button class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-surface-container-low transition-colors">
-<span class="font-body-lg text-body-lg text-primary">2024年8月</span>
+<button onclick="changeMonth(-1)" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-primary" style="font-size:18px">chevron_left</span>
+</button>
+<button id="monthSelector" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="font-body-lg text-body-lg text-primary" id="currentMonthLabel">2024年8月</span>
 <svg class="w-2 h-2" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="#1c1b1b" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+<button onclick="changeMonth(1)" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-primary" style="font-size:18px">chevron_right</span>
 </button>
 </div>
 
@@ -131,85 +137,24 @@ tailwind.config = {
 <div class="bg-surface-container-lowest rounded-xl p-6 flex flex-col gap-4 shadow-sm">
 <p class="font-label-caps text-label-caps text-pale-ink text-center uppercase">本月预算进度</p>
 <div class="text-center">
-<p class="font-number-display text-primary"><span style="font-size:48px">68</span><span style="font-size:24px">%</span></p>
-<p class="font-body-sm text-pale-ink mt-1">已使用 ¥ 6,800 / ¥ 10,000</p>
+<p class="font-number-display text-primary"><span style="font-size:48px" id="budgetPercent">--</span><span style="font-size:24px">%</span></p>
+<p class="font-body-sm text-pale-ink mt-1">已使用 <span id="budgetSpent">¥ --</span> / <span id="budgetTotal">¥ --</span></p>
 </div>
 <div class="h-2 bg-surface-container-high rounded-full overflow-hidden">
-<div class="h-full bg-primary rounded-full transition-all" style="width:68%"></div>
+<div class="h-full bg-primary rounded-full transition-all" id="budgetProgressBar" style="width:0%"></div>
 </div>
 <div class="flex justify-between font-label-caps text-label-caps text-pale-ink">
-<span>剩余 ¥ 3,200</span>
-<span class="text-ochre-warning">⚠ 接近预警线</span>
+<span id="budgetRemain">剩余 ¥ --</span>
+<span id="budgetWarning" class="text-ochre-warning hidden">⚠ 接近预警线</span>
 </div>
 </div>
 
 <!-- 分类预算列表 -->
 <div class="flex flex-col gap-4">
 <h2 class="font-headline-md text-headline-md text-primary">分类预算</h2>
-<div class="bg-surface-container-lowest rounded-xl p-5 flex flex-col gap-4">
-
-<!-- 餐饮 -->
-<div class="flex flex-col gap-2">
-<div class="flex justify-between items-center">
-<div class="flex items-center gap-3">
-<div class="w-9 h-9 bg-surface-container-low rounded-lg flex items-center justify-center">
-<span class="material-symbols-outlined text-primary">restaurant</span>
-</div>
-<span class="font-body-lg text-primary font-medium">餐饮</span>
-</div>
-<span class="font-body-lg text-primary">¥ 1,800 / ¥ 2,000</span>
-</div>
-<div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-cinnabar-red rounded-full" style="width:90%"></div></div>
-</div>
-
-<div class="h-px bg-gradient-to-r from-transparent via-ink-wash-gray to-transparent opacity-30"></div>
-
-<!-- 交通 -->
-<div class="flex flex-col gap-2">
-<div class="flex justify-between items-center">
-<div class="flex items-center gap-3">
-<div class="w-9 h-9 bg-surface-container-low rounded-lg flex items-center justify-center">
-<span class="material-symbols-outlined text-primary">directions_bus</span>
-</div>
-<span class="font-body-lg text-primary font-medium">交通</span>
-</div>
-<span class="font-body-lg text-primary">¥ 320 / ¥ 500</span>
-</div>
-<div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-slate-blue rounded-full" style="width:64%"></div></div>
-</div>
-
-<div class="h-px bg-gradient-to-r from-transparent via-ink-wash-gray to-transparent opacity-30"></div>
-
-<!-- 购物 -->
-<div class="flex flex-col gap-2">
-<div class="flex justify-between items-center">
-<div class="flex items-center gap-3">
-<div class="w-9 h-9 bg-surface-container-low rounded-lg flex items-center justify-center">
-<span class="material-symbols-outlined text-primary">shopping_bag</span>
-</div>
-<span class="font-body-lg text-primary font-medium">购物</span>
-</div>
-<span class="font-body-lg text-primary">¥ 680 / ¥ 1,500</span>
-</div>
-<div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-slate-blue rounded-full" style="width:45%"></div></div>
-</div>
-
-<div class="h-px bg-gradient-to-r from-transparent via-ink-wash-gray to-transparent opacity-30"></div>
-
-<!-- 娱乐 -->
-<div class="flex flex-col gap-2">
-<div class="flex justify-between items-center">
-<div class="flex items-center gap-3">
-<div class="w-9 h-9 bg-surface-container-low rounded-lg flex items-center justify-center">
-<span class="material-symbols-outlined text-primary">movie</span>
-</div>
-<span class="font-body-lg text-primary font-medium">娱乐</span>
-</div>
-<span class="font-body-lg text-primary">¥ 200 / ¥ 800</span>
-</div>
-<div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-pine-green rounded-full" style="width:25%"></div></div>
-</div>
-
+<div class="bg-surface-container-lowest rounded-xl p-5 flex flex-col gap-4" id="categoryBudgetList">
+<!-- 动态渲染 -->
+<p class="text-center font-body-sm text-pale-ink py-4">加载中...</p>
 </div>
 </div>
 
@@ -240,5 +185,137 @@ tailwind.config = {
 <span class="font-label-caps text-label-caps mt-1 text-pale-ink">我的</span>
 </a>
 </nav>
+
+<script src="../assets/js/api.js"></script>
+<script>
+let currentDate = new Date();
+let currentMonth = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+
+// 更新月份显示
+function updateMonthLabel() {
+  const [year, month] = currentMonth.split('-');
+  document.getElementById('currentMonthLabel').textContent = `${year}年${parseInt(month)}月`;
+}
+
+// 切换月份
+function changeMonth(delta) {
+  const [year, month] = currentMonth.split('-').map(Number);
+  const newDate = new Date(year, month - 1 + delta, 1);
+  currentMonth = `${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, '0')}`;
+  updateMonthLabel();
+  loadBudgetData();
+}
+
+// 渲染总览数据
+function renderOverview(data) {
+  const percent = data.percent || 0;
+  const spent = data.totalSpent || 0;
+  const total = data.totalBudget || 0;
+  const remain = total - spent;
+
+  document.getElementById('budgetPercent').textContent = total > 0 ? percent : '--';
+  document.getElementById('budgetSpent').textContent = `¥ ${spent.toLocaleString('zh-CN')}`;
+  document.getElementById('budgetTotal').textContent = total > 0 ? `¥ ${total.toLocaleString('zh-CN')}` : '未设置';
+  document.getElementById('budgetProgressBar').style.width = total > 0 ? `${Math.min(percent, 100)}%` : '0%';
+  document.getElementById('budgetRemain').textContent = total > 0 ? `剩余 ¥ ${remain.toLocaleString('zh-CN')}` : '剩余 ¥ --';
+
+  // 预警提示
+  const warning = document.getElementById('budgetWarning');
+  if (percent >= 80 && total > 0) {
+    warning.classList.remove('hidden');
+  } else {
+    warning.classList.add('hidden');
+  }
+}
+
+// 获取进度条颜色
+function getProgressColor(percent) {
+  if (percent >= 100) return 'bg-cinnabar-red';
+  if (percent >= 80) return 'bg-ochre-warning';
+  return 'bg-pine-green';
+}
+
+// 渲染分类列表
+function renderCategoryList(categories) {
+  const container = document.getElementById('categoryBudgetList');
+
+  // 只展示已配置预算的分类（budget > 0）
+  const configuredCategories = categories.filter(cat => cat.budget > 0);
+
+  if (!configuredCategories || configuredCategories.length === 0) {
+    container.innerHTML = '<p class="text-center font-body-sm text-pale-ink py-4">暂未配置预算<br><span class="text-xs opacity-60">点击底部导航"我的"→"预算管理"去设置</span></p>';
+    return;
+  }
+
+  let html = '';
+  configuredCategories.forEach((cat, index) => {
+    const percent = cat.budget > 0 ? Math.round((cat.spent / cat.budget) * 100) : 0;
+    const displayPercent = Math.min(percent, 100);
+    const colorClass = getProgressColor(percent);
+    const budgetText = `¥ ${cat.spent.toLocaleString('zh-CN')} / ¥ ${cat.budget.toLocaleString('zh-CN')}`;
+
+    html += `
+      <div class="flex flex-col gap-2">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-surface-container-low rounded-lg flex items-center justify-center">
+              <span class="material-symbols-outlined text-primary">${cat.icon}</span>
+            </div>
+            <span class="font-body-lg text-primary font-medium">${cat.name}</span>
+          </div>
+          <span class="font-body-lg text-primary">${budgetText}</span>
+        </div>
+        <div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+          <div class="h-full ${colorClass} rounded-full" style="width:${displayPercent}%"></div>
+        </div>
+      </div>
+    `;
+
+    if (index < configuredCategories.length - 1) {
+      html += '<div class="h-px bg-gradient-to-r from-transparent via-ink-wash-gray to-transparent opacity-30"></div>';
+    }
+  });
+
+  container.innerHTML = html;
+}
+
+// 加载预算数据
+async function loadBudgetData() {
+  try {
+    const res = await API.budget.getMonthBudget(currentMonth);
+    if (res.code === 0) {
+      renderOverview(res.data);
+      renderCategoryList(res.data.categories);
+
+      // 检查是否有分类达到80%预警
+      const warningCats = (res.data.categories || []).filter(cat => {
+        return cat.budget > 0 && (cat.spent / cat.budget) >= 0.8 && (cat.spent / cat.budget) < 1;
+      });
+      if (warningCats.length > 0) {
+        const names = warningCats.map(c => c.name).join('、');
+        setTimeout(() => {
+          alert(`⚠️ 预算预警：${names} 已超过80%！`);
+        }, 500);
+      }
+    } else {
+      console.error('加载预算数据失败:', res.message);
+    }
+  } catch (e) {
+    console.error('加载预算数据失败:', e);
+  }
+}
+
+// 页面初始化
+document.addEventListener('DOMContentLoaded', async function() {
+  // 检查登录状态
+  if (!TokenStorage.get()) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  updateMonthLabel();
+  await loadBudgetData();
+});
+</script>
 </body>
 </html>

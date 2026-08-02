@@ -121,44 +121,49 @@ tailwind.config = {
 <main class="max-w-md mx-auto px-container-margin py-6 pb-32 flex flex-col gap-6">
 <!-- 用户信息卡片 -->
 <div class="bg-surface-container-lowest rounded-xl p-8 flex flex-col items-center gap-4 shadow-sm">
-<div class="w-18 h-18 bg-surface-container-low rounded-full flex items-center justify-center border-2 border-ink-wash-gray">
-<span class="material-symbols-outlined text-4xl text-pale-ink">person</span>
+<!-- 头像上传 -->
+<label for="avatarInput" class="cursor-pointer relative">
+<div id="avatarContainer" class="w-[100px] h-[100px] bg-surface-container-low rounded-full flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity">
+<img id="avatarImg" src="" class="hidden w-full h-full object-cover">
+<span id="avatarPlaceholder" class="material-symbols-outlined text-4xl text-pale-ink">person</span>
 </div>
+</label>
+<input type="file" id="avatarInput" accept="image/*" class="hidden" onchange="handleAvatarChange(this)">
 <div class="text-center">
-<h2 class="font-headline-md text-headline-md text-primary mb-1">墨染青衣</h2>
+<h2 class="font-headline-md text-headline-md text-primary mb-1" id="usernameDisplay">墨染青衣</h2>
 <p class="font-body-sm text-pale-ink italic">"简素之道，心静如水"</p>
 </div>
 <div class="flex gap-8 pt-2">
 <div class="text-center">
 <p class="font-label-caps text-label-caps text-pine-green uppercase mb-1">本月收入</p>
-<p class="font-number-standard text-number-standard text-pine-green">¥ 24,000</p>
+<p id="monthIncome" class="font-number-standard text-number-standard text-pine-green">¥ 0</p>
 </div>
 <div class="text-center">
 <p class="font-label-caps text-label-caps text-cinnabar-red uppercase mb-1">本月支出</p>
-<p class="font-number-standard text-number-standard text-cinnabar-red">¥ 11,520</p>
+<p id="monthExpense" class="font-number-standard text-number-standard text-cinnabar-red">¥ 0</p>
 </div>
 </div>
 </div>
 
 <!-- 设置菜单 -->
 <div class="bg-surface-container-lowest rounded-xl divide-y" style="border:1px solid rgba(212,204,188,0.3)">
-<!-- 账本管理 -->
+<!-- 分类管理 -->
 <div class="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-surface-container-low transition-colors" onclick="location.href='account.html'">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 bg-surface-container-low rounded-lg flex items-center justify-center">
 <span class="material-symbols-outlined text-primary">menu_book</span>
 </div>
-<span class="font-body-lg text-primary">账本管理</span>
+<span class="font-body-lg text-primary">分类管理</span>
 </div>
 <svg class="w-2 h-3 text-pale-ink" viewBox="0 0 8 14" fill="none"><path d="M1 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </div>
-<!-- 分类管理 -->
-<div class="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-surface-container-low transition-colors" onclick="alert('分类管理功能开发中')">
+<!-- 预算管理 -->
+<div class="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-surface-container-low transition-colors" onclick="location.href='budget-edit.html'">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 bg-surface-container-low rounded-lg flex items-center justify-center">
 <span class="material-symbols-outlined text-primary">category</span>
 </div>
-<span class="font-body-lg text-primary">分类管理</span>
+<span class="font-body-lg text-primary">预算管理</span>
 </div>
 <svg class="w-2 h-3 text-pale-ink" viewBox="0 0 8 14" fill="none"><path d="M1 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </div>
@@ -212,11 +217,6 @@ tailwind.config = {
 <p class="text-center font-label-caps text-label-caps text-pale-ink opacity-50 pt-2">留白记账 v1.0.1 · Personal Finance Tracker</p>
 </main>
 
-<!-- FAB (占位，保持布局一致性) -->
-<a href="add-record.html" class="fixed bottom-24 right-6 w-14 h-14 bg-cinnabar-red rounded-xl flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform z-40 opacity-80">
-<svg class="w-4 h-4" viewBox="0 0 15.7 15.7" fill="none"><path d="M7.85 1.05v13.6M1.05 7.85h13.6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-</a>
-
 <!-- Bottom Nav -->
 <nav class="fixed bottom-0 left-0 right-0 z-50 bg-surface-container-lowest flex justify-around items-center h-16 border-t" style="border-color:rgba(212,204,188,0.3);box-shadow:0 -2px 5px rgba(26,26,26,0.05)">
 <a class="flex flex-col items-center justify-center py-2 px-4 rounded-xl" href="home.html">
@@ -237,14 +237,139 @@ tailwind.config = {
 </a>
 </nav>
 
+<script src="../assets/js/api.js"></script>
 <script>
-function handleLogout() {
-  if (confirm('确定要退出登录吗？')) {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userInfo');
-    window.location.href = 'login.html';
+async function loadMonthSummary() {
+  try {
+    const now = new Date();
+    const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const res = await API.record.getMonthSummary(month);
+    if (res.code === 0) {
+      document.getElementById('monthIncome').textContent = `¥ ${res.data.income.toLocaleString('zh-CN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+      document.getElementById('monthExpense').textContent = `¥ ${res.data.expense.toLocaleString('zh-CN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+    }
+  } catch (e) {
+    console.error('加载月度统计失败:', e);
   }
 }
+
+function handleLogout() {
+  if (confirm('确定要退出登录吗？')) {
+    API.auth.logout();
+  }
+}
+
+// 加载用户信息
+async function loadUserProfile() {
+  try {
+    const res = await API.user.getProfile();
+    if (res.code === 0 && res.data) {
+      const { username, avatarUrl } = res.data;
+      if (username) {
+        document.getElementById('usernameDisplay').textContent = username;
+      }
+      if (avatarUrl) {
+        const img = document.getElementById('avatarImg');
+        const placeholder = document.getElementById('avatarPlaceholder');
+        img.src = avatarUrl.startsWith('http') ? avatarUrl : API_BASE_URL + avatarUrl;
+        img.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+      }
+    }
+  } catch (e) {
+    console.error('加载用户信息失败:', e);
+  }
+}
+
+// 处理头像选择并上传
+async function handleAvatarChange(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  // 预览本地图片
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    const img = document.getElementById('avatarImg');
+    const placeholder = document.getElementById('avatarPlaceholder');
+    img.src = e.target.result;
+    img.classList.remove('hidden');
+    placeholder.classList.add('hidden');
+
+    // 压缩图片到 150KB 以内
+    const compressedBase64 = await compressImage(e.target.result, 150);
+
+    // 上传到服务器
+    try {
+      const res = await API.user.uploadAvatar(compressedBase64);
+      if (res.code === 0) {
+        console.log('头像上传成功:', res.data.avatarUrl);
+      } else {
+        alert('头像上传失败: ' + (res.message || '未知错误'));
+      }
+    } catch (e) {
+      console.error('头像上传失败:', e);
+      alert('头像上传失败，请重试');
+    }
+  };
+  reader.readAsDataURL(file);
+
+  // 清空 input，允许重复选择同一文件
+  input.value = '';
+}
+
+// 图片压缩：确保不超过 maxKB KB
+function compressImage(base64, maxKB) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+
+      // 先缩放到合理尺寸（最大边 800px）
+      const maxDim = 800;
+      if (width > maxDim || height > maxDim) {
+        if (width > height) {
+          height = Math.round(height * maxDim / width);
+          width = maxDim;
+        } else {
+          width = Math.round(width * maxDim / height);
+          height = maxDim;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // 逐步降低质量直到小于 maxKB
+      let quality = 0.9;
+      let result = canvas.toDataURL('image/jpeg', quality);
+
+      while (result.length > maxKB * 1024 * 1.5 && quality > 0.1) {
+        quality -= 0.1;
+        result = canvas.toDataURL('image/jpeg', quality);
+      }
+
+      resolve(result);
+    };
+    img.src = base64;
+  });
+}
+
+// 页面初始化
+document.addEventListener('DOMContentLoaded', async function() {
+  // 检查登录状态
+  if (!TokenStorage.get()) {
+    window.location.href = 'login.html';
+    return;
+  }
+  // 加载用户信息
+  await loadUserProfile();
+  // 加载月度统计
+  await loadMonthSummary();
+});
 </script>
 </body>
 </html>

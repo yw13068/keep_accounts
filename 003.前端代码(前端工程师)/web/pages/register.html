@@ -199,6 +199,7 @@ tailwind.config = {
 </div>
 <p class="mt-4 font-label-caps text-[10px] text-outline tracking-[0.2em] uppercase text-center">Liubai Finance · 留白记账</p>
 </main>
+<script src="../assets/js/api.js"></script>
 <script>
 function togglePwd() {
   const input = document.getElementById('pwd');
@@ -211,19 +212,55 @@ function togglePwd() {
     icon.textContent = 'visibility';
   }
 }
-function handleRegister(e) {
+
+async function handleRegister(e) {
   e.preventDefault();
+  const phone = document.getElementById('phone').value.trim();
+  const username = document.getElementById('username').value.trim();
   const pwd = document.getElementById('pwd').value;
   const confirm = document.getElementById('confirmPwd').value;
-  if (pwd !== confirm) { alert('两次密码不一致'); return; }
+  const terms = document.getElementById('terms').checked;
+
+  // 校验
+  if (!phone || !/^1\d{10}$/.test(phone)) {
+    alert('请输入正确的手机号');
+    return;
+  }
+  if (!username || username.length < 4 || username.length > 20) {
+    alert('用户名长度4-20位');
+    return;
+  }
+  if (!/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,20}$/.test(pwd)) {
+    alert('密码须8-20位且包含字母和数字');
+    return;
+  }
+  if (pwd !== confirm) {
+    alert('两次密码不一致');
+    return;
+  }
+  if (!terms) {
+    alert('请阅读并同意服务协议和隐私政策');
+    return;
+  }
+
   const btn = document.getElementById('regBtn');
   btn.disabled = true;
   btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span>';
-  setTimeout(() => {
-    btn.innerHTML = '<span>注册成功</span><span class="material-symbols-outlined">check_circle</span>';
-    btn.classList.replace('bg-primary', 'bg-pine-green');
-    setTimeout(() => window.location.href = 'home.html', 800);
-  }, 1200);
+
+  try {
+    const res = await API.auth.register({ phone, username, password: pwd });
+    if (res.code === 0) {
+      btn.innerHTML = '<span>注册成功</span><span class="material-symbols-outlined">check_circle</span>';
+      btn.classList.replace('bg-primary', 'bg-pine-green');
+      setTimeout(() => window.location.href = 'home.html', 800);
+    } else {
+      throw new Error(res.message || '注册失败');
+    }
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = '<span>开启记账之旅</span><span class="material-symbols-outlined">brush</span>';
+    alert(err.message || '注册失败，请重试');
+  }
 }
 </script>
 </body>

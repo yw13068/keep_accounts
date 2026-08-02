@@ -119,101 +119,77 @@ tailwind.config = {
 </header>
 
 <main class="max-w-md mx-auto px-container-margin py-6 pb-32 flex flex-col gap-8">
-<!-- 月份选择 -->
+<!-- 月份导航 -->
 <div class="flex items-center justify-center py-2">
-<button class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-surface-container-low transition-colors">
-<span class="font-body-lg text-body-lg text-primary">2024年8月</span>
+<button onclick="toggleMonthPicker()" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-surface-container-low transition-colors">
+<span id="monthLabel" class="font-body-lg text-body-lg text-primary">--年--月</span>
 <svg class="w-2 h-2" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="#1c1b1b" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </button>
 </div>
 
+<!-- 月份选择器浮层 -->
+<div id="monthPicker" class="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm hidden" onclick="closePicker(event)">
+<div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface-container-lowest rounded-xl p-6 shadow-xl min-w-[300px]" onclick="event.stopPropagation()">
+<p class="font-headline-md text-headline-md text-center mb-4 text-primary">选择月份</p>
+<!-- 年份选择区 -->
+<div id="yearPicker" class="mb-4">
+<p class="font-body-sm text-pale-ink mb-2 text-center">请选择年份</p>
+<div id="yearPickerOptions" class="space-y-2 overflow-y-auto" style="max-height: 50vh; scrollbar-width: none; -ms-overflow-style: none;"></div>
+</div>
+<!-- 月份选择区 -->
+<div id="monthPickerArea" class="hidden">
+<p class="font-body-sm text-pale-ink mb-2 text-center">请选择月份</p>
+<div id="monthPickerOptions" class="grid grid-cols-4 gap-2"></div>
+</div>
+<div class="flex gap-2 mt-4">
+<button id="btnBackToYears" onclick="showYearPicker()" class="flex-1 py-3 bg-surface-container-low rounded-lg text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors hidden">返回选择年</button>
+<button onclick="closePickerAll()" class="flex-1 py-3 bg-surface-container-low rounded-lg text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors">取消</button>
+</div>
+</div>
+</div>
+
+<!-- 折线图卡片 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 flex flex-col items-center">
+<p id="chartTitle" class="font-label-caps text-label-caps text-pale-ink uppercase mb-4">本月支出收入对比</p>
+<!-- 图表 -->
+<div class="w-full" style="height: 220px">
+<svg id="lineChart" width="100%" height="100%" viewBox="0 0 320 200"></svg>
+</div>
+<!-- 图例 -->
+<div class="flex justify-center gap-6 mt-4">
+<div class="flex items-center gap-2">
+<div class="w-3 h-0.5 bg-cinnabar-red rounded-full"></div>
+<span class="font-body-sm text-pale-ink">支出</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-0.5 bg-pine-green rounded-full"></div>
+<span class="font-body-sm text-pale-ink">收入</span>
+</div>
+</div>
+</div>
+
+<!-- 支出/收入排行 -->
+<div class="flex flex-col gap-6">
+<div class="flex justify-between items-center pl-4">
+<h2 id="rankingTitle" class="font-headline-md text-headline-md text-primary">支出排行</h2>
 <!-- 支出/收入切换 -->
-<div class="flex justify-center">
-<div class="relative flex items-center bg-surface-container-low p-1 rounded-full border border-outline-variant/30 w-48">
+<div class="relative flex items-center bg-surface-container-low p-1 rounded-full border border-outline-variant/30 w-36">
 <div id="toggleInd" class="absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-primary rounded-full transition-transform duration-300"></div>
-<button class="relative z-10 flex-1 py-2 text-center" id="btnExp" onclick="sw('exp')">
-<span class="font-body-lg text-white font-medium">支出</span>
+<button class="relative z-10 flex-1 py-1.5 text-center text-xs" id="btnExp" onclick="sw('exp')">
+<span class="text-white font-medium">支出</span>
 </button>
-<button class="relative z-10 flex-1 py-2 text-center" id="btnInc" onclick="sw('inc')">
-<span class="font-body-lg text-pale-ink">收入</span>
+<button class="relative z-10 flex-1 py-1.5 text-center text-xs" id="btnInc" onclick="sw('inc')">
+<span class="text-pale-ink">收入</span>
 </button>
 </div>
 </div>
-
-<!-- 环形图卡片 -->
-<div class="bg-surface-container-lowest rounded-xl p-6 relative overflow-hidden flex flex-col items-center" style="height:400px">
-<p class="absolute top-6 font-label-caps text-label-caps text-pale-ink uppercase">本月洞察</p>
-<!-- Donut Chart -->
-<div class="absolute top-16 left-1/2 -translate-x-1/2" style="width:220px;height:220px">
-<svg width="220" height="220" viewBox="0 0 220 220" fill="none" style="transform:rotate(-90deg)">
-<circle cx="110" cy="110" r="83.6" stroke="#e5e2e1" stroke-width="26.4" fill="none"/>
-<circle cx="110" cy="110" r="83.6" stroke="#1c1b1b" stroke-width="26.4" fill="none" stroke-dasharray="220.8 525.3" stroke-linecap="round"/>
-<circle cx="110" cy="110" r="83.6" stroke="#2B6CB0" stroke-width="26.4" fill="none" stroke-dasharray="131.3 525.3" stroke-dashoffset="-220.8" stroke-linecap="round"/>
-<circle cx="110" cy="110" r="83.6" stroke="#C0392B" stroke-width="26.4" fill="none" stroke-dasharray="84 525.3" stroke-dashoffset="-352.1" stroke-linecap="round"/>
-<circle cx="110" cy="110" r="83.6" stroke="#2E7D5E" stroke-width="26.4" fill="none" stroke-dasharray="89.3 525.3" stroke-dashoffset="-436.1" stroke-linecap="round"/>
-<circle cx="110" cy="110" r="70.4" fill="#ffffff"/>
-</svg>
-<div class="absolute inset-0 flex flex-col items-center justify-center gap-1">
-<p class="font-label-caps text-label-caps text-pale-ink text-center">本月支出</p>
-<p class="font-number-display text-number-display text-primary">¥4,280</p>
-</div>
-</div>
-<!-- Legend -->
-<div class="absolute left-6 right-6 bottom-6 grid grid-cols-2 gap-4">
-<div class="flex items-center gap-3"><div class="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div><span class="font-body-sm text-primary">居住 (42%)</span></div>
-<div class="flex items-center gap-3"><div class="w-3 h-3 rounded-full bg-slate-blue flex-shrink-0"></div><span class="font-body-sm text-primary">健康 (25%)</span></div>
-<div class="flex items-center gap-3"><div class="w-3 h-3 rounded-full bg-cinnabar-red flex-shrink-0"></div><span class="font-body-sm text-primary">餐饮 (16%)</span></div>
-<div class="flex items-center gap-3"><div class="w-3 h-3 rounded-full bg-pine-green flex-shrink-0"></div><span class="font-body-sm text-primary">休闲 (17%)</span></div>
-</div>
-</div>
-
-<!-- 支出排行 -->
-<div class="flex flex-col gap-6">
-<h2 class="font-headline-md text-headline-md text-primary pl-4">支出排行</h2>
-<div class="flex flex-col gap-6">
-
-<div class="flex flex-col gap-2">
-<div class="flex justify-between items-center">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-pale-ink">home</span>
-<span class="font-body-lg text-primary font-medium">每月房租</span>
-</div>
-<span class="font-number-standard text-primary">¥1,800.00</span>
-</div>
-<div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-primary rounded-full" style="width:42%"></div></div>
-</div>
-
-<div class="h-px bg-gradient-to-r from-transparent via-ink-wash-gray to-transparent opacity-30"></div>
-
-<div class="flex flex-col gap-2">
-<div class="flex justify-between items-center">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-pale-ink">local_cafe</span>
-<span class="font-body-lg text-primary font-medium">茶馆雅座</span>
-</div>
-<span class="font-number-standard text-primary">¥680.00</span>
-</div>
-<div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-primary rounded-full" style="width:15.9%"></div></div>
-</div>
-
-<div class="h-px bg-gradient-to-r from-transparent via-ink-wash-gray to-transparent opacity-30"></div>
-
-<div class="flex flex-col gap-2">
-<div class="flex justify-between items-center">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-pale-ink">brush</span>
-<span class="font-body-lg text-primary font-medium">书法课</span>
-</div>
-<span class="font-number-standard text-primary">¥420.00</span>
-</div>
-<div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-primary rounded-full" style="width:9.8%"></div></div>
-</div>
-
+<div id="rankingList" class="flex flex-col gap-4">
+<!-- 排行数据由JS动态生成 -->
 </div>
 </div>
 
 <!-- 引言 -->
-<p class="text-center font-body-sm text-pale-ink pt-12 opacity-60 italic">"平衡并非寻得，而是由你创造。"</p>
+<p class="text-center font-body-sm text-pale-ink pt-8 opacity-60 italic">"平衡并非寻得，而是由你创造。"</p>
 </main>
 
 <!-- FAB -->
@@ -241,18 +217,309 @@ tailwind.config = {
 </a>
 </nav>
 
+<script src="../assets/js/api.js"></script>
 <script>
+// 图表颜色
+const EXPENSE_COLOR = '#C0392B';  // 支出-朱砂红
+const INCOME_COLOR = '#2E7D5E';   // 收入-松绿
+
+// 当前选中类型: 1=支出, 2=收入
+let currentType = 1;
+// 当前选中月份 (格式: YYYY-MM)
+let currentMonth = new Date().toISOString().slice(0, 7);
+// 当前选中的年份
+let selectedYear = new Date().getFullYear();
+
+// 初始化月份标签
+function initMonthLabel() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const label = `${year}年${month}月`;
+  document.getElementById('monthLabel').textContent = label;
+}
+
+// 页面初始化
+document.addEventListener('DOMContentLoaded', async function() {
+  // 检查登录状态
+  if (!TokenStorage.get()) {
+    window.location.href = 'login.html';
+    return;
+  }
+  // 初始化月份标签
+  initMonthLabel();
+  // 生成年份选择器
+  generateYearPickerOptions();
+  // 加载数据
+  await loadData();
+});
+
+// 生成年份选择器选项（近15年，一行一个）
+function generateYearPickerOptions() {
+  const container = document.getElementById('yearPickerOptions');
+  const currentYear = new Date().getFullYear();
+  const startYear = currentYear - 14;
+
+  let options = [];
+  for (let y = currentYear; y >= startYear; y--) {
+    const isCurrent = y === parseInt(currentMonth.split('-')[0]);
+    options.push({ label: `${y}年`, value: y, isCurrent });
+  }
+
+  container.innerHTML = options.map(opt => `
+    <button onclick="selectYear(${opt.value})"
+            class="w-full py-2 px-4 rounded-lg text-center ${opt.isCurrent ? 'border-2 border-primary bg-primary text-white font-bold' : 'border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors'}">
+      ${opt.label}
+    </button>
+  `).join('');
+}
+
+// 生成月份选择器选项
+function generateMonthPickerOptions(year) {
+  const container = document.getElementById('monthPickerOptions');
+  const currentYear = new Date().getFullYear();
+  const currentMonthNum = new Date().getMonth() + 1;
+  const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+
+  let options = [];
+  for (let m = 1; m <= 12; m++) {
+    const isFuture = year === currentYear && m > currentMonthNum;
+    const isCurrent = year === parseInt(currentMonth.split('-')[0]) && m === parseInt(currentMonth.split('-')[1]);
+    options.push({ label: months[m - 1], value: m, isCurrent, disabled: isFuture });
+  }
+
+  container.innerHTML = options.map(opt => `
+    <button onclick="${opt.disabled ? '' : `selectMonth('${opt.label}', '${year}-${String(opt.value).padStart(2, '0')}')`}"
+            class="py-3 px-2 rounded-lg text-center ${opt.isCurrent ? 'border-2 border-primary bg-primary text-white font-bold' : opt.disabled ? 'border border-surface-container-high bg-surface-container-low text-body-lg text-outline cursor-not-allowed opacity-50' : 'border border-surface-container-high bg-surface-container-lowest text-body-lg text-pale-ink hover:bg-surface-container-low transition-colors'}">
+      ${opt.label}
+    </button>
+  `).join('');
+}
+
+// 选择年份
+function selectYear(year) {
+  selectedYear = year;
+  document.getElementById('yearPicker').classList.add('hidden');
+  document.getElementById('monthPickerArea').classList.remove('hidden');
+  document.getElementById('btnBackToYears').classList.remove('hidden');
+  generateMonthPickerOptions(year);
+}
+
+// 显示年份选择器
+function showYearPicker() {
+  document.getElementById('yearPicker').classList.remove('hidden');
+  document.getElementById('monthPickerArea').classList.add('hidden');
+  document.getElementById('btnBackToYears').classList.add('hidden');
+}
+
+// 月份选择器相关
+function toggleMonthPicker() {
+  const p = document.getElementById('monthPicker');
+  p.style.display = p.style.display === 'none' ? 'flex' : 'none';
+  showYearPicker();
+}
+function closePicker(e) { if (e.target === e.currentTarget) e.currentTarget.style.display = 'none'; }
+function closePickerAll() {
+  document.getElementById('monthPicker').style.display = 'none';
+  showYearPicker();
+}
+function selectMonth(label, monthValue) {
+  document.getElementById('monthLabel').textContent = label;
+  currentMonth = monthValue;
+  closePickerAll();
+  // 重新加载数据
+  loadData();
+}
+
+// 切换支出/收入（只影响排行，不影响折线图）
 function sw(type) {
+  const typeValue = type === 'inc' ? 2 : 1;
+  if (currentType === typeValue) return;
+
+  currentType = typeValue;
+
   const ind = document.getElementById('toggleInd');
+  const btnExp = document.getElementById('btnExp');
+  const btnInc = document.getElementById('btnInc');
+
   if (type === 'inc') {
-    ind.style.transform = 'translateX(88px)';
-    document.getElementById('btnExp').querySelector('span').className = 'font-body-lg text-pale-ink';
-    document.getElementById('btnInc').querySelector('span').className = 'font-body-lg text-white font-medium';
+    // 计算收入按钮的宽度
+    const btnWidth = btnInc.offsetWidth;
+    ind.style.transform = `translateX(${btnWidth}px)`;
+    btnExp.querySelector('span').className = 'text-pale-ink font-medium';
+    btnInc.querySelector('span').className = 'text-white font-medium';
   } else {
     ind.style.transform = 'translateX(0)';
-    document.getElementById('btnExp').querySelector('span').className = 'font-body-lg text-white font-medium';
-    document.getElementById('btnInc').querySelector('span').className = 'font-body-lg text-pale-ink';
+    btnExp.querySelector('span').className = 'text-white font-medium';
+    btnInc.querySelector('span').className = 'text-pale-ink';
   }
+
+  // 只更新排行数据，不重新加载折线图
+  updateRanking();
+}
+
+// 加载数据
+async function loadData() {
+  try {
+    // 获取每日统计数据（用于折线图）
+    const dailyRes = await API.record.getDailyStats(currentMonth);
+    if (dailyRes.code === 0) {
+      renderLineChart(dailyRes.data);
+    }
+
+    // 获取分类统计（用于排行）
+    const statsRes = await API.record.getCategoryStats(currentType, currentMonth);
+    if (statsRes.code === 0) {
+      renderRanking(statsRes.data);
+    }
+  } catch (e) {
+    console.error('加载数据失败:', e);
+  }
+}
+
+// 更新排行数据（不重新加载折线图）
+async function updateRanking() {
+  try {
+    const statsRes = await API.record.getCategoryStats(currentType, currentMonth);
+    if (statsRes.code === 0) {
+      renderRanking(statsRes.data);
+    }
+  } catch (e) {
+    console.error('加载排行数据失败:', e);
+  }
+}
+
+// 渲染折线图
+function renderLineChart(data) {
+  const svg = document.getElementById('lineChart');
+  const chartTitle = document.getElementById('chartTitle');
+
+  // 获取当前月份文字
+  const monthPart = currentMonth.split('-')[1];
+  const monthText = `${parseInt(monthPart)}月`;
+
+  // 更新标题
+  chartTitle.textContent = `${monthText}支出收入对比`;
+
+  if (!data || data.length === 0) {
+    svg.innerHTML = '<text x="160" y="100" text-anchor="middle" fill="#6B6B6B">暂无数据</text>';
+    return;
+  }
+
+  // 图表尺寸
+  const width = 320;
+  const height = 200;
+  const padding = { top: 20, right: 20, bottom: 30, left: 50 };
+  const chartWidth = width - padding.left - padding.right;
+  const chartHeight = height - padding.top - padding.bottom;
+
+  // 找出最大值用于计算Y轴
+  let maxValue = 0;
+  data.forEach(d => {
+    if (d.expense > maxValue) maxValue = d.expense;
+    if (d.income > maxValue) maxValue = d.income;
+  });
+  maxValue = maxValue === 0 ? 100 : maxValue * 1.2; // 如果都是0，设置默认值为100
+
+  // 计算点坐标
+  const points = data.map((d, i) => {
+    const x = padding.left + (i / (data.length - 1)) * chartWidth;
+    const expenseY = padding.top + chartHeight - (d.expense / maxValue) * chartHeight;
+    const incomeY = padding.top + chartHeight - (d.income / maxValue) * chartHeight;
+    return { day: d.day, expenseX: x, expenseY, incomeX: x, incomeY };
+  });
+
+  // 生成折线SVG
+  let svgContent = '';
+
+  // 生成网格线
+  const gridLines = 4;
+  for (let i = 0; i <= gridLines; i++) {
+    const y = padding.top + (i / gridLines) * chartHeight;
+    const value = Math.round(maxValue * (1 - i / gridLines));
+    svgContent += `<line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="#e5e2e1" stroke-width="1"/>`;
+    svgContent += `<text x="${padding.left - 5}" y="${y + 4}" text-anchor="end" font-size="10" fill="#6B6B6B">${value}</text>`;
+  }
+
+  // 生成X轴标签（只显示部分日期）
+  const labelInterval = Math.ceil(data.length / 7);
+  points.forEach((p, i) => {
+    if (i % labelInterval === 0 || i === data.length - 1) {
+      svgContent += `<text x="${p.expenseX}" y="${height - 10}" text-anchor="middle" font-size="10" fill="#6B6B6B">${p.day}</text>`;
+    }
+  });
+
+  // 生成支出折线
+  let expensePath = `M ${points[0].expenseX} ${points[0].expenseY}`;
+  points.forEach((p, i) => {
+    if (i > 0) {
+      expensePath += ` L ${p.expenseX} ${p.expenseY}`;
+    }
+  });
+  svgContent += `<path d="${expensePath}" fill="none" stroke="${EXPENSE_COLOR}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+
+  // 生成收入折线
+  let incomePath = `M ${points[0].incomeX} ${points[0].incomeY}`;
+  points.forEach((p, i) => {
+    if (i > 0) {
+      incomePath += ` L ${p.incomeX} ${p.incomeY}`;
+    }
+  });
+  svgContent += `<path d="${incomePath}" fill="none" stroke="${INCOME_COLOR}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+
+  // 生成数据点
+  points.forEach((p, i) => {
+    if (data[i].expense > 0) {
+      svgContent += `<circle cx="${p.expenseX}" cy="${p.expenseY}" r="3" fill="${EXPENSE_COLOR}"/>`;
+    }
+    if (data[i].income > 0) {
+      svgContent += `<circle cx="${p.incomeX}" cy="${p.incomeY}" r="3" fill="${INCOME_COLOR}"/>`;
+    }
+  });
+
+  svg.innerHTML = svgContent;
+}
+
+// 渲染排行
+function renderRanking(data) {
+  const rankingList = document.getElementById('rankingList');
+  const rankingTitle = document.getElementById('rankingTitle');
+
+  rankingTitle.textContent = currentType === 1 ? '支出排行' : '收入排行';
+
+  if (!data || data.length === 0) {
+    rankingList.innerHTML = `
+      <div class="text-center py-8 text-pale-ink">
+        <span class="material-symbols-outlined text-4xl mb-2">leaderboard</span>
+        <p class="font-body-lg">暂无排行数据</p>
+      </div>
+    `;
+    return;
+  }
+
+  const maxTotal = data[0]?.total || 1;
+  let html = '';
+
+  data.forEach((item, index) => {
+    const percent = (item.total / maxTotal) * 100;
+
+    html += `
+      <div class="flex flex-col gap-2">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-pale-ink">${item.icon || 'category'}</span>
+            <span class="font-body-lg text-primary font-medium">${item.name}</span>
+          </div>
+          <span class="font-number-standard text-primary">¥${item.total.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+        </div>
+        <div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+          <div class="h-full rounded-full ${currentType === 1 ? 'bg-cinnabar-red' : 'bg-pine-green'}" style="width:${percent}%"></div>
+        </div>
+      </div>
+    `;
+  });
+
+  rankingList.innerHTML = html;
 }
 </script>
 </body>
