@@ -1,12 +1,12 @@
 <template>
-  <view class="page" :style="{ backgroundColor: '#F5F0E8', minHeight: '100vh', display: 'flex', flexDirection: 'column', fontFamily: "'Noto Serif SC', serif' }">
+  <view class="page" :style="{ backgroundColor: '#F5F0E8', minHeight: '100vh', display: 'flex', flexDirection: 'column' }">
 
     <!-- Top Nav -->
     <view :style="{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, backgroundColor: 'rgba(245, 240, 232, 0.8)', backdropFilter: 'blur(12px)', height: '112rpx', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '16rpx' }">
       <view @click="goBack" :style="{ position: 'absolute', left: '32rpx', bottom: '16rpx', width: '80rpx', height: '80rpx', display: 'flex', alignItems: 'center', justifyContent: 'center' }">
         <text :style="{ fontSize: '40rpx', color: '#000' }">←</text>
       </view>
-      <text :style="{ fontFamily: "'Noto Serif SC', serif", fontSize: '32rpx', fontWeight: '700', color: '#000', letterSpacing: '4rpx' }">找回密码</text>
+      <text :style="{ fontFamily: 'Noto Serif SC, serif', fontSize: '32rpx', fontWeight: '700', color: '#000', letterSpacing: '4rpx' }">找回密码</text>
     </view>
 
     <!-- Main Content -->
@@ -18,22 +18,22 @@
           <view :style="{ width: '160rpx', height: '160rpx', backgroundColor: '#e7e2da', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32rpx' }">
             <text :style="{ fontSize: '96rpx' }">🔑</text>
           </view>
-          <text :style="{ fontFamily: "'Noto Serif SC', serif", fontSize: '32rpx', color: '#6B6B6B', lineHeight: '1.8', display: 'block' }">请输入您注册的手机号</text>
-          <text :style="{ fontFamily: "'Noto Serif SC', serif", fontSize: '32rpx', color: '#6B6B6B', lineHeight: '1.8', display: 'block' }">我们将为您发送验证码</text>
+          <text :style="{ fontFamily: 'Noto Serif SC, serif', fontSize: '32rpx', color: '#6B6B6B', lineHeight: '1.8', display: 'block' }">请输入您注册的手机号</text>
+          <text :style="{ fontFamily: 'Noto Serif SC, serif', fontSize: '32rpx', color: '#6B6B6B', lineHeight: '1.8', display: 'block' }">我们将为您发送验证码</text>
         </view>
 
         <view :style="{ display: 'flex', flexDirection: 'column', gap: '40rpx' }">
           <!-- 手机号 -->
           <view :style="{ position: 'relative' }">
             <text :style="{ position: 'absolute', left: '0', top: '50%', transform: 'translateY(-50%)', fontSize: '40rpx', color: '#6B6B6B' }">📱</text>
-            <input v-model="phone" :style="{ width: '100%', backgroundColor: 'transparent', borderBottom: '4rpx solid #D4CCBC', paddingTop: '32rpx', paddingBottom: '32rpx', paddingLeft: '64rpx', paddingRight: '0', fontFamily: "'Noto Serif SC', serif", fontSize: '32rpx', color: '#000', outline: 'none' }" placeholder="请输入手机号" type="tel" maxlength="11" />
+            <input v-model="phone" :style="{ width: '100%', backgroundColor: 'transparent', borderBottom: '4rpx solid #D4CCBC', paddingTop: '32rpx', paddingBottom: '32rpx', paddingLeft: '64rpx', paddingRight: '0', fontFamily: 'Noto Serif SC, serif', fontSize: '32rpx', color: '#000', outline: 'none' }" placeholder="请输入手机号" type="tel" maxlength="11" />
           </view>
 
           <!-- 验证码 -->
           <view :style="{ position: 'relative' }">
             <text :style="{ position: 'absolute', left: '0', top: '50%', transform: 'translateY(-50%)', fontSize: '40rpx', color: '#6B6B6B' }">💬</text>
-            <input v-model="verifyCode" :style="{ width: '100%', backgroundColor: 'transparent', borderBottom: '4rpx solid #D4CCBC', paddingTop: '32rpx', paddingBottom: '32rpx', paddingLeft: '64rpx', paddingRight: '192rpx', fontFamily: "'Hanken Grotesk', sans-serif", fontSize: '32rpx', fontWeight: '500', color: '#000', outline: 'none', letterSpacing: '4rpx' }" placeholder="请输入验证码" type="text" maxlength="6" />
-            <view @click="sendCode" :style="{ position: 'absolute', right: '0', top: '50%', transform: 'translateY(-50%)', fontFamily: "'Hanken Grotesk', sans-serif", fontSize: '22rpx', fontWeight: '700', color: '#2B6CB0', letterSpacing: '2rpx', textTransform: 'uppercase' }">
+            <input v-model="verifyCode" :style="{ width: '100%', backgroundColor: 'transparent', borderBottom: '4rpx solid #D4CCBC', paddingTop: '32rpx', paddingBottom: '32rpx', paddingLeft: '64rpx', paddingRight: '192rpx', fontFamily: 'Hanken Grotesk, sans-serif', fontSize: '32rpx', fontWeight: '500', color: '#000', outline: 'none', letterSpacing: '4rpx' }" placeholder="请输入验证码" type="text" maxlength="6" />
+            <view @click="sendCode" :style="{ position: 'absolute', right: '0', top: '50%', transform: 'translateY(-50%)', fontFamily: 'Hanken Grotesk, sans-serif', fontSize: '22rpx', fontWeight: '700', color: '#2B6CB0', letterSpacing: '2rpx', textTransform: 'uppercase' }">
               <text v-if="countdown === 0" :style="{ color: '#2B6CB0' }">发送验证码</text>
               <text v-else :style="{ color: '#6B6B6B' }">{{ countdown }}s</text>
             </view>
@@ -42,7 +42,7 @@
           <!-- 新密码 -->
           <view :style="{ position: 'relative' }">
             <text :style="{ position: 'absolute', left: '0', top: '50%', transform: 'translateY(-50%)', fontSize: '40rpx', color: '#6B6B6B' }">🔒</text>
-            <input v-model="newPwd" :style="{ width: '100%', backgroundColor: 'transparent', borderBottom: '4rpx solid #D4CCBC', paddingTop: '32rpx', paddingBottom: '32rpx', paddingLeft: '64rpx', paddingRight: '80rpx', fontFamily: "'Noto Serif SC', serif", fontSize: '32rpx', color: '#000', outline: 'none' }" placeholder="请输入新密码（8-20位）" :password="!showNewPwd" />
+            <input v-model="newPwd" :style="{ width: '100%', backgroundColor: 'transparent', borderBottom: '4rpx solid #D4CCBC', paddingTop: '32rpx', paddingBottom: '32rpx', paddingLeft: '64rpx', paddingRight: '80rpx', fontFamily: 'Noto Serif SC, serif', fontSize: '32rpx', color: '#000', outline: 'none' }" placeholder="请输入新密码（8-20位）" :password="!showNewPwd" />
             <view @click="togglePwd('new')" :style="{ position: 'absolute', right: '0', top: '50%', transform: 'translateY(-50%)', fontSize: '40rpx', color: '#6B6B6B' }">
               <text v-if="showNewPwd">👁</text>
               <text v-else>👁</text>
@@ -52,7 +52,7 @@
           <!-- 确认新密码 -->
           <view :style="{ position: 'relative' }">
             <text :style="{ position: 'absolute', left: '0', top: '50%', transform: 'translateY(-50%)', fontSize: '40rpx', color: '#6B6B6B' }">✓</text>
-            <input v-model="confirmPwd" :style="{ width: '100%', backgroundColor: 'transparent', borderBottom: '4rpx solid #D4CCBC', paddingTop: '32rpx', paddingBottom: '32rpx', paddingLeft: '64rpx', paddingRight: '80rpx', fontFamily: "'Noto Serif SC', serif", fontSize: '32rpx', color: '#000', outline: 'none' }" placeholder="请再次输入新密码" :password="!showConfirmPwd" />
+            <input v-model="confirmPwd" :style="{ width: '100%', backgroundColor: 'transparent', borderBottom: '4rpx solid #D4CCBC', paddingTop: '32rpx', paddingBottom: '32rpx', paddingLeft: '64rpx', paddingRight: '80rpx', fontFamily: 'Noto Serif SC, serif', fontSize: '32rpx', color: '#000', outline: 'none' }" placeholder="请再次输入新密码" :password="!showConfirmPwd" />
             <view @click="togglePwd('confirm')" :style="{ position: 'absolute', right: '0', top: '50%', transform: 'translateY(-50%)', fontSize: '40rpx', color: '#6B6B6B' }">
               <text v-if="showConfirmPwd">👁</text>
               <text v-else>👁</text>
@@ -61,8 +61,8 @@
         </view>
 
         <view @click="resetPassword" :style="{ width: '100%', backgroundColor: '#000', paddingTop: '32rpx', paddingBottom: '32rpx', borderRadius: '16rpx', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '32rpx' }">
-          <text v-if="!loading" :style="{ fontFamily: "'Hanken Grotesk', sans-serif", fontSize: '22rpx', fontWeight: '700', color: '#fff', letterSpacing: '4rpx', textTransform: 'uppercase' }">重置</text>
-          <text v-else :style="{ fontFamily: "'Hanken Grotesk', sans-serif", fontSize: '22rpx', fontWeight: '700', color: '#fff', letterSpacing: '4rpx' }">处理中...</text>
+          <text v-if="!loading" :style="{ fontFamily: 'Hanken Grotesk, sans-serif', fontSize: '22rpx', fontWeight: '700', color: '#fff', letterSpacing: '4rpx', textTransform: 'uppercase' }">重置</text>
+          <text v-else :style="{ fontFamily: 'Hanken Grotesk, sans-serif', fontSize: '22rpx', fontWeight: '700', color: '#fff', letterSpacing: '4rpx' }">处理中...</text>
         </view>
       </view>
 
@@ -72,19 +72,19 @@
           <view :style="{ width: '160rpx', height: '160rpx', backgroundColor: 'rgba(46, 125, 94, 0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32rpx' }">
             <text :style="{ fontSize: '96rpx' }">✓</text>
           </view>
-          <text :style="{ fontFamily: "'Noto Serif SC', serif", fontSize: '32rpx', fontWeight: '600', color: '#000', display: 'block', marginBottom: '16rpx' }">密码重置成功</text>
-          <text :style="{ fontFamily: "'Noto Serif SC', serif", fontSize: '26rpx', color: '#6B6B6B', display: 'block' }">请使用新密码登录您的账号</text>
+          <text :style="{ fontFamily: 'Noto Serif SC, serif', fontSize: '32rpx', fontWeight: '600', color: '#000', display: 'block', marginBottom: '16rpx' }">密码重置成功</text>
+          <text :style="{ fontFamily: 'Noto Serif SC, serif', fontSize: '26rpx', color: '#6B6B6B', display: 'block' }">请使用新密码登录您的账号</text>
         </view>
 
         <view @click="goToLogin" :style="{ width: '100%', backgroundColor: '#000', paddingTop: '32rpx', paddingBottom: '32rpx', borderRadius: '16rpx', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '64rpx' }">
-          <text :style="{ fontFamily: "'Hanken Grotesk', sans-serif", fontSize: '22rpx', fontWeight: '700', color: '#fff', letterSpacing: '4rpx', textTransform: 'uppercase' }">返回登录</text>
+          <text :style="{ fontFamily: 'Hanken Grotesk, sans-serif', fontSize: '22rpx', fontWeight: '700', color: '#fff', letterSpacing: '4rpx', textTransform: 'uppercase' }">返回登录</text>
         </view>
       </view>
     </view>
 
     <!-- 底部引言 -->
     <view :style="{ paddingTop: '64rpx', paddingBottom: '64rpx', textAlign: 'center' }">
-      <text :style="{ fontFamily: "'Noto Serif SC', serif", fontSize: '26rpx', color: '#6B6B6B', fontStyle: 'italic', opacity: 0.6 }">"见微知著，静心记账"</text>
+      <text :style="{ fontFamily: 'Noto Serif SC, serif', fontSize: '26rpx', color: '#6B6B6B', fontStyle: 'italic', opacity: 0.6 }">"见微知著，静心记账"</text>
     </view>
   </view>
 </template>

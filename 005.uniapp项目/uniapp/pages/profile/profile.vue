@@ -108,26 +108,6 @@
       <!-- 版本信息 -->
       <text class="version-text">留白记账 v1.0.1 · Personal Finance Tracker</text>
     </main>
-
-    <!-- Bottom Nav -->
-    <view class="bottom-nav">
-      <view class="nav-item" @click="switchTab('home')">
-        <text class="nav-icon">🏠</text>
-        <text class="nav-label">首页</text>
-      </view>
-      <view class="nav-item" @click="switchTab('stats')">
-        <text class="nav-icon">📊</text>
-        <text class="nav-label">统计</text>
-      </view>
-      <view class="nav-item" @click="switchTab('budget')">
-        <text class="nav-icon">📅</text>
-        <text class="nav-label">预算</text>
-      </view>
-      <view class="nav-item active" @click="switchTab('profile')">
-        <text class="nav-icon">👤</text>
-        <text class="nav-label">我的</text>
-      </view>
-    </view>
   </view>
 </template>
 

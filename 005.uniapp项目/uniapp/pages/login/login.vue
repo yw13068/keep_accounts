@@ -10,14 +10,14 @@
       <!-- Logo & Branding -->
       <view class="brand-section">
         <view class="logo-wrapper">
-          <svg class="logo-svg" viewBox="0 0 128 128" fill="none">
-            <circle cx="64" cy="64" r="60" fill="#FAF7F2" stroke="#D4CCBC" stroke-width="2"/>
-            <circle cx="64" cy="64" r="52" fill="none" stroke="#D4CCBC" stroke-width="0.5" stroke-dasharray="4 4"/>
-            <text x="64" y="76" text-anchor="middle" font-family="serif" font-size="48" font-weight="700" fill="#1c1b1b">留</text>
-          </svg>
+          <view class="logo-circle">
+            <text class="logo-char">留</text>
+          </view>
         </view>
         <text class="title">留白记账</text>
-        <text class="subtitle">记账，是一种生活的修行。</text>
+        <view class="subtitle-block">
+          <text class="subtitle">记账，是一种生活的修行。</text>
+        </view>
       </view>
 
       <!-- Login Form -->
@@ -65,15 +65,9 @@
         </button>
       </view>
 
-      <!-- Register Link -->
-      <view class="register-section">
-        <view class="divider"></view>
-        <view class="register-prompt">
-          <text class="register-desc">初识留白？</text>
-          <view class="register-btn" @click="goRegister">
-            <text class="register-btn-text">注 册 账 号</text>
-          </view>
-        </view>
+      <!-- Register Button -->
+      <view class="register-btn" @click="goRegister">
+        <text class="register-btn-text">注 册 账 号</text>
       </view>
     </view>
   </view>
@@ -134,7 +128,7 @@ async function handleLogin() {
 
 <style scoped>
 .page {
-  min-height: 100vh;
+  height: 100vh;
   background-color: #F5F0E8;
   font-family: 'Noto Serif SC', serif;
   position: relative;
@@ -145,28 +139,31 @@ async function handleLogin() {
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 100%;
+  right: 0;
   height: 300rpx;
-  opacity: 0.1;
   pointer-events: none;
+  z-index: 0;
 }
 
 .wave {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  left: -50%;
+  width: 200%;
   background: #D4CCBC;
-  border-radius: 50% 50% 0 0;
 }
 
 .wave-1 {
+  bottom: 0;
+  height: 200rpx;
+  border-radius: 50% 50% 0 0;
   opacity: 0.3;
-  transform: translateY(20%);
 }
 
 .wave-2 {
+  bottom: -60rpx;
+  height: 200rpx;
+  border-radius: 50% 50% 0 0;
   opacity: 0.5;
-  transform: translateY(35%);
 }
 
 .content {
@@ -177,24 +174,41 @@ async function handleLogin() {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 0 48rpx;
+  padding: 0 96rpx 0;
 }
 
 .brand-section {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   margin-bottom: 80rpx;
 }
 
 .logo-wrapper {
-  margin-bottom: 32rpx;
+  margin-top: 40rpx;
+  margin-bottom: 48rpx;
 }
 
-.logo-svg {
+.logo-circle {
   width: 200rpx;
   height: 200rpx;
+  border-radius: 50%;
+  background: #FAF7F2;
+  border: 4rpx solid #D4CCBC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-char {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 96rpx;
+  font-weight: 700;
+  color: #1c1b1b;
 }
 
 .title {
+  display: block;
   font-size: 48rpx;
   font-weight: 700;
   color: #1c1b1b;
@@ -202,7 +216,13 @@ async function handleLogin() {
   margin-bottom: 16rpx;
 }
 
+.subtitle-block {
+  display: block;
+  text-align: center;
+}
+
 .subtitle {
+  display: block;
   font-size: 26rpx;
   color: #6B6B6B;
   font-style: italic;
@@ -224,7 +244,6 @@ async function handleLogin() {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8rpx;
 }
 
 .input-label {
@@ -232,7 +251,7 @@ async function handleLogin() {
   color: #6B6B6B;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-bottom: 8rpx;
+  margin-bottom: 12rpx;
 }
 
 .input-header .input-label {
@@ -246,8 +265,8 @@ async function handleLogin() {
 
 .input-field {
   width: 100%;
-  border-bottom: 2rpx solid #D4CCBC;
-  padding: 16rpx 0;
+  border-bottom: 2px solid #D4CCBC;
+  padding: 24rpx 0;
   font-size: 32rpx;
   color: #1c1b1b;
   background: transparent;
@@ -255,8 +274,7 @@ async function handleLogin() {
 }
 
 .input-field:focus {
-  border-bottom: 4rpx solid #2B6CB0;
-  outline: none;
+  border-bottom-color: #2B6CB0;
 }
 
 .input-field::placeholder {
@@ -264,20 +282,20 @@ async function handleLogin() {
 }
 
 .remember-row {
-  padding: 16rpx 0;
+  padding: 24rpx 0;
 }
 
 .checkbox-wrapper {
   display: flex;
   align-items: center;
-  gap: 16rpx;
+  gap: 24rpx;
 }
 
 .checkbox {
   width: 36rpx;
   height: 36rpx;
-  border: 2rpx solid #747878;
-  border-radius: 4rpx;
+  border: 2px solid #747878;
+  border-radius: 8rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -301,7 +319,7 @@ async function handleLogin() {
 
 .login-btn {
   width: 100%;
-  height: 112rpx;
+  height: 72rpx;
   background: #000;
   color: #fff;
   border: none;
@@ -311,7 +329,7 @@ async function handleLogin() {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 16rpx;
+  margin-top: 32rpx;
   font-family: 'Noto Serif SC', serif;
 }
 
@@ -323,33 +341,14 @@ async function handleLogin() {
   opacity: 0.6;
 }
 
-.register-section {
-  width: 100%;
-  margin-top: 80rpx;
-}
-
-.divider {
-  height: 2rpx;
-  background: linear-gradient(90deg, transparent 0%, #D4CCBC 50%, transparent 100%);
-  margin-bottom: 48rpx;
-}
-
-.register-prompt {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24rpx;
-}
-
-.register-desc {
-  font-size: 26rpx;
-  color: #444748;
-}
-
 .register-btn {
-  padding: 24rpx 64rpx;
-  border: 2rpx solid #000;
-  display: inline-block;
+  width: 100%;
+  height: 72rpx;
+  border: 2px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 32rpx;
 }
 
 .register-btn-text {
@@ -357,5 +356,6 @@ async function handleLogin() {
   color: #000;
   letter-spacing: 0.15em;
   text-transform: uppercase;
+  font-family: 'Noto Serif SC', serif;
 }
 </style>

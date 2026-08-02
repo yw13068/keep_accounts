@@ -9,43 +9,59 @@
       <!-- Month Navigation -->
       <view class="month-nav">
         <view class="month-btn" @click="changeMonth(-1)">
-          <text class="arrow">‹</text>
+          <text class="month-arrow">‹</text>
         </view>
-        <view class="month-picker" @click="togglePicker">
+        <view class="month-picker" @click="toggleMonthPicker">
           <text class="month-label">{{ monthLabel }}</text>
-          <text class="arrow-down">▾</text>
+          <text class="month-arrow-down">▾</text>
         </view>
         <view class="month-btn" @click="changeMonth(1)">
-          <text class="arrow">›</text>
+          <text class="month-arrow">›</text>
         </view>
       </view>
 
       <!-- Month Picker Popup -->
-      <view v-if="showPicker" class="picker-overlay" @click="showPicker = false">
+      <view v-if="showMonthPicker" class="month-picker-popup" @click="closePicker">
         <view class="picker-card" @click.stop>
           <text class="picker-title">选择月份</text>
-          <view class="year-list">
-            <view
-              v-for="year in yearList"
-              :key="year"
-              :class="['year-item', year === selectedYear ? 'active' : '']"
-              @click="selectYear(year)"
-            >
-              <text :class="['year-text', year === selectedYear ? 'active' : '']">{{ year }}年</text>
+
+          <!-- Year Picker Area -->
+          <view v-if="pickerView === 'year'" class="year-picker-area">
+            <text class="picker-hint">请选择年份</text>
+            <scroll-view class="year-scroll" scroll-y="true">
+              <view
+                v-for="year in yearList"
+                :key="year"
+                :class="['year-item', year === selectedYear ? 'active' : '']"
+                @click="selectYear(year)"
+              >
+                <text :class="['year-text', year === selectedYear ? 'active' : '']">{{ year }}年</text>
+              </view>
+            </scroll-view>
+          </view>
+
+          <!-- Month Picker Area -->
+          <view v-if="pickerView === 'month'" class="month-picker-area">
+            <text class="picker-hint">请选择月份</text>
+            <view class="month-grid">
+              <view
+                v-for="m in 12"
+                :key="m"
+                :class="['month-item', (m > currentRealMonth && selectedYear === currentYear) ? 'disabled' : '']"
+                @click="(m <= currentRealMonth || selectedYear < currentYear) ? selectMonth(m) : ''"
+              >
+                <text :class="['month-text', m === selectedMonth && selectedYear === currentYear ? 'active' : '']">{{ m }}月</text>
+              </view>
             </view>
           </view>
-          <view class="month-grid" v-if="selectedYear">
-            <view
-              v-for="m in 12"
-              :key="m"
-              :class="['month-item', (m > currentRealMonth && year === currentYear) ? 'disabled' : '']"
-              @click="(m <= currentRealMonth || year < currentYear) ? selectMonth(m) : ''"
-            >
-              <text :class="['month-text', m === selectedMonth && year === selectedYear ? 'active' : '']">{{ m }}月</text>
+
+          <view class="btn-row">
+            <view v-if="pickerView === 'month'" class="btn-back" @click="pickerView = 'year'">
+              <text class="btn-back-text">返回选择年</text>
             </view>
-          </view>
-          <view class="cancel-btn" @click="showPicker = false">
-            <text class="cancel-text">取消</text>
+            <view class="btn-cancel" @click="closePicker">
+              <text class="btn-cancel-text">取消</text>
+            </view>
           </view>
         </view>
       </view>
@@ -54,24 +70,7 @@
       <view class="chart-card">
         <text class="chart-title">{{ monthLabel }}支出收入对比</text>
         <view class="chart-wrapper">
-          <svg v-if="chartData.length > 0" class="line-svg" viewBox="0 0 320 200">
-            <line v-for="(grid, i) in gridLines" :key="'g'+i"
-              :x1="grid.x1" :y1="grid.y1" :x2="grid.x2" :y2="grid.y2"
-              stroke="#e5e2e1" stroke-width="1"/>
-            <text v-for="(grid, i) in gridLines" :key="'gl'+i"
-              :x="grid.tx" :y="grid.ty" text-anchor="end" font-size="10" fill="#6B6B6B">{{ grid.label }}</text>
-            <text v-for="(pt, i) in xLabels" :key="'xl'+i"
-              :x="pt.x" :y="190" text-anchor="middle" font-size="10" fill="#6B6B6B">{{ pt.label }}</text>
-            <path :d="expensePath" fill="none" stroke="#C0392B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path :d="incomePath" fill="none" stroke="#2E7D5E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle v-for="(pt, i) in expensePoints" :key="'ep'+i"
-              :cx="pt.x" :cy="pt.y" r="3" fill="#C0392B"/>
-            <circle v-for="(pt, i) in incomePoints" :key="'ip'+i"
-              :cx="pt.x" :cy="pt.y" r="3" fill="#2E7D5E"/>
-          </svg>
-          <view v-else class="chart-empty">
-            <text class="empty-text">暂无数据</text>
-          </view>
+          <canvas canvas-id="lineChart" id="lineChart" class="chart-canvas"></canvas>
         </view>
         <view class="legend">
           <view class="legend-item">
@@ -146,7 +145,8 @@ import { API, TokenStorage } from '../../lib/api.js';
 const currentType = ref(1);
 const currentMonth = ref(new Date().toISOString().slice(0, 7));
 const monthLabel = ref('');
-const showPicker = ref(false);
+const showMonthPicker = ref(false);
+const pickerView = ref('year');
 const selectedYear = ref(new Date().getFullYear());
 const selectedMonth = ref(new Date().getMonth() + 1);
 const currentYear = new Date().getFullYear();
@@ -165,110 +165,157 @@ const maxCategoryTotal = computed(() => {
   return categoryData.value[0]?.total || 1;
 });
 
-// SVG chart computed
-const chartWidth = 320;
-const chartHeight = 200;
-const padding = { top: 20, right: 20, bottom: 30, left: 50 };
-const cW = chartWidth - padding.left - padding.right;
-const cH = chartHeight - padding.top - padding.bottom;
+// 绘制折线图
+function drawChart() {
+  if (!chartData.value.length) return;
 
-const maxValue = computed(() => {
+  const ctx = uni.createCanvasContext('lineChart');
+
+  // 使用固定尺寸
+  const width = 320;
+  const height = 200;
+
+  ctx.setFillStyle('#FFFFFF');
+  ctx.fillRect(0, 0, width, height);
+
+  const padding = { top: 20, right: 20, bottom: 30, left: 50 };
+  const cW = width - padding.left - padding.right;
+  const cH = height - padding.top - padding.bottom;
+
+  // 计算最大值
   let max = 0;
   chartData.value.forEach(d => {
     if (d.expense > max) max = d.expense;
     if (d.income > max) max = d.income;
   });
-  return max === 0 ? 100 : max * 1.2;
-});
+  const maxValue = max === 0 ? 100 : max * 1.2;
+  const divisor = Math.max(chartData.value.length - 1, 1);
 
-const gridLines = computed(() => {
-  const lines = [];
+  // 绘制网格线
+  ctx.setStrokeStyle('#e5e2e1');
+  ctx.setLineWidth(1);
   const gridCount = 4;
   for (let i = 0; i <= gridCount; i++) {
     const y = padding.top + (i / gridCount) * cH;
-    const val = Math.round(maxValue.value * (1 - i / gridCount));
-    lines.push({
-      x1: padding.left, y1: y, x2: chartWidth - padding.right, y2: y,
-      tx: padding.left - 5, ty: y + 4, label: val
-    });
-  }
-  return lines;
-});
+    ctx.beginPath();
+    ctx.moveTo(padding.left, y);
+    ctx.lineTo(width - padding.right, y);
+    ctx.stroke();
 
-const xLabels = computed(() => {
-  const labels = [];
-  if (!chartData.value.length) return labels;
-  const interval = Math.ceil(chartData.value.length / 7);
-  chartData.value.forEach((d, i) => {
-    if (i % interval === 0 || i === chartData.value.length - 1) {
-      const x = padding.left + (i / (chartData.value.length - 1)) * cW;
-      labels.push({ x, label: d.day });
+      // 绘制Y轴标签
+      const val = Math.round(maxValue * (1 - i / gridCount));
+      ctx.setFontSize(10);
+      ctx.setFillStyle('#6B6B6B');
+      ctx.textAlign = 'right';
+      ctx.fillText(val.toString(), padding.left - 5, y + 4);
     }
-  });
-  return labels;
-});
 
-const expensePoints = computed(() => {
-  return chartData.value
-    .filter(d => d.expense > 0)
-    .map((d, i) => {
-      const x = padding.left + (i / (chartData.value.length - 1)) * cW;
-      const y = padding.top + cH - (d.expense / maxValue.value) * cH;
-      return { x, y };
+    // 绘制X轴标签
+    ctx.textAlign = 'center';
+    const interval = Math.ceil(chartData.value.length / 7);
+    chartData.value.forEach((d, i) => {
+      if (i % interval === 0 || i === chartData.value.length - 1) {
+        const x = padding.left + (i / divisor) * cW;
+        ctx.fillText(d.day.toString(), x, height - 10);
+      }
     });
-});
 
-const incomePoints = computed(() => {
-  return chartData.value
-    .filter(d => d.income > 0)
-    .map((d, i) => {
-      const x = padding.left + (i / (chartData.value.length - 1)) * cW;
-      const y = padding.top + cH - (d.income / maxValue.value) * cH;
-      return { x, y };
+    // 绘制支出折线
+    ctx.setStrokeStyle('#C0392B');
+    ctx.setLineWidth(2);
+    ctx.setLineCap('round');
+    ctx.setLineJoin('round');
+    chartData.value.forEach((d, i) => {
+      const x = padding.left + (i / divisor) * cW;
+      const y = padding.top + cH - (d.expense / maxValue) * cH;
+      if (i === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
     });
-});
+    ctx.stroke();
 
-const expensePath = computed(() => {
-  if (!chartData.value.length) return '';
-  return chartData.value.map((d, i) => {
-    const x = padding.left + (i / (chartData.value.length - 1)) * cW;
-    const y = padding.top + cH - (d.expense / maxValue.value) * cH;
-    return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
-  }).join(' ');
-});
+    // 绘制收入折线
+    ctx.setStrokeStyle('#2E7D5E');
+    chartData.value.forEach((d, i) => {
+      const x = padding.left + (i / divisor) * cW;
+      const y = padding.top + cH - (d.income / maxValue) * cH;
+      if (i === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    });
+    ctx.stroke();
 
-const incomePath = computed(() => {
-  if (!chartData.value.length) return '';
-  return chartData.value.map((d, i) => {
-    const x = padding.left + (i / (chartData.value.length - 1)) * cW;
-    const y = padding.top + cH - (d.income / maxValue.value) * cH;
-    return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
-  }).join(' ');
-});
+    // 绘制数据点
+    chartData.value.forEach((d, i) => {
+      const x = padding.left + (i / divisor) * cW;
+      if (d.expense > 0) {
+        const y = padding.top + cH - (d.expense / maxValue) * cH;
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, 2 * Math.PI);
+        ctx.setFillStyle('#C0392B');
+        ctx.fill();
+      }
+      if (d.income > 0) {
+        const y = padding.top + cH - (d.income / maxValue) * cH;
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, 2 * Math.PI);
+        ctx.setFillStyle('#2E7D5E');
+        ctx.fill();
+      }
+    });
 
-function togglePicker() {
-  showPicker.value = !showPicker.value;
+    ctx.draw();
+}
+
+// 在 loadData 后调用 drawChart
+async function loadData() {
+  try {
+    const dailyRes = await API.record.getDailyStats(currentMonth.value);
+    if (dailyRes.code === 0) {
+      chartData.value = dailyRes.data || [];
+    }
+    await loadCategoryData();
+    setTimeout(() => drawChart(), 100);
+  } catch (e) {
+    console.error('加载数据失败', e);
+  }
+}
+
+// 切换月份时重绘
+function changeMonth(delta) {
+  const [y, m] = currentMonth.value.split('-').map(Number);
+  const date = new Date(y, m - 1 + delta, 1);
+  currentMonth.value = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+  updateMonthLabel();
+  loadData();
+}
+
+function toggleMonthPicker() {
+  showMonthPicker.value = !showMonthPicker.value;
+  pickerView.value = 'year';
   selectedYear.value = parseInt(currentMonth.value.split('-')[0]);
   selectedMonth.value = parseInt(currentMonth.value.split('-')[1]);
 }
 
+function closePicker() {
+  showMonthPicker.value = false;
+  pickerView.value = 'year';
+}
+
 function selectYear(year) {
   selectedYear.value = year;
+  pickerView.value = 'month';
 }
 
 function selectMonth(m) {
   selectedMonth.value = m;
   currentMonth.value = `${selectedYear.value}-${String(m).padStart(2, '0')}`;
   updateMonthLabel();
-  showPicker.value = false;
-  loadData();
-}
-
-function changeMonth(delta) {
-  const [y, m] = currentMonth.value.split('-').map(Number);
-  const date = new Date(y, m - 1 + delta, 1);
-  currentMonth.value = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-  updateMonthLabel();
+  showMonthPicker.value = false;
   loadData();
 }
 
@@ -281,18 +328,6 @@ async function switchType(type) {
   if (currentType.value === type) return;
   currentType.value = type;
   await loadCategoryData();
-}
-
-async function loadData() {
-  try {
-    const dailyRes = await API.record.getDailyStats(currentMonth.value);
-    if (dailyRes.code === 0) {
-      chartData.value = dailyRes.data || [];
-    }
-    await loadCategoryData();
-  } catch (e) {
-    console.error('加载数据失败', e);
-  }
 }
 
 async function loadCategoryData() {
@@ -401,11 +436,12 @@ onMounted(() => {
   color: #1c1b1b;
 }
 
-.picker-overlay {
+.month-picker-popup {
   position: fixed;
   inset: 0;
   z-index: 200;
   background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -416,28 +452,41 @@ onMounted(() => {
   background: #fff;
   border-radius: 24rpx;
   padding: 48rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
 }
 
 .picker-title {
   font-size: 36rpx;
-  font-weight: 700;
+  font-weight: 600;
   color: #1c1b1b;
   text-align: center;
-  margin-bottom: 32rpx;
+  margin-bottom: 24rpx;
 }
 
-.year-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16rpx;
-  margin-bottom: 32rpx;
+.picker-hint {
+  font-size: 24rpx;
+  color: #6B6B6B;
+  text-align: center;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.year-picker-area {
+  margin-bottom: 24rpx;
+}
+
+.year-scroll {
+  max-height: 400rpx;
+  overflow-y: auto;
 }
 
 .year-item {
-  padding: 16rpx 24rpx;
+  padding: 24rpx;
+  text-align: center;
   border-radius: 16rpx;
   border: 2rpx solid #ebe7e6;
-  background: #f7f3f2;
+  background: #fff;
+  margin-bottom: 12rpx;
 }
 
 .year-item.active {
@@ -455,22 +504,27 @@ onMounted(() => {
   font-weight: 700;
 }
 
+.month-picker-area {
+  margin-bottom: 24rpx;
+}
+
 .month-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16rpx;
-  margin-bottom: 32rpx;
+  gap: 12rpx;
 }
 
 .month-item {
   padding: 20rpx 0;
   text-align: center;
   border-radius: 16rpx;
-  background: #f7f3f2;
+  border: 2rpx solid #ebe7e6;
+  background: #fff;
 }
 
 .month-item.disabled {
   opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .month-text {
@@ -480,14 +534,42 @@ onMounted(() => {
 
 .month-text.active {
   font-weight: 700;
+  color: #000;
 }
 
-.cancel-btn {
-  padding: 16rpx;
+.month-item.active {
+  background: #000;
+  border-color: #000;
+}
+
+.btn-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.btn-back {
+  flex: 1;
+  padding: 24rpx;
   text-align: center;
+  border-radius: 16rpx;
+  background: #f7f3f2;
 }
 
-.cancel-text {
+.btn-back-text {
+  font-size: 28rpx;
+  color: #6B6B6B;
+}
+
+.btn-cancel {
+  flex: 1;
+  padding: 24rpx;
+  text-align: center;
+  border-radius: 16rpx;
+  background: #f7f3f2;
+}
+
+.btn-cancel-text {
   font-size: 28rpx;
   color: #6B6B6B;
 }
@@ -512,9 +594,10 @@ onMounted(() => {
 .chart-wrapper {
   width: 100%;
   height: 400rpx;
+  position: relative;
 }
 
-.line-svg {
+.chart-canvas {
   width: 100%;
   height: 100%;
 }
@@ -709,7 +792,7 @@ onMounted(() => {
 
 .fab {
   position: fixed;
-  bottom: 200rpx;
+  bottom: 123rpx;
   right: 48rpx;
   width: 112rpx;
   height: 112rpx;

@@ -17,8 +17,8 @@
             <text x="48" y="60" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="40" font-weight="700" fill="#1c1b1b">留</text>
           </svg>
         </view>
-        <text :style="{ fontFamily: "'Noto Serif SC', serif", fontSize: '56rpx', fontWeight: '700', color: '#000', display: 'block', marginBottom: '24rpx' }">留白记账</text>
-        <text :style="{ fontFamily: "'Noto Serif SC', serif", fontSize: '26rpx', color: '#6B6B6B', fontStyle: 'italic' }">记账，是一种生活的修行。</text>
+        <text :style="{ fontFamily: 'Noto Serif SC, serif', fontSize: '56rpx', fontWeight: '700', color: '#000', display: 'block', marginBottom: '24rpx' }">留白记账</text>
+        <text :style="{ fontFamily: 'Noto Serif SC, serif', fontSize: '26rpx', color: '#6B6B6B', fontStyle: 'italic' }">记账，是一种生活的修行。</text>
       </view>
 
       <!-- 装饰线 -->
@@ -26,10 +26,10 @@
 
       <!-- 品牌理念 -->
       <view :style="{ textAlign: 'center', marginBottom: '128rpx' }">
-        <text :style="{ fontFamily: "'Noto Serif SC', serif", fontSize: '32rpx', color: '#6B6B6B', lineHeight: '1.8', display: 'block' }">
+        <text :style="{ fontFamily: 'Noto Serif SC, serif', fontSize: '32rpx', color: '#6B6B6B', lineHeight: '1.8', display: 'block' }">
           轻触之间，记录每一笔收支
         </text>
-        <text :style="{ fontFamily: "'Noto Serif SC', serif", fontSize: '32rpx', color: '#6B6B6B', lineHeight: '1.8', display: 'block' }">
+        <text :style="{ fontFamily: 'Noto Serif SC, serif', fontSize: '32rpx', color: '#6B6B6B', lineHeight: '1.8', display: 'block' }">
           让财务了然于心
         </text>
       </view>
@@ -37,17 +37,17 @@
       <!-- CTA 按钮 -->
       <view :style="{ width: '100%', maxWidth: '648rpx', display: 'flex', flexDirection: 'column', gap: '32rpx' }">
         <view @click="goToRegister" :style="{ width: '100%', backgroundColor: '#000', paddingTop: '32rpx', paddingBottom: '32rpx', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16rpx', borderRadius: '16rpx' }">
-          <text :style="{ fontFamily: "'Hanken Grotesk', sans-serif", fontSize: '22rpx', fontWeight: '700', color: '#fff', letterSpacing: '4rpx', textTransform: 'uppercase' }">开启记账之旅</text>
+          <text :style="{ fontFamily: 'Hanken Grotesk, sans-serif', fontSize: '22rpx', fontWeight: '700', color: '#fff', letterSpacing: '4rpx', textTransform: 'uppercase' }">开启记账之旅</text>
           <text :style="{ fontSize: '32rpx', color: '#fff' }">→</text>
         </view>
         <view @click="goToLogin" :style="{ width: '100%', paddingTop: '32rpx', paddingBottom: '32rpx', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2rpx solid #000', borderRadius: '16rpx' }">
-          <text :style="{ fontFamily: "'Hanken Grotesk', sans-serif", fontSize: '22rpx', fontWeight: '700', color: '#000', letterSpacing: '3rpx', textTransform: 'uppercase' }">已有账号？立即登录</text>
+          <text :style="{ fontFamily: 'Hanken Grotesk, sans-serif', fontSize: '22rpx', fontWeight: '700', color: '#000', letterSpacing: '3rpx', textTransform: 'uppercase' }">已有账号？立即登录</text>
         </view>
       </view>
 
       <!-- 底部品牌 -->
       <view :style="{ marginTop: '128rpx', textAlign: 'center', opacity: 0.3 }">
-        <text :style="{ fontFamily: "'Hanken Grotesk', sans-serif", fontSize: '20rpx', color: '#6B6B6B', letterSpacing: '4rpx', textTransform: 'uppercase' }">Liubai Finance · 留白记账</text>
+        <text :style="{ fontFamily: 'Hanken Grotesk, sans-serif', fontSize: '20rpx', color: '#6B6B6B', letterSpacing: '4rpx', textTransform: 'uppercase' }">Liubai Finance · 留白记账</text>
       </view>
     </view>
   </view>

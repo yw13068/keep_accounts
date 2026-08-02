@@ -1,7 +1,7 @@
 /**
  * API 工具类 - 适配 UniApp
  */
-const API_BASE_URL = 'http://120.48.129.151:3000';
+const API_BASE_URL = 'http://127.0.0.1:3000';
 
 // Token 存储
 const TokenStorage = {

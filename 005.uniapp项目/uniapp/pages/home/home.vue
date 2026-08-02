@@ -21,31 +21,47 @@
       </view>
 
       <!-- Month Picker Popup -->
-      <view v-if="showMonthPicker" class="month-picker-popup" @click="showMonthPicker = false">
+      <view v-if="showMonthPicker" class="month-picker-popup" @click="closePicker">
         <view class="picker-card" @click.stop>
           <text class="picker-title">选择月份</text>
-          <view class="year-grid">
-            <view
-              v-for="year in yearList"
-              :key="year"
-              :class="['year-item', year === selectedYear ? 'active' : '']"
-              @click="selectYear(year)"
-            >
-              <text :class="['year-text', year === selectedYear ? 'active' : '']">{{ year }}年</text>
+
+          <!-- Year Picker Area -->
+          <view v-if="pickerView === 'year'" class="year-picker-area">
+            <text class="picker-hint">请选择年份</text>
+            <scroll-view class="year-scroll" scroll-y="true">
+              <view
+                v-for="year in yearList"
+                :key="year"
+                :class="['year-item', year === selectedYear ? 'active' : '']"
+                @click="selectYear(year)"
+              >
+                <text :class="['year-text', year === selectedYear ? 'active' : '']">{{ year }}年</text>
+              </view>
+            </scroll-view>
+          </view>
+
+          <!-- Month Picker Area -->
+          <view v-if="pickerView === 'month'" class="month-picker-area">
+            <text class="picker-hint">请选择月份</text>
+            <view class="month-grid">
+              <view
+                v-for="m in 12"
+                :key="m"
+                :class="['month-item', (m > currentRealMonth && selectedYear === currentYear) ? 'disabled' : '']"
+                @click="(m <= currentRealMonth || selectedYear < currentYear) ? selectMonth(m) : ''"
+              >
+                <text :class="['month-text', m === selectedMonth && selectedYear === currentYear ? 'active' : '']">{{ m }}月</text>
+              </view>
             </view>
           </view>
-          <view class="month-grid" v-if="selectedYear">
-            <view
-              v-for="m in 12"
-              :key="m"
-              :class="['month-item', m > currentMonth && year === currentYear ? 'disabled' : '']"
-              @click="m <= currentMonth || year < currentYear ? selectMonth(m) : ''"
-            >
-              <text :class="['month-text', m === selectedMonth && year === currentYear ? 'active' : '']">{{ m }}月</text>
+
+          <view class="btn-row">
+            <view v-if="pickerView === 'month'" class="btn-back" @click="pickerView = 'year'">
+              <text class="btn-back-text">返回选择年</text>
             </view>
-          </view>
-          <view class="cancel-btn" @click="showMonthPicker = false">
-            <text class="cancel-text">取消</text>
+            <view class="btn-cancel" @click="closePicker">
+              <text class="btn-cancel-text">取消</text>
+            </view>
           </view>
         </view>
       </view>
@@ -68,12 +84,14 @@
 
       <!-- Type Toggle -->
       <view class="type-toggle">
-        <view :class="['toggle-bg', currentType === 2 ? 'right' : '']"></view>
-        <view class="toggle-btn expense-btn" @click="switchType(1)">
-          <text :class="['toggle-text', currentType === 1 ? 'white' : '']">支出</text>
-        </view>
-        <view class="toggle-btn income-btn" @click="switchType(2)">
-          <text :class="['toggle-text', currentType === 2 ? 'white' : '']">收入</text>
+        <view class="toggle-container">
+          <view :class="['toggle-bg', currentType === 2 ? 'right' : '']"></view>
+          <view class="toggle-btn" @click="switchType(1)">
+            <text :class="['toggle-text', currentType === 1 ? 'white' : '']">支出</text>
+          </view>
+          <view class="toggle-btn" @click="switchType(2)">
+            <text :class="['toggle-text', currentType === 2 ? 'white' : '']">收入</text>
+          </view>
         </view>
       </view>
 
@@ -133,6 +151,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { onShow } from '@dcloudio/uni-app';
 import { API, TokenStorage } from '../../lib/api.js';
 
 const currentType = ref(1);
@@ -144,6 +163,7 @@ const expense = ref(0);
 const records = ref([]);
 const expanded = ref(false);
 const showMonthPicker = ref(false);
+const pickerView = ref('year');
 const selectedYear = ref(new Date().getFullYear());
 const selectedMonth = ref(new Date().getMonth() + 1);
 const currentYear = new Date().getFullYear();
@@ -173,12 +193,19 @@ function toggleExpand() {
 
 function toggleMonthPicker() {
   showMonthPicker.value = !showMonthPicker.value;
+  pickerView.value = 'year';
   selectedYear.value = parseInt(currentMonth.value.split('-')[0]);
   selectedMonth.value = parseInt(currentMonth.value.split('-')[1]);
 }
 
+function closePicker() {
+  showMonthPicker.value = false;
+  pickerView.value = 'year';
+}
+
 function selectYear(year) {
   selectedYear.value = year;
+  pickerView.value = 'month';
 }
 
 function selectMonth(m) {
@@ -250,6 +277,13 @@ onMounted(() => {
   updateMonthLabel();
   loadData();
 });
+
+// 每次页面显示时刷新数据
+onShow(() => {
+  if (TokenStorage.get()) {
+    loadData();
+  }
+});
 </script>
 
 <style scoped>
@@ -257,7 +291,7 @@ onMounted(() => {
   min-height: 100vh;
   background-color: #F5F0E8;
   font-family: 'Noto Serif SC', serif;
-  padding-bottom: 160rpx;
+  padding-bottom: 0;
 }
 
 .top-bar {
@@ -337,6 +371,7 @@ onMounted(() => {
   inset: 0;
   z-index: 200;
   background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -347,28 +382,41 @@ onMounted(() => {
   background: #fff;
   border-radius: 24rpx;
   padding: 48rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
 }
 
 .picker-title {
   font-size: 36rpx;
-  font-weight: 700;
+  font-weight: 600;
   color: #1c1b1b;
   text-align: center;
-  margin-bottom: 32rpx;
+  margin-bottom: 24rpx;
 }
 
-.year-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16rpx;
-  margin-bottom: 32rpx;
+.picker-hint {
+  font-size: 24rpx;
+  color: #6B6B6B;
+  text-align: center;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.year-picker-area {
+  margin-bottom: 24rpx;
+}
+
+.year-scroll {
+  max-height: 400rpx;
+  overflow-y: auto;
 }
 
 .year-item {
-  padding: 16rpx 24rpx;
+  padding: 24rpx;
+  text-align: center;
   border-radius: 16rpx;
   border: 2rpx solid #ebe7e6;
-  background: #f7f3f2;
+  background: #fff;
+  margin-bottom: 12rpx;
 }
 
 .year-item.active {
@@ -386,22 +434,27 @@ onMounted(() => {
   font-weight: 700;
 }
 
+.month-picker-area {
+  margin-bottom: 24rpx;
+}
+
 .month-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16rpx;
-  margin-bottom: 32rpx;
+  gap: 12rpx;
 }
 
 .month-item {
   padding: 20rpx 0;
   text-align: center;
   border-radius: 16rpx;
-  background: #f7f3f2;
+  border: 2rpx solid #ebe7e6;
+  background: #fff;
 }
 
 .month-item.disabled {
   opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .month-text {
@@ -411,14 +464,42 @@ onMounted(() => {
 
 .month-text.active {
   font-weight: 700;
+  color: #000;
 }
 
-.cancel-btn {
-  padding: 16rpx;
+.month-item.active {
+  background: #000;
+  border-color: #000;
+}
+
+.btn-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.btn-back {
+  flex: 1;
+  padding: 24rpx;
   text-align: center;
+  border-radius: 16rpx;
+  background: #f7f3f2;
 }
 
-.cancel-text {
+.btn-back-text {
+  font-size: 28rpx;
+  color: #6B6B6B;
+}
+
+.btn-cancel {
+  flex: 1;
+  padding: 24rpx;
+  text-align: center;
+  border-radius: 16rpx;
+  background: #f7f3f2;
+}
+
+.btn-cancel-text {
   font-size: 28rpx;
   color: #6B6B6B;
 }
@@ -497,11 +578,22 @@ onMounted(() => {
   margin-bottom: 32rpx;
 }
 
+.toggle-container {
+  position: relative;
+  display: flex;
+  background: #f7f3f2;
+  border: 1rpx solid rgba(196, 199, 199, 0.3);
+  border-radius: 9999rpx;
+  padding: 4rpx;
+  width: 384rpx;
+}
+
 .toggle-bg {
   position: absolute;
-  top: 0;
-  width: 192rpx;
-  height: 80rpx;
+  left: 4rpx;
+  top: 4rpx;
+  width: calc(50% - 4rpx);
+  height: 72rpx;
   background: #000;
   border-radius: 9999rpx;
   transition: transform 0.3s;
@@ -509,12 +601,12 @@ onMounted(() => {
 }
 
 .toggle-bg.right {
-  transform: translateX(192rpx);
+  transform: translateX(calc(100% + 4rpx));
 }
 
 .toggle-btn {
-  width: 192rpx;
-  height: 80rpx;
+  flex: 1;
+  height: 72rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -525,6 +617,7 @@ onMounted(() => {
   font-size: 32rpx;
   color: #6B6B6B;
   font-weight: 500;
+  transition: color 0.3s;
 }
 
 .toggle-text.white {
@@ -678,7 +771,7 @@ onMounted(() => {
 
 .fab {
   position: fixed;
-  bottom: 200rpx;
+  bottom: 123rpx;
   right: 48rpx;
   width: 112rpx;
   height: 112rpx;

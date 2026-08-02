@@ -47,7 +47,7 @@
             <view class="category-item">
               <view class="category-left">
                 <view class="category-icon-box">
-                  <text class="category-icon">{{ cat.icon }}</text>
+                  <text class="category-icon">{{ getIconEmoji(cat.icon) }}</text>
                 </view>
                 <text class="category-name">{{ cat.name }}</text>
               </view>
@@ -72,32 +72,61 @@
     <view class="fab" @click="goToAddRecord">
       <text class="fab-icon">+</text>
     </view>
-
-    <!-- Bottom Nav -->
-    <view class="bottom-nav">
-      <view class="nav-item" @click="switchTab('home')">
-        <text class="nav-icon">🏠</text>
-        <text class="nav-label">首页</text>
-      </view>
-      <view class="nav-item" @click="switchTab('stats')">
-        <text class="nav-icon">📊</text>
-        <text class="nav-label">统计</text>
-      </view>
-      <view class="nav-item active" @click="switchTab('budget')">
-        <text class="nav-icon">📅</text>
-        <text class="nav-label">预算</text>
-      </view>
-      <view class="nav-item" @click="switchTab('profile')">
-        <text class="nav-icon">👤</text>
-        <text class="nav-label">我的</text>
-      </view>
-    </view>
   </view>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue';
+import { onShow } from '@dcloudio/uni-app';
 import { API, TokenStorage } from '../../lib/api.js'
+
+// 图标映射到 emoji
+const getIconEmoji = (icon) => {
+  const iconMap = {
+    'restaurant': '🍜',
+    'directions_bus': '🚌',
+    'shopping_bag': '🛍',
+    'home': '🏠',
+    'movie': '🎬',
+    'health_and_safety': '🏥',
+    'school': '📚',
+    'pets': '🐾',
+    'flight': '✈️',
+    'fitness_center': '💪',
+    'spa': '🧘',
+    'music_note': '🎵',
+    'book': '📖',
+    'coffee': '☕',
+    'local_bar': '🍸',
+    'sports_esports': '🎮',
+    'attach_money': '💰',
+    'savings': '🏦',
+    'card_giftcard': '🎁',
+    'redeem': '🎁',
+    'trending_up': '📈',
+    'account_balance_wallet': '💳',
+    'payments': '💵',
+    'work': '💼',
+    'business_center': '🏢',
+    'local_atm': '🏧',
+    'favorite': '❤️',
+    'lock_reset': '🔑',
+    'smartphone': '📱',
+    'chat': '💬',
+    'lock': '🔒',
+    'verified_user': '✓',
+    'visibility_off': '👁',
+    'visibility': '👁',
+    'check_circle': '✓',
+    'arrow_back_ios_new': '←',
+    'add': '+',
+    'close': '✕',
+    'analytics': '📊',
+    'calendar_today': '📅',
+    'person': '👤',
+  }
+  return iconMap[icon] || '📌'
+}
 
 // 当前月份
 let currentDate = new Date()
@@ -233,6 +262,13 @@ onMounted(() => {
   }
   loadBudgetData()
 })
+
+// 每次页面显示时刷新数据
+onShow(() => {
+  if (uni.getStorageSync('liubai_token')) {
+    loadBudgetData()
+  }
+})
 </script>
 
 <style scoped>
@@ -336,7 +372,7 @@ onMounted(() => {
 }
 
 .overview-label {
-  font-family: 'Hanken Grotesk', sans-serif;
+  font-family: 'PingFang SC', sans-serif;
   font-size: 22rpx;
   font-weight: 700;
   color: #6B6B6B;
@@ -350,7 +386,7 @@ onMounted(() => {
 }
 
 .percent-display {
-  font-family: 'Hanken Grotesk', sans-serif;
+  font-family: 'PingFang SC', sans-serif;
   font-size: 96rpx;
   font-weight: 600;
   color: #000;
@@ -358,7 +394,7 @@ onMounted(() => {
 }
 
 .percent-unit {
-  font-family: 'Hanken Grotesk', sans-serif;
+  font-family: 'PingFang SC', sans-serif;
   font-size: 48rpx;
   color: #000;
 }
@@ -395,14 +431,14 @@ onMounted(() => {
 }
 
 .remain-text {
-  font-family: 'Hanken Grotesk', sans-serif;
+  font-family: 'PingFang SC', sans-serif;
   font-size: 22rpx;
   font-weight: 700;
   color: #6B6B6B;
 }
 
 .warning-text {
-  font-family: 'Hanken Grotesk', sans-serif;
+  font-family: 'PingFang SC', sans-serif;
   font-size: 22rpx;
   font-weight: 700;
   color: #B7610A;
@@ -523,7 +559,7 @@ onMounted(() => {
 
 .fab {
   position: fixed;
-  bottom: 192rpx;
+  bottom: 123rpx;
   right: 48rpx;
   width: 112rpx;
   height: 112rpx;
@@ -576,7 +612,7 @@ onMounted(() => {
 }
 
 .nav-label {
-  font-family: 'Hanken Grotesk', sans-serif;
+  font-family: 'PingFang SC', sans-serif;
   font-size: 22rpx;
   font-weight: 700;
   color: #6B6B6B;

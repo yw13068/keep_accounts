@@ -15,11 +15,12 @@
         <view class="amount-row">
           <text class="amount-prefix" :style="{ color: currentType === 'expense' ? '#C0392B' : '#2E7D5E' }">¥</text>
           <input
-            type="text"
-            inputmode="decimal"
+            type="digit"
             v-model="amountDisplay"
             class="amount-input"
-            @input="onAmountInput"
+            :style="{ color: currentType === 'expense' ? '#C0392B' : '#2E7D5E' }"
+            placeholder="0.00"
+            placeholder-class="amount-placeholder"
           />
         </view>
         <view class="brush-divider"></view>
@@ -95,7 +96,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { API, TokenStorage } from '../../lib/api.js'
 
 // 支出分类
@@ -119,7 +120,7 @@ const incomeCategories = [
 ]
 
 const currentType = ref('expense')
-const amountDisplay = ref('0.00')
+const amountDisplay = ref('')
 const amountValue = ref(0)
 const note = ref('')
 const dateDisplay = ref('')
@@ -130,18 +131,9 @@ const currentCategories = computed(() => {
   return currentType.value === 'expense' ? expenseCategories : incomeCategories
 })
 
-function switchType(type) {
-  currentType.value = type
-  const cats = type === 'expense' ? expenseCategories : incomeCategories
-  selectedCategoryId.value = cats[0].id
-}
-
-function selectCategory(id) {
-  selectedCategoryId.value = id
-}
-
-function onAmountInput(e) {
-  let value = e.detail.value.replace(/[^\d.]/g, '')
+// 监听金额输入，更新 amountValue
+watch(amountDisplay, (newVal) => {
+  let value = String(newVal).replace(/[^\d.]/g, '')
   const parts = value.split('.')
   if (parts.length > 2) {
     value = parts[0] + '.' + parts.slice(1).join('')
@@ -151,6 +143,16 @@ function onAmountInput(e) {
   }
   amountDisplay.value = value
   amountValue.value = parseFloat(value) || 0
+})
+
+function switchType(type) {
+  currentType.value = type
+  const cats = type === 'expense' ? expenseCategories : incomeCategories
+  selectedCategoryId.value = cats[0].id
+}
+
+function selectCategory(id) {
+  selectedCategoryId.value = id
 }
 
 function closeDrawer() {
@@ -279,7 +281,7 @@ onMounted(() => {
 }
 
 .amount-prefix {
-  font-family: 'Hanken Grotesk', sans-serif;
+  font-family: 'PingFang SC', sans-serif;
   font-size: 48rpx;
   font-weight: 600;
   opacity: 0.6;
@@ -287,14 +289,23 @@ onMounted(() => {
 }
 
 .amount-input {
-  font-family: 'Hanken Grotesk', sans-serif;
-  font-size: 96rpx;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  min-width: 240rpx;
-  background: transparent;
-  color: #000000;
+  font-family: 'PingFang SC', sans-serif !important;
+  font-size: 48rpx !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  min-width: 360rpx !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  color: #000000 !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+.amount-placeholder {
+  color: #D4CCBC;
+  font-size: 18rpx;
 }
 
 .brush-divider {
@@ -360,7 +371,7 @@ onMounted(() => {
 
 .category-label {
   display: block;
-  font-family: 'Hanken Grotesk', sans-serif;
+  font-family: 'PingFang SC', sans-serif;
   font-size: 22rpx;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -407,7 +418,7 @@ onMounted(() => {
 }
 
 .category-name {
-  font-family: 'Hanken Grotesk', sans-serif;
+  font-family: 'PingFang SC', sans-serif;
   font-size: 22rpx;
   font-weight: 700;
   letter-spacing: 0.1em;

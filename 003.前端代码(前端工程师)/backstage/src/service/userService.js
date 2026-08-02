@@ -143,6 +143,9 @@ async function updateLastLogin(userId) {
  */
 async function createAuthToken({ userId, deviceInfo, ipAddress }) {
   const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30天后
+  // 截断过长字段，防止数据库溢出
+  const safeDeviceInfo = String(deviceInfo || '').substring(0, 500);
+  const safeIpAddress = String(ipAddress || '').substring(0, 45);
 
   // 最多重试3次生成唯一token
   let token;
@@ -151,7 +154,7 @@ async function createAuthToken({ userId, deviceInfo, ipAddress }) {
     try {
       await db.query(
         'INSERT INTO auth_tokens (user_id, token, device_info, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)',
-        [userId, token, deviceInfo, ipAddress, expiresAt]
+        [userId, token, safeDeviceInfo, safeIpAddress, expiresAt]
       );
       return { token, expiresAt };
     } catch (err) {
@@ -169,9 +172,13 @@ async function createAuthToken({ userId, deviceInfo, ipAddress }) {
  * @param {Object} logData 日志数据
  */
 async function createLoginLog({ userId, phone, status, failReason, ipAddress, deviceInfo }) {
+  // 截断过长字段，防止数据库溢出
+  const safeDeviceInfo = String(deviceInfo || '').substring(0, 500);
+  const safeIpAddress = String(ipAddress || '').substring(0, 45);
+  const safeFailReason = String(failReason || '').substring(0, 255);
   await db.query(
     'INSERT INTO login_logs (user_id, phone, status, fail_reason, ip_address, device_info) VALUES (?, ?, ?, ?, ?, ?)',
-    [userId, phone, status, failReason, ipAddress, deviceInfo]
+    [userId, phone, status, safeFailReason, safeIpAddress, safeDeviceInfo]
   );
 }
 
