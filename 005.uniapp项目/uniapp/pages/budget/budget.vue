@@ -285,7 +285,8 @@ onShow(() => {
   left: 0;
   right: 0;
   z-index: 30;
-  height: 128rpx;
+  height: calc(88rpx + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);
   background-color: rgba(253, 248, 248, 0.9);
   backdrop-filter: blur(24rpx);
   display: flex;
@@ -307,7 +308,7 @@ onShow(() => {
   max-width: 750rpx;
   margin: 0 auto;
   padding: 0 48rpx;
-  padding-top: 160rpx;
+  padding-top: calc(160rpx + env(safe-area-inset-top));
   display: flex;
   flex-direction: column;
   gap: 48rpx;

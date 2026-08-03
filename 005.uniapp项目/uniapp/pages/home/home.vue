@@ -299,7 +299,8 @@ onShow(() => {
   top: 0;
   left: 0;
   right: 0;
-  height: 88rpx;
+  height: calc(88rpx + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);
   background: rgba(245, 240, 232, 0.9);
   backdrop-filter: blur(20px);
   display: flex;
@@ -317,7 +318,7 @@ onShow(() => {
 }
 
 .main-content {
-  padding: 100rpx 48rpx 0;
+  padding: calc(100rpx + env(safe-area-inset-top)) 48rpx 0;
   max-width: 750rpx;
   margin: 0 auto;
 }

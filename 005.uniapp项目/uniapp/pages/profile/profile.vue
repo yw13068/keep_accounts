@@ -113,7 +113,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { API, TokenStorage } from '../../lib/api.js'
+import { API, TokenStorage, API_BASE_URL } from '../../lib/api.js'
 
 const username = ref('墨染青衣')
 const avatarUrl = ref('')
@@ -145,7 +145,7 @@ async function loadUserProfile() {
         username.value = name
       }
       if (url) {
-        avatarUrl.value = url.startsWith('http') ? url : API.API_BASE_URL + url
+        avatarUrl.value = url.startsWith('http') ? url : API_BASE_URL + url
       }
     }
   } catch (e) {
@@ -174,7 +174,8 @@ function chooseAvatar() {
       try {
         const uploadRes = await API.user.uploadAvatar(base64)
         if (uploadRes.code === 0) {
-          avatarUrl.value = uploadRes.data.avatarUrl
+          const uploadedUrl = uploadRes.data.avatarUrl
+          avatarUrl.value = uploadedUrl.startsWith('http') ? uploadedUrl : API_BASE_URL + uploadedUrl
           uni.showToast({ title: '头像上传成功', icon: 'success' })
         } else {
           uni.showToast({ title: '头像上传失败: ' + (uploadRes.message || '未知错误'), icon: 'none' })
